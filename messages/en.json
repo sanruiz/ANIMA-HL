@@ -1,0 +1,27 @@
+{
+  "nav": {
+    "home": "Home",
+    "agenda": "Events",
+    "brands": "Brands"
+  },
+  "home": {
+    "title": "Ánima Village",
+    "subtitle": "Headless site with WordPress + Next.js",
+    "viewAgenda": "View events",
+    "viewBrands": "View brands"
+  },
+  "agenda": {
+    "title": "Events",
+    "empty": "No events yet.",
+    "error": "Could not load events. Check the WordPress connection."
+  },
+  "brands": {
+    "title": "Brands",
+    "empty": "No brands yet.",
+    "error": "Could not load brands. Check the WordPress connection."
+  },
+  "localeSwitcher": {
+    "es": "Español",
+    "en": "English"
+  }
+}

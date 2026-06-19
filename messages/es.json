@@ -1,0 +1,27 @@
+{
+  "nav": {
+    "home": "Inicio",
+    "agenda": "Agenda",
+    "brands": "Marcas"
+  },
+  "home": {
+    "title": "Ánima Village",
+    "subtitle": "Sitio headless con WordPress + Next.js",
+    "viewAgenda": "Ver agenda",
+    "viewBrands": "Ver marcas"
+  },
+  "agenda": {
+    "title": "Agenda",
+    "empty": "No hay eventos por ahora.",
+    "error": "No se pudo cargar la agenda. Revisa la conexión con WordPress."
+  },
+  "brands": {
+    "title": "Marcas",
+    "empty": "No hay marcas por ahora.",
+    "error": "No se pudieron cargar las marcas. Revisa la conexión con WordPress."
+  },
+  "localeSwitcher": {
+    "es": "Español",
+    "en": "English"
+  }
+}
