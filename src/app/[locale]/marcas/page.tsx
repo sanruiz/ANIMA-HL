@@ -38,6 +38,13 @@ export default async function MarcasPage({
         <div className="grid">
           {brands.map((brand) => {
             const img = brand.featuredImage?.node;
+            const f = brand.brandFields;
+            const hours = [f?.days, f?.time].filter(Boolean).join(" · ");
+            const isPetFriendly =
+              !!f?.petfriendly &&
+              !["no", "none", "false", ""].includes(
+                f.petfriendly.toLowerCase()
+              );
             return (
               <article className="card" key={brand.id}>
                 {img?.sourceUrl && (
@@ -49,7 +56,24 @@ export default async function MarcasPage({
                 )}
                 <div className="body">
                   <h3>{brand.title}</h3>
+                  {f?.store && <div className="meta">{f.store}</div>}
+                  {hours && <div className="meta">{hours}</div>}
+                  {f?.website && (
+                    <div className="meta">
+                      <a
+                        href={f.website}
+                        target="_blank"
+                        rel="noreferrer"
+                        style={{ color: "var(--accent)" }}
+                      >
+                        {t("website")} ↗
+                      </a>
+                    </div>
+                  )}
                   <div>
+                    {isPetFriendly && (
+                      <span className="tag">🐾 {t("petFriendly")}</span>
+                    )}
                     {brand.brandTags?.nodes.map((tag) => (
                       <span className="tag" key={tag.slug}>
                         {tag.name}

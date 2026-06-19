@@ -38,6 +38,10 @@ export default async function AgendaPage({
         <div className="grid">
           {events.map((ev) => {
             const img = ev.featuredImage?.node;
+            const f = ev.eventFields;
+            // startDate es un campo de fecha de ACF (medianoche UTC); se formatea
+            // en UTC para evitar desfase de un día. Fallback a la fecha del post.
+            const startDate = f?.startDate ?? ev.date;
             return (
               <article className="card" key={ev.id}>
                 {img?.sourceUrl && (
@@ -45,16 +49,20 @@ export default async function AgendaPage({
                   <img src={img.sourceUrl} alt={img.altText ?? ev.title ?? ""} />
                 )}
                 <div className="body">
+                  {f?.featured && <span className="tag">★ {t("featured")}</span>}
                   <h3>{ev.title}</h3>
-                  {ev.date && (
+                  {startDate && (
                     <div className="meta">
-                      {new Date(ev.date).toLocaleDateString(locale, {
+                      {new Date(startDate).toLocaleDateString(locale, {
                         day: "numeric",
                         month: "long",
                         year: "numeric",
+                        timeZone: "UTC",
                       })}
+                      {f?.startTime ? ` · ${f.startTime.slice(0, 5)}` : ""}
                     </div>
                   )}
+                  {f?.place && <div className="meta">{f.place}</div>}
                   <div>
                     {ev.eventTags?.nodes.map((tag) => (
                       <span className="tag" key={tag.slug}>

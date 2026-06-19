@@ -42,6 +42,24 @@ npm run dev
 Páginas incluidas: `/` (home), `/agenda` (eventos), `/marcas` (marcas), en ambos
 idiomas.
 
+### Certificado SSL de Local (importante)
+
+Local sirve por HTTPS con un certificado **autofirmado**, y Node rechaza esos
+certs por defecto. El fetch del servidor a WordPress fallaría.
+
+- `npm run dev` arranca con `NODE_TLS_REJECT_UNAUTHORIZED=0`, que desactiva la
+  verificación TLS **solo para el dev server local**. Es seguro aquí porque solo
+  hablas con tu propio WordPress de Local, y `build`/`start` (producción) NO
+  llevan ese flag. (`--use-system-ca` no sirve: Node no lo permite en NODE_OPTIONS
+  y `next dev` usa procesos hijos.)
+- `npm run dev:strict` = `next dev` sin el flag, para cuando apuntes a un WP con
+  certificado válido.
+- Alternativa segura manteniendo verificación: exporta el certificado de Local
+  (en Local: tu sitio → SSL) y apunta `NODE_EXTRA_CA_CERTS=/ruta/al/cert.pem`.
+
+Prueba rápida del endpoint: abre `https://anima-headless.local/graphql` en el
+navegador; deberías ver el IDE de GraphiQL o una respuesta JSON.
+
 ## Estructura
 
 ```

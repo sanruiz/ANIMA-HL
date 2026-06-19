@@ -13,12 +13,15 @@
   "agenda": {
     "title": "Events",
     "empty": "No events yet.",
-    "error": "Could not load events. Check the WordPress connection."
+    "error": "Could not load events. Check the WordPress connection.",
+    "featured": "Featured"
   },
   "brands": {
     "title": "Brands",
     "empty": "No brands yet.",
-    "error": "Could not load brands. Check the WordPress connection."
+    "error": "Could not load brands. Check the WordPress connection.",
+    "website": "Website",
+    "petFriendly": "Pet friendly"
   },
   "localeSwitcher": {
     "es": "Español",

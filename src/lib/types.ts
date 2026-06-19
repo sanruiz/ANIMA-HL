@@ -12,6 +12,21 @@ export type TermNode = {
   slug: string;
 };
 
+export type MediaItem = {
+  sourceUrl: string | null;
+  altText: string | null;
+};
+
+export type EventFields = {
+  startDate: string | null;
+  startTime: string | null;
+  endDate: string | null;
+  endTime: string | null;
+  place: string | null;
+  featured: boolean | null;
+  gallery: { nodes: MediaItem[] } | null;
+} | null;
+
 export type EventNode = {
   id: string;
   title: string | null;
@@ -20,7 +35,19 @@ export type EventNode = {
   excerpt: string | null;
   featuredImage: FeaturedImage;
   eventTags: { nodes: TermNode[] } | null;
+  eventFields: EventFields;
 };
+
+export type BrandFields = {
+  store: string | null;
+  phone: string | null;
+  website: string | null;
+  days: string | null;
+  time: string | null;
+  petfriendly: string | null;
+  petfriendlyDescription: string | null;
+  gallery: { nodes: MediaItem[] } | null;
+} | null;
 
 export type BrandNode = {
   id: string;
@@ -28,6 +55,7 @@ export type BrandNode = {
   slug: string | null;
   featuredImage: FeaturedImage;
   brandTags: { nodes: TermNode[] } | null;
+  brandFields: BrandFields;
 };
 
 export type EventsResponse = { events: { nodes: EventNode[] } };

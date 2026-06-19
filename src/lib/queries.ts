@@ -1,13 +1,8 @@
 // Queries GraphQL contra los CPTs event/brand del plugin soma-malls-content-types.
 //
-// NOTA sobre campos ACF: cuando confirmes que cada field group tiene
-// show_in_graphql=true (y esté instalado "WPGraphQL for ACF"), añade aquí el
-// bloque del field group. Por convención de WPGraphQL aparece como un campo con
-// el nombre del grupo, p. ej.:
-//
-//   eventFields { fecha lugar precio }
-//
-// Mientras tanto usamos los campos nativos (title, date, featuredImage, etc.).
+// Campos ACF: el grupo ACF de Event se expone como el campo `events` dentro de
+// cada nodo Event (nombre del field group). Lo pedimos con el alias `eventFields`
+// para evitar el confuso `events { events { ... } }`.
 
 export const EVENTS_QUERY = /* GraphQL */ `
   query Events($first: Int = 50) {
@@ -28,6 +23,20 @@ export const EVENTS_QUERY = /* GraphQL */ `
           nodes {
             name
             slug
+          }
+        }
+        eventFields: events {
+          startDate
+          startTime
+          endDate
+          endTime
+          place
+          featured
+          gallery {
+            nodes {
+              sourceUrl
+              altText
+            }
           }
         }
       }
@@ -52,6 +61,21 @@ export const BRANDS_QUERY = /* GraphQL */ `
           nodes {
             name
             slug
+          }
+        }
+        brandFields: brands {
+          store
+          phone
+          website
+          days
+          time
+          petfriendly
+          petfriendlyDescription
+          gallery {
+            nodes {
+              sourceUrl
+              altText
+            }
           }
         }
       }

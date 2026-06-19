@@ -13,12 +13,15 @@
   "agenda": {
     "title": "Agenda",
     "empty": "No hay eventos por ahora.",
-    "error": "No se pudo cargar la agenda. Revisa la conexión con WordPress."
+    "error": "No se pudo cargar la agenda. Revisa la conexión con WordPress.",
+    "featured": "Destacado"
   },
   "brands": {
     "title": "Marcas",
     "empty": "No hay marcas por ahora.",
-    "error": "No se pudieron cargar las marcas. Revisa la conexión con WordPress."
+    "error": "No se pudieron cargar las marcas. Revisa la conexión con WordPress.",
+    "website": "Sitio web",
+    "petFriendly": "Pet friendly"
   },
   "localeSwitcher": {
     "es": "Español",
