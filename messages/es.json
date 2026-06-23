@@ -2,13 +2,32 @@
   "nav": {
     "home": "Inicio",
     "agenda": "Agenda",
-    "brands": "Marcas"
+    "brands": "Marcas",
+    "news": "Noticias",
+    "about": "Nosotros",
+    "arte": "Arte Abierto",
+    "elevatedBrands": "Elevated Brands",
+    "gastronomy": "Gastronomía",
+    "map": "Mapa",
+    "blog": "Blog",
+    "menu": "Menú",
+    "close": "Cerrar",
+    "followUs": "Síguenos",
+    "aboutBlurb": "Ánima Village reúne más de 84 marcas exclusivas, experiencias gastronómicas, estudios de bienestar y cafés. Un espacio que celebra lo mejor de la vida: naturaleza, bienestar, gastronomía, arte y comunidad."
   },
   "home": {
     "title": "Ánima Village",
     "subtitle": "Sitio headless con WordPress + Next.js",
+    "heroText": "Un destino donde <em>marcas, bienestar, arte</em> y naturaleza convergen.",
     "viewAgenda": "Ver agenda",
-    "viewBrands": "Ver marcas"
+    "viewBrands": "Ver marcas",
+    "viewNews": "Ver noticias",
+    "soulHeading": "Nuestra Esencia",
+    "soulP1": "Ánima Village reúne <em>más de 80 marcas exclusivas, experiencias gastronómicas, actividades de bienestar, restaurantes y cafés.</em>",
+    "soulP2": "Un espacio que celebra lo mejor de la vida: naturaleza, bienestar, gastronomía, arte y comunidad.",
+    "soulCaption": "Cada rincón es una invitación a <em>disfrutar el momento y estar presente.</em>",
+    "soulImageAlt": "Ánima Village",
+    "ritualsHeading": "Donde los <em>rituales diarios</em><br></br>se transforman en una<br></br><em>experiencia extraordinaria</em>"
   },
   "agenda": {
     "title": "Agenda",
@@ -22,6 +41,39 @@
     "error": "No se pudieron cargar las marcas. Revisa la conexión con WordPress.",
     "website": "Sitio web",
     "petFriendly": "Pet friendly"
+  },
+  "news": {
+    "title": "Noticias",
+    "empty": "No hay noticias por ahora.",
+    "error": "No se pudieron cargar las noticias. Revisa la conexión con WordPress."
+  },
+  "footer": {
+    "newsletterTitle": "Sé parte de nuestra comunidad",
+    "newsletterLead": "Regístrate para recibir acceso anticipado a eventos, noticias y oportunidades.",
+    "formPlaceholder": "Tu correo electrónico",
+    "formSubmit": "Suscribirme",
+    "formSending": "Enviando...",
+    "formSuccess": "¡Gracias! Tu registro ha sido recibido.",
+    "formError": "No pudimos completar la suscripción.",
+    "formErrorEmail": "Por favor ingresa tu correo.",
+    "formErrorConsent": "Debes aceptar el Aviso de Privacidad.",
+    "formErrorNetwork": "Error de red. Intenta de nuevo.",
+    "consentBefore": "He leído y acepto el",
+    "privacyNotice": "Aviso de Privacidad",
+    "hoursTitle": "Horario del Village",
+    "hours": "10 AM – 9 PM",
+    "offerTitle": "Qué Ofrecemos",
+    "offerBrands": "Elevated Brands",
+    "offerArte": "Arte Abierto",
+    "offerGastronomy": "Gastronomía",
+    "offerProgramming": "Programación",
+    "offerNews": "Noticias",
+    "followUs": "Síguenos",
+    "findUs": "Encuéntranos",
+    "legalPrivacy": "Legal / Privacidad",
+    "guidelines": "Reglamento del Village",
+    "destinationBy": "Un destino de",
+    "credits": "© 2025 SOMA Group. Todos los derechos reservados."
   },
   "localeSwitcher": {
     "es": "Español",

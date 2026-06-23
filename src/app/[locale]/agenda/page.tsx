@@ -2,6 +2,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { fetchGraphQL } from "@/lib/wp";
 import { EVENTS_QUERY } from "@/lib/queries";
 import type { EventsResponse, EventNode } from "@/lib/types";
+import { localizeTags } from "@/lib/i18n-tags";
 
 export default async function AgendaPage({
   params,
@@ -27,7 +28,7 @@ export default async function AgendaPage({
   }
 
   return (
-    <>
+    <div className="container">
       <h1>{t("title")}</h1>
 
       {failed ? (
@@ -66,7 +67,7 @@ export default async function AgendaPage({
                   <div>
                     {ev.eventTags?.nodes.map((tag) => (
                       <span className="tag" key={tag.slug}>
-                        {tag.name}
+                        {localizeTags(tag.name, locale)}
                       </span>
                     ))}
                   </div>
@@ -76,6 +77,6 @@ export default async function AgendaPage({
           })}
         </div>
       )}
-    </>
+    </div>
   );
 }

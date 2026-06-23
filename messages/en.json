@@ -2,13 +2,32 @@
   "nav": {
     "home": "Home",
     "agenda": "Events",
-    "brands": "Brands"
+    "brands": "Brands",
+    "news": "News",
+    "about": "About",
+    "arte": "Arte Abierto",
+    "elevatedBrands": "Elevated Brands",
+    "gastronomy": "Gastronomy",
+    "map": "Map",
+    "blog": "Blog",
+    "menu": "Menu",
+    "close": "Close",
+    "followUs": "Follow Us",
+    "aboutBlurb": "Ánima Village brings together over 84 exclusive brands, gastronomic experiences, wellness studios, and cafes. A space that celebrates the best of life: nature, wellness, gastronomy, art, and community."
   },
   "home": {
     "title": "Ánima Village",
     "subtitle": "Headless site with WordPress + Next.js",
+    "heroText": "A destination where <em>brands, wellness, art</em> and nature converge.",
     "viewAgenda": "View events",
-    "viewBrands": "View brands"
+    "viewBrands": "View brands",
+    "viewNews": "View news",
+    "soulHeading": "Our Soul",
+    "soulP1": "Ánima Village brings together <em>over 80 elevated brands, gastronomic experiences, wellness activities, restaurants and cafes.</em>",
+    "soulP2": "A space that celebrates the best of life: nature, wellness, gastronomy, art, and community.",
+    "soulCaption": "Each corner is an invitation to <em>enjoy the moment and be present.</em>",
+    "soulImageAlt": "Ánima Village",
+    "ritualsHeading": "Where <em>daily rituals</em><br></br>of modern life are experienced<br></br><em>like never before</em>"
   },
   "agenda": {
     "title": "Events",
@@ -22,6 +41,39 @@
     "error": "Could not load brands. Check the WordPress connection.",
     "website": "Website",
     "petFriendly": "Pet friendly"
+  },
+  "news": {
+    "title": "News",
+    "empty": "No news yet.",
+    "error": "Could not load news. Check the WordPress connection."
+  },
+  "footer": {
+    "newsletterTitle": "Become part of our community",
+    "newsletterLead": "Sign up to receive early access to events, news and opportunities.",
+    "formPlaceholder": "Your email",
+    "formSubmit": "Sign up",
+    "formSending": "Sending...",
+    "formSuccess": "Thank you! Your submission has been received.",
+    "formError": "We couldn't complete your subscription.",
+    "formErrorEmail": "Please enter your email.",
+    "formErrorConsent": "You must agree to the Privacy Notice.",
+    "formErrorNetwork": "Network error. Please try again.",
+    "consentBefore": "I have read, and agree to the",
+    "privacyNotice": "Privacy Notice",
+    "hoursTitle": "Village Hours",
+    "hours": "10 AM – 9 PM",
+    "offerTitle": "What We Offer",
+    "offerBrands": "Elevated Brands",
+    "offerArte": "Arte Abierto",
+    "offerGastronomy": "Gastronomy",
+    "offerProgramming": "Programming",
+    "offerNews": "News",
+    "followUs": "Follow Us",
+    "findUs": "Find Us",
+    "legalPrivacy": "Legal / Privacy",
+    "guidelines": "Village Guidelines",
+    "destinationBy": "A destination by",
+    "credits": "© 2025 SOMA Group. All Rights Reserved."
   },
   "localeSwitcher": {
     "es": "Español",

@@ -2,6 +2,23 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { fetchGraphQL } from "@/lib/wp";
 import { BRANDS_QUERY } from "@/lib/queries";
 import type { BrandsResponse, BrandNode } from "@/lib/types";
+import { localizeTags } from "@/lib/i18n-tags";
+
+function isTruthyPetFriendly(
+  value: NonNullable<BrandNode["brandFields"]>["petfriendly"] | undefined
+) {
+  if (typeof value === "boolean") {
+    return value;
+  }
+
+  if (value == null) {
+    return false;
+  }
+
+  return !["no", "none", "false", "0", ""].includes(
+    String(value).trim().toLowerCase()
+  );
+}
 
 export default async function MarcasPage({
   params,
@@ -27,7 +44,7 @@ export default async function MarcasPage({
   }
 
   return (
-    <>
+    <div className="container">
       <h1>{t("title")}</h1>
 
       {failed ? (
@@ -40,11 +57,7 @@ export default async function MarcasPage({
             const img = brand.featuredImage?.node;
             const f = brand.brandFields;
             const hours = [f?.days, f?.time].filter(Boolean).join(" · ");
-            const isPetFriendly =
-              !!f?.petfriendly &&
-              !["no", "none", "false", ""].includes(
-                f.petfriendly.toLowerCase()
-              );
+            const isPetFriendly = isTruthyPetFriendly(f?.petfriendly);
             return (
               <article className="card" key={brand.id}>
                 {img?.sourceUrl && (
@@ -76,7 +89,7 @@ export default async function MarcasPage({
                     )}
                     {brand.brandTags?.nodes.map((tag) => (
                       <span className="tag" key={tag.slug}>
-                        {tag.name}
+                        {localizeTags(tag.name, locale)}
                       </span>
                     ))}
                   </div>
@@ -86,6 +99,6 @@ export default async function MarcasPage({
           })}
         </div>
       )}
-    </>
+    </div>
   );
 }
