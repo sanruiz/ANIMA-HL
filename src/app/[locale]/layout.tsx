@@ -1,10 +1,29 @@
 import "../globals.css";
 import type { Metadata } from "next";
+import { Cardo, Geist_Mono, Inter } from "next/font/google";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import SiteHeader from "@/components/SiteHeader";
+import SiteFooter from "@/components/SiteFooter";
+
+const cardo = Cardo({
+  variable: "--font-cardo",
+  subsets: ["latin"],
+  weight: "400",
+});
+
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
+
+// Sustituto libre de "Neue Haas Grotesk Display" (Adobe) que usa el nav en Webflow.
+const inter = Inter({
+  variable: "--font-ui",
+  subsets: ["latin"],
+});
 
 export const metadata: Metadata = {
   title: "Ánima Village",
@@ -32,11 +51,15 @@ export default async function LocaleLayout({
   setRequestLocale(locale);
 
   return (
-    <html lang={locale}>
+    <html
+      lang={locale}
+      className={`${cardo.variable} ${geistMono.variable} ${inter.variable}`}
+    >
       <body>
         <NextIntlClientProvider>
           <SiteHeader locale={locale} />
-          <main className="container">{children}</main>
+          <main>{children}</main>
+          <SiteFooter />
         </NextIntlClientProvider>
       </body>
     </html>

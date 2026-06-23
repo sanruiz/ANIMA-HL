@@ -44,7 +44,7 @@ export type BrandFields = {
   website: string | null;
   days: string | null;
   time: string | null;
-  petfriendly: string | null;
+  petfriendly: string | boolean | number | null;
   petfriendlyDescription: string | null;
   gallery: { nodes: MediaItem[] } | null;
 } | null;
@@ -58,5 +58,24 @@ export type BrandNode = {
   brandFields: BrandFields;
 };
 
+export type PostNode = {
+  id: string;
+  title: string | null;
+  slug: string | null;
+  date: string | null;
+  excerpt: string | null;
+  featuredImage: FeaturedImage;
+};
+
 export type EventsResponse = { events: { nodes: EventNode[] } };
 export type BrandsResponse = { brands: { nodes: BrandNode[] } };
+export type NewsResponse = { posts: { nodes: PostNode[] } };
+
+export type PostSingle = {
+  id: string;
+  title: string | null;
+  date: string | null;
+  content: string | null;
+  featuredImage: FeaturedImage;
+};
+export type NewsBySlugResponse = { post: PostSingle | null };

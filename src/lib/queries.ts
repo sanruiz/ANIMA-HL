@@ -44,6 +44,43 @@ export const EVENTS_QUERY = /* GraphQL */ `
   }
 `;
 
+export const NEWS_QUERY = /* GraphQL */ `
+  query News($first: Int = 50) {
+    posts(first: $first, where: { orderby: { field: DATE, order: DESC } }) {
+      nodes {
+        id
+        title
+        slug
+        date
+        excerpt
+        featuredImage {
+          node {
+            sourceUrl
+            altText
+          }
+        }
+      }
+    }
+  }
+`;
+
+export const NEWS_BY_SLUG_QUERY = /* GraphQL */ `
+  query NewsBySlug($slug: ID!) {
+    post(id: $slug, idType: SLUG) {
+      id
+      title
+      date
+      content
+      featuredImage {
+        node {
+          sourceUrl
+          altText
+        }
+      }
+    }
+  }
+`;
+
 export const BRANDS_QUERY = /* GraphQL */ `
   query Brands($first: Int = 100) {
     brands(first: $first, where: { orderby: { field: TITLE, order: ASC } }) {

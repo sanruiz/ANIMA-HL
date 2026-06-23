@@ -1,5 +1,8 @@
-import { getTranslations, setRequestLocale } from "next-intl/server";
-import { Link } from "@/i18n/navigation";
+import { setRequestLocale } from "next-intl/server";
+import VideoHero from "@/components/VideoHero";
+import OurSoul from "@/components/OurSoul";
+import OfferBanner from "@/components/OfferBanner";
+import DailyRituals from "@/components/DailyRituals";
 
 export default async function HomePage({
   params,
@@ -8,20 +11,13 @@ export default async function HomePage({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const t = await getTranslations("home");
 
   return (
     <>
-      <h1>{t("title")}</h1>
-      <p className="subtitle">{t("subtitle")}</p>
-      <div className="home-actions">
-        <Link className="btn" href="/agenda">
-          {t("viewAgenda")}
-        </Link>
-        <Link className="btn" href="/marcas">
-          {t("viewBrands")}
-        </Link>
-      </div>
+      <VideoHero />
+      <OurSoul />
+      <OfferBanner />
+      <DailyRituals />
     </>
   );
 }
