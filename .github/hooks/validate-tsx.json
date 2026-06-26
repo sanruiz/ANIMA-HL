@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "hooks": {
+    "PostToolUse": [
+      {
+        "type": "command",
+        "command": "scripts/validate-tsx.sh",
+        "timeout": 30,
+        "cwd": ".github/hooks"
+      }
+    ]
+  }
+}
