@@ -1,0 +1,37 @@
+/**
+ * Marcas publicadas en el CMS de Webflow (export 2026-06-19).
+ * Lista estática a propósito: el coming soon no debe depender de WP/Webflow.
+ */
+export const BRANDS: string[] = [
+  "Abercrombie & Fitch",
+  "AllSaints",
+  "Alo",
+  "Bath & Body Works",
+  "Birkenstock",
+  "Boss",
+  "Brunello Cucinelli",
+  "Coach",
+  "Columbia",
+  "Farm Rio",
+  "Ferragamo",
+  "Golden Goose",
+  "Guess",
+  "Lululemon",
+  "MacStore",
+  "Maje",
+  "Nike",
+  "Orlebar Brown",
+  "Psycho Bunny",
+  "Purificación García",
+  "Rag & Bone",
+  "Salomon",
+  "Sandro",
+  "Scalpers",
+  "Sephora",
+  "Sisley",
+  "Skims",
+  "Sunglass Hut",
+  "Victoria's Secret",
+  "Zadig & Voltaire",
+  "Zimmermann",
+];

@@ -5,8 +5,6 @@ import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
-import SiteHeader from "@/components/SiteHeader";
-import SiteFooter from "@/components/SiteFooter";
 
 const cardo = Cardo({
   variable: "--font-cardo",
@@ -56,11 +54,7 @@ export default async function LocaleLayout({
       className={`${cardo.variable} ${geistMono.variable} ${inter.variable}`}
     >
       <body>
-        <NextIntlClientProvider>
-          <SiteHeader locale={locale} />
-          <main>{children}</main>
-          <SiteFooter />
-        </NextIntlClientProvider>
+        <NextIntlClientProvider>{children}</NextIntlClientProvider>
       </body>
     </html>
   );

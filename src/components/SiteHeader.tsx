@@ -28,7 +28,9 @@ const INSTAGRAM_URL = "https://www.instagram.com/animavillagecabo/";
 export default function SiteHeader({ locale }: { locale: string }) {
   const t = useTranslations("nav");
   const pathname = usePathname();
-  const onHero = pathname === "/";
+  // Páginas cuya primera sección es un media full-bleed oscuro: el header
+  // flota encima en transparente con texto claro (home y about).
+  const onHero = pathname === "/" || pathname === "/about";
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 

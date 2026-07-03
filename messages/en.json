@@ -47,6 +47,19 @@
     "empty": "No news yet.",
     "error": "Could not load news. Check the WordPress connection."
   },
+  "about": {
+    "title": "About",
+    "metaDescription": "Ánima Village is a neighborhood and retail destination dedicated to exclusive brands, wellness, art, nature and community.",
+    "heroImageAlt": "Aerial render of Ánima Village",
+    "heroP1": "Ánima Village brings together <em>over 84 exclusive brands, gastronomic experiences, wellness studios, and cafes</em>.",
+    "heroP2": "A space that celebrates the best of life: nature, wellness, gastronomy, art, and community. Each corner is an invitation to <em>enjoy the moment and be present.</em>",
+    "essenceHeading": "Our Essence",
+    "essenceP1": "A SOMA Group destination, designed by Sordo Madaleno.",
+    "essenceP2": "Located at the heart of Cabo Del Sol, we are inspired by the essence of a local village, creating a place that elevates the senses and celebrates the beauty of the natural environment.",
+    "essenceP3": "We offer a <em>holistic experience</em> where retail, dining, art, culture, and nature intertwine to form a space <em>full of life and connection</em>.",
+    "galleryAlt": "Ánima Village",
+    "closing": "We can't wait for you to <em>be part of this story</em>"
+  },
   "footer": {
     "newsletterTitle": "Become part of our community",
     "newsletterLead": "Sign up to receive early access to events, news and opportunities.",
@@ -78,5 +91,16 @@
   "localeSwitcher": {
     "es": "Español",
     "en": "English"
+  },
+  "comingSoon": {
+    "eyebrow": "Now open until 9 PM",
+    "headline": "Come visit us and discover <em>everything the Village has to offer.</em>",
+    "moreOnWay": "…& so much more on the way",
+    "lead": "We're growing our brands, experiences, and services. Our website is currently being updated and will be back soon.",
+    "hoursTitle": "Village Hours",
+    "hours": "10 AM – 9 PM",
+    "findUsTitle": "Find Us",
+    "address": "Cabo Del Sol · Carretera Transpeninsular Km 10.3, Cabo San Lucas, B.C.S. 23455, Mexico",
+    "followUs": "Follow Us"
   }
 }

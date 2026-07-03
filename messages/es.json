@@ -47,6 +47,19 @@
     "empty": "No hay noticias por ahora.",
     "error": "No se pudieron cargar las noticias. Revisa la conexión con WordPress."
   },
+  "about": {
+    "title": "Acerca",
+    "metaDescription": "Ánima Village reúne marcas exclusivas, experiencias gastronómicas, cafés, arte y espacios para activar el cuerpo y la mente.",
+    "heroImageAlt": "Render aéreo de Ánima Village",
+    "heroP1": "Ánima Village reúne más de 84 <em>marcas exclusivas</em>, <em>experiencias gastronómicas</em>, cafés y <em>espacios para activar el cuerpo y la mente</em>.",
+    "heroP2": "Celebra lo mejor de la vida: la naturaleza, el bienestar, la gastronomía, el arte y la comunidad. Cada espacio te invita a <em>disfrutar</em> y a <em>estar presente.</em>",
+    "essenceHeading": "Acerca de Ánima",
+    "essenceP1": "Un destino de SOMA Group, diseñado por Sordo Madaleno.",
+    "essenceP2": "Un espacio inspirado en las comunidades locales y la esencia de Cabo del Sol.",
+    "essenceP3": "Una <em>experiencia holística</em> con tiendas, arte, gastronomía y bienestar en un <em>ambiente lleno de vida y conexión</em>.",
+    "galleryAlt": "Ánima Village",
+    "closing": "La <em>comunidad</em> Ánima"
+  },
   "footer": {
     "newsletterTitle": "Sé parte de nuestra comunidad",
     "newsletterLead": "Regístrate para recibir acceso anticipado a eventos, noticias y oportunidades.",
@@ -78,5 +91,16 @@
   "localeSwitcher": {
     "es": "Español",
     "en": "English"
+  },
+  "comingSoon": {
+    "eyebrow": "Ahora abiertos hasta las 9 PM",
+    "headline": "Ven a visitarnos y descubre <em>todo lo que el Village tiene para ofrecerte.</em>",
+    "moreOnWay": "…y mucho más en camino",
+    "lead": "Estamos sumando nuevas marcas, experiencias y servicios. Nuestro sitio web se está actualizando y estará de vuelta muy pronto.",
+    "hoursTitle": "Horario del Village",
+    "hours": "10 AM – 9 PM",
+    "findUsTitle": "Encuéntranos",
+    "address": "Cabo Del Sol · Carretera Transpeninsular Km 10.3, Cabo San Lucas, B.C.S. 23455, México",
+    "followUs": "Síguenos"
   }
 }

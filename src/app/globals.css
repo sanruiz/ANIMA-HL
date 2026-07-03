@@ -853,6 +853,245 @@ h1 {
 }
 
 /* ============================================================
+   ABOUT — secciones (migrado de Webflow: /about)
+   ============================================================ */
+
+/* Hero: render aéreo full-bleed + gradiente superior para el header. */
+.about-hero {
+  position: relative;
+  width: 100%;
+  height: 90svh;
+  min-height: 520px;
+  overflow: hidden;
+  background: var(--color-oscuro);
+}
+
+.about-hero__img {
+  object-fit: cover;
+}
+
+.about-hero__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg,
+      color-mix(in srgb, var(--color-oscuro) 55%, transparent) 0%,
+      color-mix(in srgb, var(--color-oscuro) 12%, transparent) 22%,
+      transparent 45%);
+}
+
+/* Intro: dos párrafos centrados sobre claro. */
+.about-intro {
+  width: 100%;
+  background: var(--color-claro);
+  color: var(--color-oscuro);
+  display: flex;
+  justify-content: center;
+}
+
+.about-intro__inner {
+  width: 95%;
+  max-width: 900px;
+  padding: 90px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+  text-align: center;
+}
+
+.about-intro__lead {
+  margin: 0;
+  font-family: var(--font-primary);
+  font-weight: 400;
+  font-size: 28px;
+  line-height: 38px;
+  color: var(--color-oscuro);
+}
+
+.about-intro__lead em {
+  font-style: italic;
+}
+
+/* Video loop full-bleed. */
+.about-video {
+  width: 100%;
+  height: 80svh;
+  min-height: 420px;
+  overflow: hidden;
+  background: var(--color-oscuro);
+}
+
+.about-video__media {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Essence: heading italic + texto, dos columnas sobre verde. */
+.about-essence {
+  width: 100%;
+  background: var(--color-verde);
+  color: var(--color-beige);
+  display: flex;
+  justify-content: center;
+}
+
+.about-essence__inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 50px;
+  align-items: center;
+  width: 95%;
+  max-width: var(--width-max);
+  padding: 90px 0;
+}
+
+.about-essence__heading {
+  margin: 0;
+  font-family: var(--font-primary);
+  font-style: italic;
+  font-weight: 500;
+  font-size: 64px;
+  line-height: 68px;
+  color: var(--color-beige);
+}
+
+.about-essence__body {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.about-essence__body p {
+  margin: 0;
+  font-family: var(--font-primary);
+  font-size: 22px;
+  line-height: 30px;
+  color: var(--color-beige);
+}
+
+.about-essence__body em {
+  font-style: italic;
+}
+
+/* Galería de 6 fotos, grid de 3 columnas. */
+.about-gallery {
+  width: 100%;
+  background: var(--color-claro);
+  display: flex;
+  justify-content: center;
+}
+
+.about-gallery__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  width: 95%;
+  max-width: var(--width-max);
+  padding: 60px 0;
+}
+
+.about-gallery__item {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: 4px;
+}
+
+.about-gallery__img {
+  object-fit: cover;
+}
+
+/* Cierre: emblema + heading sobre beige. */
+.about-closing {
+  width: 100%;
+  min-height: 60vh;
+  background: var(--color-beige);
+  color: var(--color-oscuro);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.about-closing__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+  width: 95%;
+  max-width: var(--width-max);
+  padding: 80px 0;
+  text-align: center;
+}
+
+.about-closing__mark {
+  width: 70px;
+  height: auto;
+  color: color-mix(in srgb, var(--color-verde) 55%, var(--color-beige));
+}
+
+.about-closing__heading {
+  margin: 0;
+  font-family: var(--font-primary);
+  font-weight: 400;
+  font-size: 48px;
+  line-height: 52px;
+  color: var(--color-oscuro);
+}
+
+.about-closing__heading em {
+  font-style: italic;
+}
+
+@media (max-width: 991px) {
+  .about-essence__inner {
+    grid-template-columns: 1fr;
+    gap: 32px;
+    padding: 70px 0;
+  }
+
+  .about-essence__heading {
+    font-size: 48px;
+    line-height: 52px;
+  }
+
+  .about-gallery__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 767px) {
+  .about-intro__inner {
+    padding: 64px 0;
+  }
+
+  .about-intro__lead {
+    font-size: 22px;
+    line-height: 30px;
+  }
+
+  .about-essence__heading {
+    font-size: 40px;
+    line-height: 44px;
+  }
+
+  .about-essence__body p {
+    font-size: 19px;
+    line-height: 27px;
+  }
+
+  .about-gallery__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .about-closing__heading {
+    font-size: 32px;
+    line-height: 36px;
+  }
+}
+
+/* ============================================================
    FOOTER (migrado de Webflow: section.news oscuro + section verde)
    ============================================================ */
 .site-footer {
@@ -1202,4 +1441,249 @@ h1 {
   .footer-credits {
     width: 90%;
   }
+}
+
+/* =============================================================================
+   Coming soon (/coming-soon)
+   Página de mantenimiento pública mientras se desarrolla el sitio.
+   ========================================================================== */
+
+.coming-soon {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100dvh;
+  background: var(--color-claro);
+  color: var(--color-oscuro);
+}
+
+.coming-soon__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 28px clamp(20px, 4vw, 48px);
+}
+
+.coming-soon__logo {
+  color: var(--color-oscuro);
+}
+
+.coming-soon__header .locale-switcher {
+  display: flex;
+  gap: 20px;
+  font-family: var(--font-ui-stack);
+  font-size: 11.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.coming-soon__header .locale-switcher a {
+  opacity: 0.45;
+  border-bottom: 1px solid transparent;
+  padding-bottom: 2px;
+  transition: opacity 0.25s ease, border-color 0.25s ease;
+}
+
+.coming-soon__header .locale-switcher a.active {
+  opacity: 1;
+  border-bottom-color: var(--color-oscuro);
+}
+
+.coming-soon__header .locale-switcher a:hover {
+  opacity: 1;
+}
+
+.coming-soon__main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: clamp(32px, 5vh, 52px);
+  padding: clamp(32px, 6vh, 72px) 24px;
+}
+
+.coming-soon__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-ui-stack);
+  font-size: 11.5px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-verde);
+  border: 1px solid var(--color-beige);
+  border-radius: 999px;
+  padding: 9px 18px;
+  background: color-mix(in srgb, var(--color-beige) 25%, transparent);
+}
+
+.coming-soon__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--color-verde);
+  animation: coming-soon-pulse 2.4s ease-in-out infinite;
+}
+
+@keyframes coming-soon-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.35;
+    transform: scale(0.8);
+  }
+}
+
+.coming-soon__headline {
+  font-family: var(--font-primary);
+  font-weight: 400;
+  font-size: clamp(32px, 5.2vw, 60px);
+  line-height: 1.18;
+  max-width: 18ch;
+  text-wrap: balance;
+  margin: 0;
+}
+
+.coming-soon__headline em {
+  font-style: italic;
+}
+
+.coming-soon__marquee-block {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.coming-soon__marquee {
+  overflow: hidden;
+  width: 100%;
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 12%,
+    black 88%,
+    transparent
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 12%,
+    black 88%,
+    transparent
+  );
+}
+
+.coming-soon__track {
+  display: flex;
+  width: max-content;
+  animation: coming-soon-scroll 55s linear infinite;
+}
+
+.coming-soon__marquee:hover .coming-soon__track {
+  animation-play-state: paused;
+}
+
+.coming-soon__track span {
+  display: inline-flex;
+  align-items: center;
+  gap: 35px;
+  white-space: nowrap;
+  font-size: clamp(18px, 2.2vw, 26px);
+  padding: 0 18px;
+}
+
+.coming-soon__track span::after {
+  content: "";
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--color-gold);
+  flex-shrink: 0;
+}
+
+.coming-soon__brand--italic {
+  font-style: italic;
+}
+
+@keyframes coming-soon-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .coming-soon__track {
+    animation: none;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .coming-soon__dot {
+    animation: none;
+  }
+}
+
+.coming-soon__more {
+  font-style: italic;
+  font-size: clamp(17px, 1.8vw, 22px);
+  color: var(--color-verde);
+  margin: 0;
+}
+
+.coming-soon__lead {
+  font-size: clamp(17px, 1.6vw, 20px);
+  line-height: 1.65;
+  max-width: 44ch;
+  opacity: 0.85;
+  text-wrap: balance;
+  margin: 0;
+}
+
+.coming-soon__footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px 48px;
+  justify-content: center;
+  text-align: center;
+  border-top: 1px solid var(--color-beige);
+  padding: 32px clamp(20px, 4vw, 48px) 40px;
+  font-family: var(--font-ui-stack);
+  font-size: 12.5px;
+  letter-spacing: 0.06em;
+  line-height: 1.7;
+}
+
+.coming-soon__footer-col {
+  max-width: 340px;
+}
+
+.coming-soon__footer-col strong {
+  display: block;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 11px;
+  color: var(--color-verde);
+  margin-bottom: 6px;
+}
+
+.coming-soon__footer-col a {
+  border-bottom: 1px solid var(--color-beige);
+  padding-bottom: 1px;
+  transition: border-color 0.25s ease;
+}
+
+.coming-soon__footer-col a:hover {
+  border-bottom-color: var(--color-oscuro);
 }
