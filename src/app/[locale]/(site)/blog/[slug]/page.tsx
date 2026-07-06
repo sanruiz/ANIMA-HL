@@ -5,7 +5,7 @@ import { NEWS_BY_SLUG_QUERY } from "@/lib/queries";
 import type { NewsBySlugResponse } from "@/lib/types";
 import { Link } from "@/i18n/navigation";
 
-export default async function NoticiaDetallePage({
+export default async function BlogPostPage({
   params,
 }: {
   params: Promise<{ locale: string; slug: string }>;
@@ -22,7 +22,7 @@ export default async function NoticiaDetallePage({
     });
     post = data.post;
   } catch (err) {
-    console.error("[noticia] error:", err);
+    console.error("[blog] error:", err);
   }
 
   if (!post) notFound();
@@ -31,7 +31,7 @@ export default async function NoticiaDetallePage({
 
   return (
     <article className="container">
-      <Link href="/noticias" className="wp-list-card__meta" style={{ color: "var(--accent)" }}>
+      <Link href="/blog" className="wp-list-card__meta" style={{ color: "var(--accent)" }}>
         ← {locale === "es" ? "Noticias" : "News"}
       </Link>
 

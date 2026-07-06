@@ -10,14 +10,14 @@ import AnimaLogo from "./AnimaLogo";
 
 // Nav del sitio Webflow replicado. Las páginas aún no migradas al headless
 // (arte, gastronomy, map) apuntan a rutas internas placeholder y darán 404
-// hasta que se migren; about, brands y blog→/noticias ya existen.
+// hasta que se migren; about, brands y blog ya existen.
 const NAV_ITEMS = [
   { key: "about", href: "/about" },
   { key: "arte", href: "/arte" },
   { key: "elevatedBrands", href: "/brands" },
   { key: "gastronomy", href: "/gastronomy" },
   { key: "map", href: "/map" },
-  { key: "blog", href: "/noticias" },
+  { key: "blog", href: "/blog" },
 ] as const;
 
 const ABOUT_IMAGE =

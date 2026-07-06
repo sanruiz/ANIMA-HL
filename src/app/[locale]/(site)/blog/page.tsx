@@ -5,14 +5,14 @@ import type { NewsResponse, PostNode } from "@/lib/types";
 import { Link } from "@/i18n/navigation";
 import { stripHtml } from "@/lib/utils";
 
-export default async function NoticiasPage({
+export default async function BlogPage({
   params,
 }: {
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const t = await getTranslations("news");
+  const t = await getTranslations("blog");
 
   let posts: PostNode[] = [];
   let failed = false;
@@ -21,7 +21,7 @@ export default async function NoticiasPage({
     const data = await fetchGraphQL<NewsResponse>({ query: NEWS_QUERY, locale });
     posts = data.posts.nodes;
   } catch (err) {
-    console.error("[noticias] error cargando noticias:", err);
+    console.error("[blog] error cargando posts:", err);
     failed = true;
   }
 
@@ -42,7 +42,7 @@ export default async function NoticiasPage({
               <Link
                 className="wp-list-card"
                 key={post.id}
-                href={`/noticias/${post.slug}`}
+                href={`/blog/${post.slug}`}
               >
                 {img?.sourceUrl && (
                   // eslint-disable-next-line @next/next/no-img-element
