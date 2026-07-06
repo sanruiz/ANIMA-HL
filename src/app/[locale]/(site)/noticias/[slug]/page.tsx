@@ -31,12 +31,12 @@ export default async function NoticiaDetallePage({
 
   return (
     <article className="container">
-      <Link href="/noticias" className="meta" style={{ color: "var(--accent)" }}>
+      <Link href="/noticias" className="wp-list-card__meta" style={{ color: "var(--accent)" }}>
         ← {locale === "es" ? "Noticias" : "News"}
       </Link>
 
       {post.date && (
-        <div className="meta" style={{ marginTop: "1rem" }}>
+        <div className="wp-list-card__meta" style={{ marginTop: "1rem" }}>
           {new Date(post.date).toLocaleDateString(locale, {
             day: "numeric",
             month: "long",

@@ -190,21 +190,23 @@ a {
   height: 100px;
 }
 
-h1 {
-  font-family: var(--font-primary);
+@layer base {
+  h1 {
+    font-family: var(--font-primary);
     font-size: var(--text-h1);
     font-weight: 400;
     line-height: var(--text-h1--line-height);
     margin: 0 0 8px;
     color: var(--color-warm-gray);
   }
-  
+
   h2,
   h3 {
     font-family: var(--font-primary);
     font-size: var(--text-h2);
     font-weight: 400;
     line-height: var(--text-h2--line-height);
+  }
 }
 
 .subtitle {
@@ -212,13 +214,16 @@ h1 {
     margin-bottom: 32px;
 }
 
-.grid {
+/* Estilos placeholder de las páginas WP aún no migradas de Webflow
+   (agenda, noticias, noticias/[slug]). Prefijo wp-list- para no chocar
+   con las utilities de Tailwind (`.grid`) ni con shadcn (`.card`). */
+.wp-list-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 1.25rem;
 }
 
-.card {
+.wp-list-card {
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: 8px;
@@ -227,22 +232,22 @@ h1 {
   flex-direction: column;
 }
 
-.card img {
+.wp-list-card img {
   width: 100%;
   height: 150px;
   object-fit: cover;
   background: #000;
 }
 
-.card .body {
+.wp-list-card__body {
   padding: 14px 16px 18px;
 }
 
-.card h3 {
+.wp-list-card h3 {
   margin: 0 0 6px;
 }
 
-.card .meta {
+.wp-list-card__meta {
   color: var(--muted-foreground);
     font-size: var(--text-small);
     line-height: var(--text-small--line-height);
@@ -1088,6 +1093,205 @@ h1 {
   .about-closing__heading {
     font-size: 32px;
     line-height: 36px;
+  }
+}
+
+/* ============================================================
+   BRANDS — secciones (migrado de Webflow: /brands)
+   ============================================================ */
+
+/* Hero: render aéreo full-bleed + gradiente + párrafo centrado en la base. */
+.brands-hero {
+  position: relative;
+  width: 100%;
+  height: 90svh;
+  min-height: 520px;
+  overflow: hidden;
+  background: var(--color-oscuro);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.brands-hero__img {
+  object-fit: cover;
+  z-index: 0;
+}
+
+.brands-hero__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(180deg,
+      color-mix(in srgb, var(--color-oscuro) 55%, transparent) 0%,
+      color-mix(in srgb, var(--color-oscuro) 12%, transparent) 22%,
+      transparent 45%,
+      color-mix(in srgb, var(--color-oscuro) 18%, transparent) 72%,
+      color-mix(in srgb, var(--color-oscuro) 70%, transparent) 100%);
+}
+
+.brands-hero__inner {
+  position: relative;
+  z-index: 2;
+  width: 95%;
+  max-width: 900px;
+  padding: 0 0 90px;
+  text-align: center;
+}
+
+.brands-hero__lead {
+  margin: 0;
+  font-family: var(--font-primary);
+  font-weight: 400;
+  font-size: 28px;
+  line-height: 38px;
+  color: var(--color-claro);
+  text-wrap: balance;
+}
+
+.brands-hero__lead em {
+  font-style: italic;
+}
+
+/* Intro: heading + subheading centrados sobre claro. */
+.brands-intro {
+  width: 100%;
+  background: var(--color-claro);
+  color: var(--color-oscuro);
+  display: flex;
+  justify-content: center;
+}
+
+.brands-intro__inner {
+  width: 95%;
+  max-width: 900px;
+  padding: 90px 0 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  text-align: center;
+}
+
+.brands-intro__heading {
+  margin: 0;
+  font-family: var(--font-primary);
+  font-style: italic;
+  font-weight: 500;
+  font-size: 56px;
+  line-height: 60px;
+  color: var(--color-oscuro);
+}
+
+.brands-intro__lead {
+  margin: 0;
+  font-family: var(--font-primary);
+  font-weight: 400;
+  font-size: 22px;
+  line-height: 30px;
+  color: color-mix(in srgb, var(--color-oscuro) 78%, transparent);
+}
+
+/* Directorio: heading "Retail reimagined" + tabs de filtros + grid de marcas. */
+.brands-directory {
+  width: 100%;
+  background: var(--color-claro);
+  color: var(--color-oscuro);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 0 100px;
+}
+
+.brands-directory__intro {
+  width: 95%;
+  max-width: 900px;
+  padding: 40px 0 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  text-align: center;
+}
+
+.brands-directory__heading {
+  margin: 0;
+  font-family: var(--font-primary);
+  font-style: italic;
+  font-weight: 500;
+  font-size: 48px;
+  line-height: 52px;
+  color: var(--color-oscuro);
+}
+
+.brands-directory__lead {
+  margin: 0;
+  font-family: var(--font-primary);
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 28px;
+  color: color-mix(in srgb, var(--color-oscuro) 72%, transparent);
+}
+
+/* Filters, grid y brand-card viven en Tailwind dentro de BrandsDirectory.tsx
+   (ver hybrid rule en CLAUDE.md). Solo el canvas de la sección (wrapper +
+   __intro + __heading + __lead) permanece en BEM. */
+
+@media (max-width: 991px) {
+  .brands-hero__lead {
+    font-size: 24px;
+    line-height: 32px;
+  }
+
+  .brands-intro__inner {
+    padding: 70px 0 32px;
+  }
+
+  .brands-intro__heading {
+    font-size: 44px;
+    line-height: 48px;
+  }
+
+  .brands-directory__heading {
+    font-size: 40px;
+    line-height: 44px;
+  }
+}
+
+@media (max-width: 767px) {
+  .brands-hero__inner {
+    padding-bottom: 64px;
+  }
+
+  .brands-hero__lead {
+    font-size: 20px;
+    line-height: 28px;
+  }
+
+  .brands-intro__inner {
+    padding: 56px 0 24px;
+  }
+
+  .brands-intro__heading {
+    font-size: 36px;
+    line-height: 40px;
+  }
+
+  .brands-intro__lead {
+    font-size: 19px;
+    line-height: 27px;
+  }
+
+  .brands-directory {
+    padding: 24px 0 72px;
+  }
+
+  .brands-directory__heading {
+    font-size: 32px;
+    line-height: 36px;
+  }
+
+  .brands-directory__lead {
+    font-size: 18px;
+    line-height: 26px;
   }
 }
 

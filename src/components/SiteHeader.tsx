@@ -9,12 +9,12 @@ import InstagramIcon from "./InstagramIcon";
 import AnimaLogo from "./AnimaLogo";
 
 // Nav del sitio Webflow replicado. Las páginas aún no migradas al headless
-// (about, arte, gastronomy, map) apuntan a rutas internas placeholder y darán
-// 404 hasta que se migren; brands→/marcas y blog→/noticias ya existen.
+// (arte, gastronomy, map) apuntan a rutas internas placeholder y darán 404
+// hasta que se migren; about, brands y blog→/noticias ya existen.
 const NAV_ITEMS = [
   { key: "about", href: "/about" },
   { key: "arte", href: "/arte" },
-  { key: "elevatedBrands", href: "/marcas" },
+  { key: "elevatedBrands", href: "/brands" },
   { key: "gastronomy", href: "/gastronomy" },
   { key: "map", href: "/map" },
   { key: "blog", href: "/noticias" },
@@ -29,8 +29,9 @@ export default function SiteHeader({ locale }: { locale: string }) {
   const t = useTranslations("nav");
   const pathname = usePathname();
   // Páginas cuya primera sección es un media full-bleed oscuro: el header
-  // flota encima en transparente con texto claro (home y about).
-  const onHero = pathname === "/" || pathname === "/about";
+  // flota encima en transparente con texto claro (home, about, brands).
+  const onHero =
+    pathname === "/" || pathname === "/about" || pathname === "/brands";
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 

@@ -10,10 +10,10 @@ const INSTAGRAM_URL = "https://www.instagram.com/animavillagecabo";
 const INSTAGRAM_ICON_URL = "https://www.instagram.com/animavillagecabos";
 const SOMA_URL = "https://soma.group/";
 
-// "What We Offer": brands→/marcas y news→/noticias ya existen en headless;
-// arte y gastronomy son placeholders hasta migrar; programming→/agenda existe.
+// "What We Offer": brands y news→/noticias ya existen en headless; arte
+// y gastronomy son placeholders hasta migrar; programming→/agenda existe.
 const OFFER_LINKS = [
-  { key: "offerBrands", href: "/marcas" },
+  { key: "offerBrands", href: "/brands" },
   { key: "offerArte", href: "/arte" },
   { key: "offerGastronomy", href: "/gastronomy" },
   { key: "offerProgramming", href: "/agenda" },

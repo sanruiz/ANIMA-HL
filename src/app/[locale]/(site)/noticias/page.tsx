@@ -34,13 +34,13 @@ export default async function NoticiasPage({
       ) : posts.length === 0 ? (
         <p className="empty">{t("empty")}</p>
       ) : (
-        <div className="grid">
+        <div className="wp-list-grid">
           {posts.map((post) => {
             const img = post.featuredImage?.node;
             const excerpt = stripHtml(post.excerpt);
             return (
               <Link
-                className="card"
+                className="wp-list-card"
                 key={post.id}
                 href={`/noticias/${post.slug}`}
               >
@@ -51,9 +51,9 @@ export default async function NoticiasPage({
                     alt={img.altText ?? post.title ?? ""}
                   />
                 )}
-                <div className="body">
+                <div className="wp-list-card__body">
                   {post.date && (
-                    <div className="meta">
+                    <div className="wp-list-card__meta">
                       {new Date(post.date).toLocaleDateString(locale, {
                         month: "long",
                         year: "numeric",
@@ -63,7 +63,7 @@ export default async function NoticiasPage({
                   )}
                   <h3>{post.title}</h3>
                   {excerpt && (
-                    <div className="meta">
+                    <div className="wp-list-card__meta">
                       {excerpt.length > 140
                         ? excerpt.slice(0, 140) + "…"
                         : excerpt}
