@@ -57,7 +57,10 @@
       "mcp__2dc753b5-4273-44d5-87a1-54fdb77ae7b9__data_style_tool",
       "Bash(curl -sL https://www.animavillage.com/news -o /private/tmp/claude-501/-Users-santiagoramirez-Sites-ANIMA-HL/f1b27f1e-022d-46be-90f4-f0fdceb34b4d/scratchpad/news.html)",
       "Bash(python3 -)",
-      "Bash(curl -sL \"https://www.animavillage.com/es/news\" -o /private/tmp/claude-501/-Users-santiagoramirez-Sites-ANIMA-HL/f1b27f1e-022d-46be-90f4-f0fdceb34b4d/scratchpad/news-es.html)"
+      "Bash(curl -sL \"https://www.animavillage.com/es/news\" -o /private/tmp/claude-501/-Users-santiagoramirez-Sites-ANIMA-HL/f1b27f1e-022d-46be-90f4-f0fdceb34b4d/scratchpad/news-es.html)",
+      "Bash(curl -s -L -o /dev/null -w \"final: %{url_effective} \\(%{http_code}\\)\\\\n\" http://localhost:3000/news)",
+      "Bash(curl -sL http://localhost:3000/es/blog)",
+      "Bash(curl -sL http://localhost:3000/en/blog)"
     ]
   }
 }
