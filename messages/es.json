@@ -21,7 +21,6 @@
     "heroText": "Un destino donde <em>marcas, bienestar, arte</em> y naturaleza convergen.",
     "viewAgenda": "Ver agenda",
     "viewBrands": "Ver marcas",
-    "viewNews": "Ver noticias",
     "soulHeading": "Nuestra Esencia",
     "soulP1": "Ánima Village reúne <em>más de 80 marcas exclusivas, experiencias gastronómicas, actividades de bienestar, restaurantes y cafés.</em>",
     "soulP2": "Un espacio que celebra lo mejor de la vida: naturaleza, bienestar, gastronomía, arte y comunidad.",
@@ -37,13 +36,24 @@
   },
   "brands": {
     "title": "Marcas",
+    "metaDescription": "Descubre la selección exclusiva de marcas de Ánima Village: moda, belleza, joyería, hogar, tecnología y gastronomía en Cabo Del Sol.",
+    "heroImageAlt": "Vista aérea del paseo comercial de Ánima Village",
+    "heroP1": "Ánima Village reúne <em>más de 84 marcas exclusivas</em>, experiencias gastronómicas, cafés y espacios para activar el cuerpo y la mente.",
+    "introHeading": "Directorio de tiendas",
+    "introLead": "Una selección cuidadosamente elegida de las marcas que debes conocer.",
+    "directoryHeading": "Marcas que inspiran",
+    "directoryLead": "Para quienes buscan lo extraordinario.",
+    "filterAll": "Todo",
     "empty": "No hay marcas por ahora.",
     "error": "No se pudieron cargar las marcas. Revisa la conexión con WordPress.",
     "website": "Sitio web",
     "petFriendly": "Pet friendly"
   },
-  "news": {
+  "blog": {
     "title": "Noticias",
+    "metaDescription": "Lo último de la comunidad de Ánima Village en Cabo Del Sol: aperturas, eventos, arte, bienestar y más.",
+    "heading": "Lo Último",
+    "lead": "<em>Noticias, eventos y más.</em> <br></br>No te pierdas nada",
     "empty": "No hay noticias por ahora.",
     "error": "No se pudieron cargar las noticias. Revisa la conexión con WordPress."
   },

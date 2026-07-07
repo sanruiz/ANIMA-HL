@@ -36,7 +36,7 @@ export default async function AgendaPage({
       ) : events.length === 0 ? (
         <p className="empty">{t("empty")}</p>
       ) : (
-        <div className="grid">
+        <div className="wp-list-grid">
           {events.map((ev) => {
             const img = ev.featuredImage?.node;
             const f = ev.eventFields;
@@ -44,16 +44,16 @@ export default async function AgendaPage({
             // en UTC para evitar desfase de un día. Fallback a la fecha del post.
             const startDate = f?.startDate ?? ev.date;
             return (
-              <article className="card" key={ev.id}>
+              <article className="wp-list-card" key={ev.id}>
                 {img?.sourceUrl && (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img src={img.sourceUrl} alt={img.altText ?? ev.title ?? ""} />
                 )}
-                <div className="body">
+                <div className="wp-list-card__body">
                   {f?.featured && <span className="tag">★ {t("featured")}</span>}
                   <h3>{ev.title}</h3>
                   {startDate && (
-                    <div className="meta">
+                    <div className="wp-list-card__meta">
                       {new Date(startDate).toLocaleDateString(locale, {
                         day: "numeric",
                         month: "long",
@@ -63,7 +63,9 @@ export default async function AgendaPage({
                       {f?.startTime ? ` · ${f.startTime.slice(0, 5)}` : ""}
                     </div>
                   )}
-                  {f?.place && <div className="meta">{f.place}</div>}
+                  {f?.place && (
+                    <div className="wp-list-card__meta">{f.place}</div>
+                  )}
                   <div>
                     {ev.eventTags?.nodes.map((tag) => (
                       <span className="tag" key={tag.slug}>

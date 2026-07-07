@@ -75,7 +75,18 @@ export type PostSingle = {
   id: string;
   title: string | null;
   date: string | null;
+  modified: string | null;
+  excerpt: string | null;
   content: string | null;
   featuredImage: FeaturedImage;
 };
 export type NewsBySlugResponse = { post: PostSingle | null };
+
+export type NewsSlugNode = {
+  id: string;
+  slug: string | null;
+  date: string | null;
+  modified: string | null;
+};
+
+export type NewsSlugsResponse = { posts: { nodes: NewsSlugNode[] } };

@@ -21,7 +21,6 @@
     "heroText": "A destination where <em>brands, wellness, art</em> and nature converge.",
     "viewAgenda": "View events",
     "viewBrands": "View brands",
-    "viewNews": "View news",
     "soulHeading": "Our Soul",
     "soulP1": "Ánima Village brings together <em>over 80 elevated brands, gastronomic experiences, wellness activities, restaurants and cafes.</em>",
     "soulP2": "A space that celebrates the best of life: nature, wellness, gastronomy, art, and community.",
@@ -37,13 +36,24 @@
   },
   "brands": {
     "title": "Brands",
+    "metaDescription": "Discover Ánima Village's hand-picked selection of exclusive brands — fashion, beauty, jewelry, home, technology and gastronomy in Cabo Del Sol.",
+    "heroImageAlt": "Aerial view of Ánima Village retail promenade",
+    "heroP1": "Ánima Village brings together <em>over 84 exclusive brands</em>, gastronomic experiences, wellness studios, and cafes.",
+    "introHeading": "Store Directory",
+    "introLead": "Our hand-picked selection of the brands you need to know.",
+    "directoryHeading": "Retail reimagined",
+    "directoryLead": "An invitation to discover, live, and shop elevated brands.",
+    "filterAll": "All",
     "empty": "No brands yet.",
     "error": "Could not load brands. Check the WordPress connection.",
     "website": "Website",
     "petFriendly": "Pet friendly"
   },
-  "news": {
+  "blog": {
     "title": "News",
+    "metaDescription": "The latest updates, events, and highlights from the Ánima Village community in Cabo Del Sol — openings, art, wellness, and more.",
+    "heading": "What's Happening",
+    "lead": "Discover the latest <em>updates, events, <br></br>and highlights</em> from our community",
     "empty": "No news yet.",
     "error": "Could not load news. Check the WordPress connection."
   },

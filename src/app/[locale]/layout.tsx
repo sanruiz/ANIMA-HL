@@ -5,6 +5,7 @@ import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
+import { getSiteUrl } from "@/lib/seo";
 
 const cardo = Cardo({
   variable: "--font-cardo",
@@ -24,6 +25,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+  metadataBase: getSiteUrl(),
   title: "Ánima Village",
   description: "Sitio headless con WordPress + Next.js",
 };

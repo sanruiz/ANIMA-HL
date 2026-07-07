@@ -38,13 +38,13 @@ describe("getPreviewToken", () => {
 
 describe("splitLocale", () => {
   it("extrae el locale del pathname", () => {
-    expect(splitLocale("/es/marcas")).toEqual({ locale: "es", rest: "/marcas" });
+    expect(splitLocale("/es/brands")).toEqual({ locale: "es", rest: "/brands" });
     expect(splitLocale("/en")).toEqual({ locale: "en", rest: "/" });
   });
 
   it("usa el locale por defecto cuando no hay prefijo", () => {
     expect(splitLocale("/")).toEqual({ locale: "es", rest: "/" });
-    expect(splitLocale("/marcas")).toEqual({ locale: "es", rest: "/marcas" });
+    expect(splitLocale("/brands")).toEqual({ locale: "es", rest: "/brands" });
   });
 
   it("no confunde segmentos que parecen locales", () => {
@@ -61,7 +61,7 @@ describe("isComingSoonPath", () => {
 
   it("rechaza otras rutas", () => {
     expect(isComingSoonPath("/")).toBe(false);
-    expect(isComingSoonPath("/es/marcas")).toBe(false);
+    expect(isComingSoonPath("/es/brands")).toBe(false);
     expect(isComingSoonPath("/es/coming-soon/extra")).toBe(false);
   });
 });

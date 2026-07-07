@@ -70,12 +70,27 @@ export const NEWS_BY_SLUG_QUERY = /* GraphQL */ `
       id
       title
       date
+      modified
+      excerpt
       content
       featuredImage {
         node {
           sourceUrl
           altText
         }
+      }
+    }
+  }
+`;
+
+export const NEWS_SLUGS_QUERY = /* GraphQL */ `
+  query NewsSlugs($first: Int = 100) {
+    posts(first: $first, where: { orderby: { field: DATE, order: DESC } }) {
+      nodes {
+        id
+        slug
+        date
+        modified
       }
     }
   }

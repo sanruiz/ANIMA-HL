@@ -211,3 +211,60 @@ TYPE-XXX: Brief description
 - `feature/TYPE-XXX-brief-description`
 - `bugfix/TYPE-XXX-brief-description`
 - `hotfix/TYPE-XXX-brief-description`
+
+---
+
+## Shared Detailed Rules (source of truth for both Claude & Copilot)
+
+The following files under `.github/instructions/` contain detailed coding
+conventions written in Copilot's `applyTo` format but agent-agnostic in content.
+Read the relevant file BEFORE touching a matching path — do not duplicate the
+rules into memory, treat these as the canonical source.
+
+| File | Read when touching |
+|---|---|
+| [.github/instructions/typescript.instructions.md](.github/instructions/typescript.instructions.md) | Any `*.ts` / `*.tsx` |
+| [.github/instructions/react-components.instructions.md](.github/instructions/react-components.instructions.md) | `src/components/**/*.tsx` |
+| [.github/instructions/server-actions.instructions.md](.github/instructions/server-actions.instructions.md) | `src/app/actions/**/*.ts` |
+| [.github/instructions/tests.instructions.md](.github/instructions/tests.instructions.md) | `*.test.{ts,tsx}` |
+| [.github/instructions/caching.instructions.md](.github/instructions/caching.instructions.md) | `next.config.*`, `src/proxy.ts`, `src/lib/**/*.ts`, `src/app/**/{route,page}.tsx` |
+| [.github/instructions/seo-ai-optimization.instructions.md](.github/instructions/seo-ai-optimization.instructions.md) | Any `*.tsx` (pages, layouts, metadata) |
+| [.github/instructions/css-styling.instructions.md](.github/instructions/css-styling.instructions.md) | `*.css` / `*.tsx` — **see CSS exception below** |
+
+### CSS styling — exception for Webflow-migrated sections
+
+`css-styling.instructions.md` prescribes Tailwind + shadcn/ui + mobile-first as
+the default for new UI. **Full-bleed sections migrated from Webflow** (currently
+Home, About, Footer, Brands) intentionally break that rule and use **BEM classes
+in `src/app/globals.css`** with CSS custom properties (`--color-oscuro`,
+`--color-beige`, etc.) and **desktop-first media queries** (`@media (max-width: 991px)`).
+Reason: the migration mirrors Webflow's output verbatim to keep visual parity
+during the WordPress-headless transition.
+
+### Hybrid rule (BEM ↔ Tailwind) — the split is inside each section
+
+Even within a Webflow-migrated section, split at the boundary of "canvas" vs
+"interactive/repeatable content":
+
+- **BEM in `globals.css`** for the section canvas: full-bleed hero, art-direction
+  strips (essence, closing), section title + lead paragraphs, complex layered
+  backgrounds (image + gradient + centered text). These pieces mirror Webflow
+  1:1, need exact desktop-first breakpoints (991 / 767), and rarely change.
+- **Tailwind utilities (+ shadcn primitives when applicable)** for anything
+  interactive or repeated inside the canvas: filter tabs, cards, grids, buttons,
+  forms, modals. Rule of thumb: if it has state (hover/focus/active) OR renders
+  as a list of N items, it's Tailwind. Use `cn()` from `@/lib/utils`, semantic
+  tokens (`bg-brand-oscuro`, `text-brand-oscuro/70`), and mobile-first breakpoints.
+
+**Example (Brands page):**
+
+- BEM → `.brands-hero`, `.brands-intro`, `.brands-directory` (wrapper),
+  `.brands-directory__intro` (Retail Reimagined heading + lead).
+- Tailwind → filter buttons, grid, brand cards inside `BrandsDirectory`.
+
+### Files under `.github/instructions/` that DO NOT apply to this repo
+
+`php-standards`, `wordpress-plugin-architecture`, `testing-standards` (PHPUnit),
+`github-workflow`, and `documentation-language` were seeded from a Silver Assist
+WordPress plugin template. There is no PHP in this repo and those workflows do
+not apply. Ignore them unless the repo grows to include a plugin subtree.

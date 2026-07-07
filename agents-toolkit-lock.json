@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "packageVersion": "2.4.0",
+  "packageVersion": "2.5.1",
   "config": {
     "stack": "all",
     "tracker": "all"
@@ -8,7 +8,7 @@
   "skills": {
     "ai-seo-optimization": {
       "source": "@silverassist/agents-toolkit",
-      "packageVersion": "2.4.0",
+      "packageVersion": "2.5.1",
       "computedHash": "493c1dc453b309b94b17803dfcc7e4def4a095bad258f3f394b36584a2c34201",
       "agents": [
         ".claude/skills",
@@ -17,7 +17,7 @@
     },
     "component-architecture": {
       "source": "@silverassist/agents-toolkit",
-      "packageVersion": "2.4.0",
+      "packageVersion": "2.5.1",
       "computedHash": "63a01e249e00c045e4a5f3f9882e64bb7a0a977dec9998e8da71806ef3a236fc",
       "agents": [
         ".claude/skills",
@@ -26,7 +26,7 @@
     },
     "create-component": {
       "source": "@silverassist/agents-toolkit",
-      "packageVersion": "2.4.0",
+      "packageVersion": "2.5.1",
       "computedHash": "55a8b26064ff3a47896ae4819cddfaccde1653d316917d51692ba8281d265549",
       "agents": [
         ".claude/skills",
@@ -35,7 +35,7 @@
     },
     "domain-driven-design": {
       "source": "@silverassist/agents-toolkit",
-      "packageVersion": "2.4.0",
+      "packageVersion": "2.5.1",
       "computedHash": "153a35ba274a34e049f0a105d1216150ad6beeee3622b32027905f3292c78974",
       "agents": [
         ".claude/skills",
@@ -44,7 +44,7 @@
     },
     "plugin-creation": {
       "source": "@silverassist/agents-toolkit",
-      "packageVersion": "2.4.0",
+      "packageVersion": "2.5.1",
       "computedHash": "cd6b0fa3f93bda9a746c0951426a43242fd5428197904d04542beebe4a1022fa",
       "agents": [
         ".claude/skills",
@@ -53,7 +53,7 @@
     },
     "quality-checks": {
       "source": "@silverassist/agents-toolkit",
-      "packageVersion": "2.4.0",
+      "packageVersion": "2.5.1",
       "computedHash": "ac89665fd0a1a886905cdc3835d68f8b7eb658f9398bb2fa6aad64a41b503b5e",
       "agents": [
         ".claude/skills",
@@ -62,7 +62,7 @@
     },
     "release-management": {
       "source": "@silverassist/agents-toolkit",
-      "packageVersion": "2.4.0",
+      "packageVersion": "2.5.1",
       "computedHash": "ff222c9d3b1fc82ed6cdc421bb0475fe675ea36969431264d394fc3f9e586228",
       "agents": [
         ".claude/skills",
@@ -71,7 +71,7 @@
     },
     "testing": {
       "source": "@silverassist/agents-toolkit",
-      "packageVersion": "2.4.0",
+      "packageVersion": "2.5.1",
       "computedHash": "0608339e43f847024a1e5e598fa0921ce629af0decc359572cece4b6fa1e4de5",
       "agents": [
         ".claude/skills",
@@ -80,8 +80,17 @@
     },
     "testing-patterns": {
       "source": "@silverassist/agents-toolkit",
-      "packageVersion": "2.4.0",
+      "packageVersion": "2.5.1",
       "computedHash": "94fd45a3090cccb183ed5a6f8fee9c6137587107cb8e4473bf11cb8f3d13eb92",
+      "agents": [
+        ".claude/skills",
+        ".github/skills"
+      ]
+    },
+    "nextjs-caching": {
+      "source": "@silverassist/agents-toolkit",
+      "packageVersion": "2.5.1",
+      "computedHash": "7222f2bbee4b01e9a3e8fa791ac9c50738fe53ed02f81e051dbe4b48497b07f9",
       "agents": [
         ".claude/skills",
         ".github/skills"
