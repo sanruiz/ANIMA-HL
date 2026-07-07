@@ -92,6 +92,34 @@ describe("fetchGraphQL()", () => {
     expect(init.next?.revalidate).toBe(60);
   });
 
+  it("passes tags as next.tags together with revalidate", async () => {
+    mockFetch({ data: {} });
+
+    await fetchGraphQL({ query: QUERY, revalidate: 3600, tags: ["wp:posts"] });
+
+    const [, init] = (globalThis.fetch as ReturnType<typeof vi.fn>).mock.calls[0];
+    expect(init.next?.tags).toEqual(["wp:posts"]);
+    expect(init.next?.revalidate).toBe(3600);
+  });
+
+  it("omits next.tags when tags are not provided", async () => {
+    mockFetch({ data: {} });
+
+    await fetchGraphQL({ query: QUERY });
+
+    const [, init] = (globalThis.fetch as ReturnType<typeof vi.fn>).mock.calls[0];
+    expect(init.next).not.toHaveProperty("tags");
+  });
+
+  it("omits next.tags when tags are empty", async () => {
+    mockFetch({ data: {} });
+
+    await fetchGraphQL({ query: QUERY, tags: [] });
+
+    const [, init] = (globalThis.fetch as ReturnType<typeof vi.fn>).mock.calls[0];
+    expect(init.next).not.toHaveProperty("tags");
+  });
+
   // === Errores HTTP ===
   it("respuesta HTTP no-ok lanza error con el status code", async () => {
     mockFetch("Not Found", 404);

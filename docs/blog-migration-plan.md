@@ -182,12 +182,12 @@ Ninguna hacia fuera. Interno: firma de `fetchGraphQL` gana `tags?` opcional.
 ### Phase 1: Rename `/noticias` → `/blog` + redirects 301
 **Objetivo**: la ruta nueva funciona con el contenido actual; URLs viejas redirigen.
 
-- [ ] `git mv src/app/[locale]/(site)/noticias src/app/[locale]/(site)/blog`
-- [ ] Actualizar hrefs internos: `blog/page.tsx` (`/blog/${slug}`), `blog/[slug]/page.tsx`
-- [ ] `SiteHeader.tsx` y `SiteFooter.tsx`: `href: "/blog"` (+ comentarios)
-- [ ] `messages/{en,es}.json`: namespace `news` → `blog` (mismos textos por ahora); borrar `home.viewNews`
-- [ ] `next.config.ts`: bloque `redirects()` completo (ver arriba)
-- [ ] Test de redirects (importar `next.config` y asegurar los 8 entries con `statusCode: 301`)
+- [x] `git mv src/app/[locale]/(site)/noticias src/app/[locale]/(site)/blog`
+- [x] Actualizar hrefs internos: `blog/page.tsx` (`/blog/${slug}`), `blog/[slug]/page.tsx`
+- [x] `SiteHeader.tsx` y `SiteFooter.tsx`: `href: "/blog"` (+ comentarios)
+- [x] `messages/{en,es}.json`: namespace `news` → `blog` (mismos textos por ahora); borrar `home.viewNews`
+- [x] `next.config.ts`: bloque `redirects()` completo (ver arriba)
+- [x] Test de redirects (importar `next.config` y asegurar los 8 entries con `statusCode: 301`)
 
 **Validación**: `npm test` + `npm run typecheck` + `npm run lint` verdes;
 `curl -I localhost:3000/news` → 301 → `/blog` → 307 (intl) → `/es/blog` 200;
@@ -196,13 +196,13 @@ Ninguna hacia fuera. Interno: firma de `fetchGraphQL` gana `tags?` opcional.
 ### Phase 2: Índice `/blog` con diseño Webflow
 **Objetivo**: paridad visual del listado.
 
-- [ ] `fetchGraphQL`: soporte `tags` + tests en `wp.test.ts`
-- [ ] `formatMonthYear()` en `src/lib/utils.ts` + tests (es/en, capitalización, UTC)
-- [ ] BEM `.blog-intro` en `globals.css` (bg claro, 300 px, breakpoints 991/767)
-- [ ] `BlogIntro.tsx` (t.rich con `em`/`br`)
-- [ ] `BlogList.tsx` (Tailwind: grid, card 2/3 + overlay + texto; `next/image` fill + `sizes` + `shouldBypassImageOptimizer`)
-- [ ] `blog/page.tsx`: componer Intro + List, `export const revalidate = 3600`, fetch con tags
-- [ ] Messages: textos Webflow EN/ES del intro
+- [x] `fetchGraphQL`: soporte `tags` + tests en `wp.test.ts`
+- [x] `formatMonthYear()` en `src/lib/utils.ts` + tests (es/en, capitalización, UTC)
+- [x] BEM `.blog-intro` en `globals.css` (bg claro, 300 px, breakpoints 991/767)
+- [x] `BlogIntro.tsx` (t.rich con `em`/`br`)
+- [x] `BlogList.tsx` (Tailwind: grid, card 2/3 + overlay + texto; `next/image` fill + `sizes` + `shouldBypassImageOptimizer`)
+- [x] `blog/page.tsx`: componer Intro + List, `export const revalidate = 3600`, fetch con tags
+- [x] Messages: textos Webflow EN/ES del intro
 - [ ] Comparación visual desktop/mobile vs `animavillage.com/news`
 
 **Validación**: suite verde; preview visual (3 cols desktop, 1 col mobile,
@@ -211,10 +211,10 @@ overlay/typo correctos, fechas "Mayo 2026"/"May 2026").
 ### Phase 3: Detalle `/blog/[slug]`
 **Objetivo**: paridad visual del post.
 
-- [ ] `NEWS_BY_SLUG_QUERY` + `excerpt`/`modified`; `PostSingle` en types
-- [ ] BEM `.blog-post-hero` + `.blog-post__content` (tipografía editorial WP) en `globals.css`
-- [ ] `BlogPostHeader.tsx`; reescribir `blog/[slug]/page.tsx` (sin back-link, `export const revalidate = 3600`, tags por slug)
-- [ ] `notFound()` intacto para slugs inexistentes
+- [x] `NEWS_BY_SLUG_QUERY` + `excerpt`/`modified`; `PostSingle` en types
+- [x] BEM `.blog-post-hero` + `.blog-post__content` (tipografía editorial WP) en `globals.css`
+- [x] `BlogPostHeader.tsx`; reescribir `blog/[slug]/page.tsx` (sin back-link, `export const revalidate = 3600`, tags por slug)
+- [x] `notFound()` intacto para slugs inexistentes
 
 **Validación**: suite verde; post real renderiza título/fecha/imagen/cuerpo con
 paridad; 404 correcto; cambio de locale mantiene el slug.
@@ -222,10 +222,10 @@ paridad; 404 correcto; cambio de locale mantiene el slug.
 ### Phase 4: SEO — metadata, JSON-LD, sitemap
 **Objetivo**: cierre SEO del cutover.
 
-- [ ] `NEXT_PUBLIC_SITE_URL` (`.env.example`, `.env.local`) + `metadataBase` en `[locale]/layout.tsx`
-- [ ] `generateMetadata` en índice y detalle (OG completo, canonical, hreflang)
-- [ ] `JsonLd.tsx` + `Article` (detalle) y `Blog`/`BreadcrumbList` (índice)
-- [ ] `NEWS_SLUGS_QUERY` + `src/app/sitemap.ts` (estáticas × locale + posts, hreflang)
+- [x] `NEXT_PUBLIC_SITE_URL` (`.env.example`, `.env.local`) + `metadataBase` en `[locale]/layout.tsx`
+- [x] `generateMetadata` en índice y detalle (OG completo, canonical, hreflang)
+- [x] `JsonLd.tsx` + `Article` (detalle) y `Blog`/`BreadcrumbList` (índice)
+- [x] `NEWS_SLUGS_QUERY` + `src/app/sitemap.ts` (estáticas × locale + posts, hreflang)
 
 **Validación**: `curl localhost:3000/sitemap.xml` bien formado; OG/JSON-LD
 visibles en el HTML fuente; validador de schema.org sin errores.

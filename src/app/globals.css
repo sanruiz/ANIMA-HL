@@ -1296,6 +1296,267 @@ a {
 }
 
 /* ============================================================
+   BLOG — sections migrated from Webflow /news.
+   ============================================================ */
+
+/* Intro canvas matching Webflow section.intro-text.blog. */
+.blog-intro {
+  width: 100%;
+  height: 300px;
+  margin-top: 100px;
+  background: var(--color-claro);
+  color: var(--color-oscuro);
+  display: flex;
+  justify-content: center;
+}
+
+.blog-intro__inner {
+  width: 95%;
+  max-width: 900px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.blog-intro__heading {
+  margin: 0;
+  padding-bottom: 30px;
+  font-family: var(--font-primary);
+  font-style: italic;
+  font-weight: 500;
+  font-size: 48px;
+  line-height: 52px;
+  color: var(--color-oscuro);
+}
+
+.blog-intro__lead {
+  margin: 0;
+  font-family: var(--font-primary);
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 32px;
+  color: var(--color-oscuro);
+}
+
+.blog-intro__lead em {
+  font-style: italic;
+}
+
+/* The card grid lives in Tailwind inside BlogList.tsx. */
+
+.blog-post {
+  background: var(--color-claro);
+  color: var(--color-oscuro);
+}
+
+.blog-post-hero {
+  width: 100%;
+  margin-top: 100px;
+  background: var(--color-claro);
+  display: flex;
+  justify-content: center;
+  padding: 72px 0 64px;
+}
+
+.blog-post-hero__inner {
+  width: 60%;
+  max-width: 960px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.blog-post-hero__title {
+  margin: 0;
+  font-family: var(--font-primary);
+  font-size: 48px;
+  line-height: 52px;
+  font-style: normal;
+  font-weight: 500;
+  color: var(--color-oscuro);
+}
+
+.blog-post-hero__date {
+  margin: 20px 0 0;
+  font-family: var(--font-primary);
+  font-size: 24px;
+  line-height: 32px;
+  font-weight: 400;
+  color: var(--color-oscuro);
+}
+
+.blog-post-hero__image {
+  width: 100%;
+  padding-top: 30px;
+}
+
+.blog-post-hero__img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.blog-post__body {
+  width: 100%;
+  background: var(--color-claro);
+  display: flex;
+  justify-content: center;
+  padding: 0 0 96px;
+}
+
+.blog-post__content {
+  width: 60%;
+  max-width: 960px;
+  font-family: var(--font-primary);
+  font-size: 21px;
+  line-height: 32px;
+  color: var(--color-oscuro);
+}
+
+.blog-post__content > *:first-child {
+  margin-top: 0;
+}
+
+.blog-post__content > *:last-child {
+  margin-bottom: 0;
+}
+
+.blog-post__content p {
+  margin: 0 0 28px;
+}
+
+.blog-post__content em {
+  font-style: italic;
+}
+
+.blog-post__content h2,
+.blog-post__content h3 {
+  margin: 48px 0 20px;
+  font-family: var(--font-primary);
+  font-weight: 500;
+  color: var(--color-oscuro);
+}
+
+.blog-post__content h2 {
+  font-size: 36px;
+  line-height: 42px;
+}
+
+.blog-post__content h3 {
+  font-size: 30px;
+  line-height: 36px;
+}
+
+.blog-post__content blockquote {
+  margin: 44px 0;
+  padding: 0 0 0 32px;
+  border-left: 1px solid color-mix(in srgb, var(--color-oscuro) 35%, transparent);
+  font-size: 28px;
+  line-height: 38px;
+  font-style: italic;
+}
+
+.blog-post__content img {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 44px 0;
+}
+
+.blog-post__content figure {
+  margin: 44px 0;
+}
+
+.blog-post__content figure img {
+  margin: 0;
+}
+
+.blog-post__content figcaption {
+  margin-top: 12px;
+  font-family: var(--font-ui-stack);
+  font-size: 14px;
+  line-height: 20px;
+  color: color-mix(in srgb, var(--color-oscuro) 65%, transparent);
+}
+
+.blog-post__content a {
+  color: var(--color-gold);
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
+@media (max-width: 991px) {
+  .blog-intro__heading {
+    font-size: 40px;
+    line-height: 44px;
+  }
+
+  .blog-post-hero__inner,
+  .blog-post__content {
+    width: 95%;
+  }
+
+  .blog-post-hero__title {
+    font-size: 40px;
+    line-height: 44px;
+  }
+}
+
+@media (max-width: 767px) {
+  .blog-intro__heading {
+    font-size: 32px;
+    line-height: 36px;
+  }
+
+  .blog-intro__lead {
+    font-size: 21px;
+    line-height: 28px;
+  }
+
+  .blog-post-hero {
+    padding: 48px 0 44px;
+  }
+
+  .blog-post-hero__title {
+    font-size: 32px;
+    line-height: 38px;
+  }
+
+  .blog-post-hero__date {
+    font-size: 21px;
+    line-height: 28px;
+  }
+
+  .blog-post__body {
+    padding-bottom: 72px;
+  }
+
+  .blog-post__content {
+    font-size: 19px;
+    line-height: 30px;
+  }
+
+  .blog-post__content h2 {
+    font-size: 30px;
+    line-height: 36px;
+  }
+
+  .blog-post__content h3 {
+    font-size: 26px;
+    line-height: 32px;
+  }
+
+  .blog-post__content blockquote {
+    padding-left: 22px;
+    font-size: 24px;
+    line-height: 34px;
+  }
+}
+
+/* ============================================================
    FOOTER (migrado de Webflow: section.news oscuro + section verde)
    ============================================================ */
 .site-footer {

@@ -51,6 +51,9 @@
   },
   "blog": {
     "title": "News",
+    "metaDescription": "The latest updates, events, and highlights from the Ánima Village community in Cabo Del Sol — openings, art, wellness, and more.",
+    "heading": "What's Happening",
+    "lead": "Discover the latest <em>updates, events, <br></br>and highlights</em> from our community",
     "empty": "No news yet.",
     "error": "Could not load news. Check the WordPress connection."
   },

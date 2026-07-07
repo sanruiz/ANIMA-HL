@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { cn, stripHtml } from "./utils";
+import { cn, formatMonthYear, stripHtml } from "./utils";
 
 describe("cn()", () => {
   it("combina clases simples", () => {
@@ -64,5 +64,30 @@ describe("stripHtml()", () => {
 
   it("elimina etiquetas self-closing", () => {
     expect(stripHtml("Antes<br />Después")).toBe("AntesDespués");
+  });
+});
+
+describe("formatMonthYear()", () => {
+  it("formats English as 'May 2026'", () => {
+    expect(formatMonthYear("2026-05-14T10:00:00", "en")).toBe("May 2026");
+  });
+
+  it("formats Spanish as capitalized month plus year without 'de'", () => {
+    expect(formatMonthYear("2026-05-14T10:00:00", "es")).toBe("Mayo 2026");
+  });
+
+  it("uses UTC to avoid timezone month drift", () => {
+    expect(formatMonthYear("2026-05-31T23:59:00Z", "en")).toBe("May 2026");
+    expect(formatMonthYear("2026-06-01T00:01:00Z", "en")).toBe("June 2026");
+  });
+
+  it("returns an empty string for null, undefined, and empty values", () => {
+    expect(formatMonthYear(null, "es")).toBe("");
+    expect(formatMonthYear(undefined, "es")).toBe("");
+    expect(formatMonthYear("", "es")).toBe("");
+  });
+
+  it("returns an empty string for invalid dates", () => {
+    expect(formatMonthYear("no-es-fecha", "es")).toBe("");
   });
 });

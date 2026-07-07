@@ -1,68 +1,148 @@
-import { setRequestLocale } from "next-intl/server";
+import type { Metadata } from "next";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
-import { fetchGraphQL } from "@/lib/wp";
+import BlogPostHeader from "@/components/BlogPostHeader";
+import JsonLd from "@/components/JsonLd";
 import { NEWS_BY_SLUG_QUERY } from "@/lib/queries";
+import { getLanguageAlternates, getLocalizedUrl } from "@/lib/seo";
 import type { NewsBySlugResponse } from "@/lib/types";
-import { Link } from "@/i18n/navigation";
+import { stripHtml } from "@/lib/utils";
+import { fetchGraphQL } from "@/lib/wp";
 
-export default async function BlogPostPage({
-  params,
-}: {
+export const revalidate = 3600;
+
+type BlogPostParams = {
   params: Promise<{ locale: string; slug: string }>;
-}) {
+};
+
+async function getPost(locale: string, slug: string) {
+  const data = await fetchGraphQL<NewsBySlugResponse>({
+    query: NEWS_BY_SLUG_QUERY,
+    variables: { slug },
+    locale,
+    revalidate: 3600,
+    tags: ["wp:posts", `wp:post:${slug}`],
+  });
+
+  return data.post;
+}
+
+export async function generateMetadata({
+  params,
+}: BlogPostParams): Promise<Metadata> {
+  const { locale, slug } = await params;
+  const t = await getTranslations({ locale, namespace: "blog" });
+
+  try {
+    const post = await getPost(locale, slug);
+    if (!post) return {};
+
+    const title = `${post.title ?? t("title")} | Ánima Village`;
+    const description = stripHtml(post.excerpt) || t("metaDescription");
+    const canonical = getLocalizedUrl(locale, `/blog/${slug}`);
+    const image = post.featuredImage?.node?.sourceUrl;
+
+    return {
+      title,
+      description,
+      alternates: {
+        canonical,
+        languages: getLanguageAlternates(`/blog/${slug}`),
+      },
+      openGraph: {
+        title,
+        description,
+        type: "article",
+        url: canonical,
+        publishedTime: post.date ?? undefined,
+        modifiedTime: post.modified ?? undefined,
+        images: image ? [{ url: image }] : undefined,
+      },
+    };
+  } catch {
+    return {
+      title: `${t("title")} | Ánima Village`,
+      description: t("metaDescription"),
+    };
+  }
+}
+
+export default async function BlogPostPage({ params }: BlogPostParams) {
   const { locale, slug } = await params;
   setRequestLocale(locale);
 
   let post: NewsBySlugResponse["post"] = null;
   try {
-    const data = await fetchGraphQL<NewsBySlugResponse>({
-      query: NEWS_BY_SLUG_QUERY,
-      variables: { slug },
-      locale,
-    });
-    post = data.post;
+    post = await getPost(locale, slug);
   } catch (err) {
     console.error("[blog] error:", err);
   }
 
   if (!post) notFound();
 
-  const img = post.featuredImage?.node;
+  const t = await getTranslations("blog");
+  const postUrl = getLocalizedUrl(locale, `/blog/${slug}`);
+  const image = post.featuredImage?.node?.sourceUrl;
+  const description = stripHtml(post.excerpt) || t("metaDescription");
+  const jsonLd = [
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      headline: post.title,
+      description,
+      datePublished: post.date,
+      dateModified: post.modified ?? post.date,
+      image: image ? [image] : undefined,
+      mainEntityOfPage: postUrl,
+      inLanguage: locale,
+      publisher: {
+        "@type": "Organization",
+        name: "Ánima Village",
+        url: getLocalizedUrl(locale, "/"),
+      },
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Ánima Village",
+          item: getLocalizedUrl(locale, "/"),
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: t("title"),
+          item: getLocalizedUrl(locale, "/blog"),
+        },
+        {
+          "@type": "ListItem",
+          position: 3,
+          name: post.title,
+          item: postUrl,
+        },
+      ],
+    },
+  ];
 
   return (
-    <article className="container">
-      <Link href="/blog" className="wp-list-card__meta" style={{ color: "var(--accent)" }}>
-        ← {locale === "es" ? "Noticias" : "News"}
-      </Link>
-
-      {post.date && (
-        <div className="wp-list-card__meta" style={{ marginTop: "1rem" }}>
-          {new Date(post.date).toLocaleDateString(locale, {
-            day: "numeric",
-            month: "long",
-            year: "numeric",
-            timeZone: "UTC",
-          })}
-        </div>
-      )}
-
-      <h1>{post.title}</h1>
-
-      {img?.sourceUrl && (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
-          src={img.sourceUrl}
-          alt={img.altText ?? post.title ?? ""}
-          style={{
-            width: "100%",
-            borderRadius: 12,
-            margin: "1rem 0 1.5rem",
-          }}
-        />
-      )}
-
+    <article className="blog-post">
+      <JsonLd data={jsonLd} />
+      <BlogPostHeader
+        date={post.date}
+        featuredImage={post.featuredImage}
+        locale={locale}
+        title={post.title}
+      />
       {post.content && (
-        <div dangerouslySetInnerHTML={{ __html: post.content }} />
+        <section className="blog-post__body">
+          <div
+            className="blog-post__content"
+            dangerouslySetInnerHTML={{ __html: post.content }}
+          />
+        </section>
       )}
     </article>
   );

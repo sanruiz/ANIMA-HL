@@ -19,8 +19,13 @@ type FetchArgs = {
   variables?: Record<string, unknown>;
   /** Idioma para WP Multilang (?lang=). */
   locale?: string;
-  /** Segundos de revalidación ISR. 0 = sin cache. */
+  /** ISR revalidation in seconds. 0 = no cache. */
   revalidate?: number;
+  /**
+   * Cache tags for on-demand invalidation with revalidateTag().
+   * Always paired with revalidate as a time-based fallback.
+   */
+  tags?: string[];
 };
 
 export async function fetchGraphQL<T>({
@@ -28,6 +33,7 @@ export async function fetchGraphQL<T>({
   variables,
   locale,
   revalidate = 60,
+  tags,
 }: FetchArgs): Promise<T> {
   const url = locale ? `${ENDPOINT}?lang=${encodeURIComponent(locale)}` : ENDPOINT;
 
@@ -35,7 +41,7 @@ export async function fetchGraphQL<T>({
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ query, variables }),
-    next: { revalidate },
+    next: { revalidate, ...(tags?.length ? { tags } : {}) },
   });
 
   if (!res.ok) {

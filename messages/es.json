@@ -51,6 +51,9 @@
   },
   "blog": {
     "title": "Noticias",
+    "metaDescription": "Lo último de la comunidad de Ánima Village en Cabo Del Sol: aperturas, eventos, arte, bienestar y más.",
+    "heading": "Lo Último",
+    "lead": "<em>Noticias, eventos y más.</em> <br></br>No te pierdas nada",
     "empty": "No hay noticias por ahora.",
     "error": "No se pudieron cargar las noticias. Revisa la conexión con WordPress."
   },
