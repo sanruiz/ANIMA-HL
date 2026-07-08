@@ -96,6 +96,48 @@ export const NEWS_SLUGS_QUERY = /* GraphQL */ `
   }
 `;
 
+export const BRAND_BY_SLUG_QUERY = /* GraphQL */ `
+  query BrandBySlug($slug: ID!) {
+    brand(id: $slug, idType: SLUG) {
+      id
+      title
+      slug
+      content
+      modified
+      featuredImage {
+        node {
+          sourceUrl
+          altText
+        }
+      }
+      brandTags {
+        nodes {
+          name
+          slug
+        }
+      }
+      brandFields: brands {
+        store
+        phone
+        days
+        time
+      }
+    }
+  }
+`;
+
+export const BRAND_SLUGS_QUERY = /* GraphQL */ `
+  query BrandSlugs($first: Int = 200) {
+    brands(first: $first) {
+      nodes {
+        id
+        slug
+        modified
+      }
+    }
+  }
+`;
+
 export const BRANDS_QUERY = /* GraphQL */ `
   query Brands($first: Int = 100) {
     brands(first: $first, where: { orderby: { field: TITLE, order: ASC } }) {

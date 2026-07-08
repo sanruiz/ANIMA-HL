@@ -69,6 +69,32 @@ export type PostNode = {
 
 export type EventsResponse = { events: { nodes: EventNode[] } };
 export type BrandsResponse = { brands: { nodes: BrandNode[] } };
+
+export type BrandHoursFields = {
+  store: string | null;
+  phone: string | null;
+  days: string | null;
+  time: string | null;
+} | null;
+
+export type BrandSingle = {
+  id: string;
+  title: string | null;
+  slug: string | null;
+  content: string | null;
+  modified: string | null;
+  featuredImage: FeaturedImage;
+  brandTags: { nodes: TermNode[] } | null;
+  brandFields: BrandHoursFields;
+};
+export type BrandBySlugResponse = { brand: BrandSingle | null };
+
+export type BrandSlugNode = {
+  id: string;
+  slug: string | null;
+  modified: string | null;
+};
+export type BrandSlugsResponse = { brands: { nodes: BrandSlugNode[] } };
 export type NewsResponse = { posts: { nodes: PostNode[] } };
 
 export type PostSingle = {

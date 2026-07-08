@@ -32,3 +32,16 @@ export function formatMonthYear(
   const year = parts.find((p) => p.type === "year")?.value ?? "";
   return `${month.charAt(0).toUpperCase()}${month.slice(1)} ${year}`.trim();
 }
+
+/**
+ * Joins a brand's ACF `days` and `time` fields into the single "Hours" line
+ * shown on the Webflow brand template (e.g. "Monday to Sunday: 11:00 AM –
+ * 8:00 PM"). Empty unless both fields are present.
+ */
+export function formatBrandHours(
+  days: string | null | undefined,
+  time: string | null | undefined
+): string {
+  if (!days || !time) return "";
+  return `${days}: ${time}`;
+}

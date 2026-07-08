@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { cn, formatMonthYear, stripHtml } from "./utils";
+import { cn, formatBrandHours, formatMonthYear, stripHtml } from "./utils";
 
 describe("cn()", () => {
   it("combina clases simples", () => {
@@ -89,5 +89,25 @@ describe("formatMonthYear()", () => {
 
   it("returns an empty string for invalid dates", () => {
     expect(formatMonthYear("no-es-fecha", "es")).toBe("");
+  });
+});
+
+describe("formatBrandHours()", () => {
+  it("joins days and time with a colon", () => {
+    expect(formatBrandHours("Monday to Sunday", "11:00 AM – 8:00 PM")).toBe(
+      "Monday to Sunday: 11:00 AM – 8:00 PM"
+    );
+  });
+
+  it("returns an empty string when days is missing", () => {
+    expect(formatBrandHours(null, "11:00 AM – 8:00 PM")).toBe("");
+  });
+
+  it("returns an empty string when time is missing", () => {
+    expect(formatBrandHours("Monday to Sunday", undefined)).toBe("");
+  });
+
+  it("returns an empty string when both are missing", () => {
+    expect(formatBrandHours(null, null)).toBe("");
   });
 });
