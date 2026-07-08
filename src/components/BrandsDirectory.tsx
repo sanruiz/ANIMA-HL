@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
+import { Link } from "@/i18n/navigation";
 import { localizeTags } from "@/lib/i18n-tags";
 import type { BrandNode } from "@/lib/types";
 import { cn } from "@/lib/utils";
@@ -106,25 +107,31 @@ export default function BrandsDirectory({ brands }: BrandsDirectoryProps) {
         <ul className="w-[95%] max-w-[var(--width-max)] list-none p-0 m-0 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-10 lg:gap-x-8 lg:gap-y-12">
           {filtered.map((brand) => {
             const img = brand.featuredImage?.node;
+            if (!brand.slug) return null;
             return (
-              <li key={brand.id} className="flex flex-col gap-[18px]">
-                <div className="relative w-full aspect-[4/3] overflow-hidden bg-brand-beige/60">
-                  {img?.sourceUrl ? (
-                    <Image
-                      src={img.sourceUrl}
-                      alt={img.altText ?? brand.title ?? ""}
-                      fill
-                      sizes="(min-width: 992px) 33vw, (min-width: 600px) 50vw, 95vw"
-                      className="object-cover"
-                      unoptimized={shouldBypassImageOptimizer(img.sourceUrl)}
-                    />
-                  ) : null}
-                </div>
-                <div className="px-[2px]">
-                  <h3 className="m-0 font-[family-name:var(--font-ui-stack)] font-light text-base lg:text-[17px] leading-[22px] text-brand-oscuro">
-                    {brand.title}
-                  </h3>
-                </div>
+              <li key={brand.id}>
+                <Link
+                  href={`/brands/${brand.slug}`}
+                  className="group flex flex-col gap-[18px]"
+                >
+                  <div className="relative w-full aspect-[4/3] overflow-hidden bg-brand-beige/60">
+                    {img?.sourceUrl ? (
+                      <Image
+                        src={img.sourceUrl}
+                        alt={img.altText ?? brand.title ?? ""}
+                        fill
+                        sizes="(min-width: 992px) 33vw, (min-width: 600px) 50vw, 95vw"
+                        className="object-cover transition-transform duration-200 group-hover:scale-[1.03]"
+                        unoptimized={shouldBypassImageOptimizer(img.sourceUrl)}
+                      />
+                    ) : null}
+                  </div>
+                  <div className="px-[2px]">
+                    <h3 className="m-0 font-[family-name:var(--font-ui-stack)] font-light text-base lg:text-[17px] leading-[22px] text-brand-oscuro">
+                      {brand.title}
+                    </h3>
+                  </div>
+                </Link>
               </li>
             );
           })}

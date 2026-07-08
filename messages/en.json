@@ -47,7 +47,12 @@
     "empty": "No brands yet.",
     "error": "Could not load brands. Check the WordPress connection.",
     "website": "Website",
-    "petFriendly": "Pet friendly"
+    "petFriendly": "Pet friendly",
+    "detail": {
+      "hoursLabel": "Hours",
+      "contactLabel": "Contact",
+      "locationLabel": "Location"
+    }
   },
   "blog": {
     "title": "News",

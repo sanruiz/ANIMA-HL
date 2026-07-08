@@ -83,6 +83,7 @@
       --color-beige: #e5d7c5;
       --color-claro: #faf7f3;
       --color-verde: #626951;
+      --color-rosa: #b59289;
       --width-max: 1440px;
     
       --font-primary: var(--font-cardo), "Cardo", Georgia, "Times New Roman", serif;
@@ -1292,6 +1293,128 @@ a {
   .brands-directory__lead {
     font-size: 18px;
     line-height: 26px;
+  }
+}
+
+/* ============================================================
+   BRAND DETAIL — single brand page (migrated from Webflow: /brands/[slug])
+   ============================================================ */
+
+/* Two-column grid: text | single image. Mirrors Webflow's
+   .template-info-container (no dedicated hero/intro on this page). */
+.brand-detail {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  background: var(--color-claro);
+  color: var(--color-oscuro);
+  padding: 30px 0 50px;
+}
+
+.brand-detail__grid {
+  width: 95%;
+  max-width: var(--width-max);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 50px;
+  align-items: flex-start;
+}
+
+.brand-detail__body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.brand-detail__title {
+  margin: 0 0 24px;
+  font-family: var(--font-primary);
+  font-weight: 400;
+  font-size: 36px;
+  line-height: 48px;
+  color: var(--color-oscuro);
+}
+
+/* WP post content (not an ACF field) — conditional, plain paragraphs. */
+.brand-detail__description {
+  width: 100%;
+  margin: 12px 0 0;
+  padding-top: 24px;
+  border-top: 1px solid var(--color-oscuro);
+  font-family: var(--font-ui-stack);
+  font-size: 18px;
+  line-height: 24px;
+  color: var(--color-oscuro);
+}
+
+.brand-detail__description p {
+  margin: 0 0 12px;
+}
+
+.brand-detail__description p:last-child {
+  margin-bottom: 0;
+}
+
+.brand-detail__description em {
+  font-style: italic;
+}
+
+.brand-detail__info {
+  width: 100%;
+  margin-bottom: 12px;
+  font-family: var(--font-ui-stack);
+}
+
+.brand-detail__info-label {
+  margin: 0;
+  color: var(--color-rosa);
+  font-family: var(--font-ui-stack);
+  font-size: 18px;
+  line-height: 18px;
+}
+
+.brand-detail__info-value {
+  margin: 0;
+  color: var(--color-oscuro);
+  font-family: var(--font-ui-stack);
+  font-size: 18px;
+  text-decoration: none;
+}
+
+a.brand-detail__info-value {
+  cursor: pointer;
+}
+
+a.brand-detail__info-value:hover {
+  text-underline-offset: 4px;
+  text-decoration: underline;
+}
+
+/* Single image — Webflow's gallery repeater is always empty in production
+   and falls back to one full-height image (the featured image). */
+.brand-detail__media {
+  position: relative;
+  width: 100%;
+  height: 75vh;
+  max-height: 75vh;
+  overflow: hidden;
+}
+
+.brand-detail__img {
+  object-fit: cover;
+}
+
+@media (max-width: 991px) {
+  .brand-detail__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .brand-detail__media {
+    order: -1;
+    height: auto;
+    max-height: none;
+    aspect-ratio: 16 / 9;
   }
 }
 

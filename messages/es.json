@@ -47,7 +47,12 @@
     "empty": "No hay marcas por ahora.",
     "error": "No se pudieron cargar las marcas. Revisa la conexión con WordPress.",
     "website": "Sitio web",
-    "petFriendly": "Pet friendly"
+    "petFriendly": "Pet friendly",
+    "detail": {
+      "hoursLabel": "Horario",
+      "contactLabel": "Contacto",
+      "locationLabel": "Ubicación"
+    }
   },
   "blog": {
     "title": "Noticias",
