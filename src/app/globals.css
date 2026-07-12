@@ -71,10 +71,10 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 :root {
-    --color-brown: #453536;
+    --color-brown: var(--color-oscuro); /* alias del canónico Webflow (oscuro) */
       --color-rose: #ca9a8e;
       --color-warm-gray: #d1c1a8;
-      --color-sage: #626951;
+      --color-sage: var(--color-verde); /* alias del canónico Webflow (verde) */
       --color-blue-gray: #9db0ac;
       --color-gold: #bd9b60;
     
@@ -87,6 +87,7 @@
       --width-max: 1440px;
     
       --font-primary: var(--font-cardo), "Cardo", Georgia, "Times New Roman", serif;
+      /* Serif = Cardo (--font-primary). Sans (nav/UI) = sustituto de Neue Haas Grotesk. */
       --font-ui-stack: var(--font-ui), "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
     
       --background: var(--color-claro);

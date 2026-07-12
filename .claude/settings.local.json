@@ -60,7 +60,28 @@
       "Bash(curl -sL \"https://www.animavillage.com/es/news\" -o /private/tmp/claude-501/-Users-santiagoramirez-Sites-ANIMA-HL/f1b27f1e-022d-46be-90f4-f0fdceb34b4d/scratchpad/news-es.html)",
       "Bash(curl -s -L -o /dev/null -w \"final: %{url_effective} \\(%{http_code}\\)\\\\n\" http://localhost:3000/news)",
       "Bash(curl -sL http://localhost:3000/es/blog)",
-      "Bash(curl -sL http://localhost:3000/en/blog)"
+      "Bash(curl -sL http://localhost:3000/en/blog)",
+      "Bash(vercel project *)",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); [print\\(s.get\\('environment_url'\\), s.get\\('state'\\)\\) for s in d]\")",
+      "mcp__03bf4d97-314b-42fa-ae07-5c9bf27144b2__get_project",
+      "Bash(curl -sL \"https://www.animavillage.com/brands/nike\" -o \"/private/tmp/claude-501/-Users-santiagoramirez-Sites-ANIMA-HL/7fa80413-3dcc-40cb-970b-8331d30f4b76/scratchpad/brand-nike.html\")",
+      "Bash(curl -sL https://cdn.prod.website-files.com/67323ae4f125fe55a3034503/css/anima-village.webflow.shared.fb0fd05bc.min.css -o /private/tmp/claude-501/-Users-santiagoramirez-Sites-ANIMA-HL/7fa80413-3dcc-40cb-970b-8331d30f4b76/scratchpad/anima.min.css)",
+      "Bash(python3 - /private/tmp/claude-501/-Users-santiagoramirez-Sites-ANIMA-HL/7fa80413-3dcc-40cb-970b-8331d30f4b76/scratchpad/anima.min.css)",
+      "Bash(curl -s -k https://anima-headless.local/graphql -X POST -H 'Content-Type: application/json' -d '{\"query\":\"{ __type\\(name: \\\\\"RootQuery\\\\\"\\) { fields { name } } }\"}')",
+      "Bash(python3 -c ' *)",
+      "Bash(xargs -I{} echo {})",
+      "Bash(mkdir -p \"/Users/santiagoramirez/Sites/ANIMA-HL/src/app/[locale]/\\(site\\)/brands/[slug]\")",
+      "Bash(lsof -ti:3000)",
+      "Bash(xargs -r kill -9)",
+      "Bash(echo \"started with pid $!\")",
+      "Bash(break)",
+      "Bash(curl -s http://localhost:3000/en/brands/nike -o /tmp/nike-local.html -w \"%{http_code}\\\\n\")",
+      "Bash(curl -s http://localhost:3000/es/brands/nike -o /tmp/nike-local-es.html -w \"%{http_code}\\\\n\")",
+      "Bash(curl -s http://localhost:3000/en/brands -o /tmp/brands-list.html -w \"%{http_code}\\\\n\")",
+      "Bash(curl -s http://localhost:3000/sitemap.xml)"
+    ],
+    "additionalDirectories": [
+      "/Users/santiagoramirez/Sites/ANIMA-HL/src/app/[locale]/(site)/brands"
     ]
   }
 }

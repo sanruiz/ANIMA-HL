@@ -18,7 +18,7 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-// Sustituto libre de "Neue Haas Grotesk Display" (Adobe) que usa el nav en Webflow.
+// Sans del nav/UI: sustituto libre de "Neue Haas Grotesk Display" (Adobe, de pago).
 const inter = Inter({
   variable: "--font-ui",
   subsets: ["latin"],
