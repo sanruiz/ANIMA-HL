@@ -108,6 +108,10 @@ export const BRAND_BY_SLUG_QUERY = /* GraphQL */ `
         node {
           sourceUrl
           altText
+          mediaDetails {
+            width
+            height
+          }
         }
       }
       brandTags {
@@ -121,6 +125,16 @@ export const BRAND_BY_SLUG_QUERY = /* GraphQL */ `
         phone
         days
         time
+        gallery {
+          nodes {
+            sourceUrl
+            altText
+            mediaDetails {
+              width
+              height
+            }
+          }
+        }
       }
     }
   }

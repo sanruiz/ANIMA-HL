@@ -4,6 +4,10 @@ export type FeaturedImage = {
   node: {
     sourceUrl: string | null;
     altText: string | null;
+    mediaDetails?: {
+      width: number | null;
+      height: number | null;
+    } | null;
   } | null;
 } | null;
 
@@ -15,6 +19,10 @@ export type TermNode = {
 export type MediaItem = {
   sourceUrl: string | null;
   altText: string | null;
+  mediaDetails?: {
+    width: number | null;
+    height: number | null;
+  } | null;
 };
 
 export type EventFields = {
@@ -75,6 +83,7 @@ export type BrandHoursFields = {
   phone: string | null;
   days: string | null;
   time: string | null;
+  gallery: { nodes: MediaItem[] } | null;
 } | null;
 
 export type BrandSingle = {

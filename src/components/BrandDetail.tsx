@@ -10,13 +10,21 @@ interface BrandDetailProps {
 
 // Single-brand template migrated from Webflow's .template-info-container:
 // title + conditional description (WP content) + info rows (Hours/Contact/
-// Location) + one full-height image (the gallery repeater is always empty
-// in production, so it always falls back to the featured image).
+// Location) + featured image + optional gallery images from the ACF repeater.
 export default function BrandDetail({ brand }: BrandDetailProps) {
   const t = useTranslations("brands.detail");
   const image = brand.featuredImage?.node;
   const fields = brand.brandFields;
   const hours = formatBrandHours(fields?.days, fields?.time);
+  const mediaWidth = image?.mediaDetails?.width ?? 0;
+  const mediaHeight = image?.mediaDetails?.height ?? 0;
+  const hasMediaDimensions = mediaWidth > 0 && mediaHeight > 0;
+  const imageWidth = hasMediaDimensions ? mediaWidth : 900;
+  const imageHeight = hasMediaDimensions ? mediaHeight : 600;
+  const galleryImages =
+    fields?.gallery?.nodes.filter((galleryImage) => galleryImage.sourceUrl) ??
+    [];
+  const hasGalleryImages = galleryImages.length > 0;
 
   return (
     <section className="brand-detail">
@@ -32,14 +40,14 @@ export default function BrandDetail({ brand }: BrandDetailProps) {
           )}
 
           {hours && (
-            <div className="brand-detail__info">
+            <div className="brand-detail__info mt-4">
               <p className="brand-detail__info-label">{t("hoursLabel")}</p>
               <p className="brand-detail__info-value">{hours}</p>
             </div>
           )}
 
           {fields?.phone && (
-            <div className="brand-detail__info">
+            <div className="brand-detail__info mt-4">
               <p className="brand-detail__info-label">{t("contactLabel")}</p>
               <a
                 href={`tel:${fields.phone}`}
@@ -51,21 +59,56 @@ export default function BrandDetail({ brand }: BrandDetailProps) {
           )}
 
           {fields?.store && (
-            <div className="brand-detail__info">
+            <div className="brand-detail__info mt-4">
               <p className="brand-detail__info-label">{t("locationLabel")}</p>
               <p className="brand-detail__info-value">{fields.store}</p>
             </div>
           )}
         </div>
 
-        {image?.sourceUrl && (
+        {hasGalleryImages && (
+          <div
+            className="brand-detail__gallery columns-1 gap-6 md:columns-2 lg:columns-3"
+            aria-label={`${brand.title ?? ""} gallery`}
+          >
+            {galleryImages.map((galleryImage, index) => {
+              const { altText, mediaDetails, sourceUrl } = galleryImage;
+
+              if (!sourceUrl) return null;
+
+              const galleryWidth = mediaDetails?.width ?? 900;
+              const galleryHeight = mediaDetails?.height ?? 1200;
+
+              return (
+                <figure
+                  key={sourceUrl}
+                  className="mb-6 break-inside-avoid overflow-hidden"
+                >
+                  <Image
+                    src={sourceUrl}
+                    alt={altText || brand.title || ""}
+                    width={galleryWidth}
+                    height={galleryHeight}
+                    sizes="(max-width: 767px) 95vw, (max-width: 991px) 47vw, 16vw"
+                    className="h-auto w-full object-cover"
+                    unoptimized={shouldBypassImageOptimizer(sourceUrl)}
+                    priority={index < 3}
+                  />
+                </figure>
+              );
+            })}
+          </div>
+        )}
+
+        {!hasGalleryImages && image?.sourceUrl && (
           <div className="brand-detail__media">
             <Image
               src={image.sourceUrl}
               alt={image.altText ?? brand.title ?? ""}
-              fill
+              width={imageWidth}
+              height={imageHeight}
               sizes="(max-width: 991px) 95vw, 47vw"
-              className="brand-detail__img"
+              className="brand-detail__img aspect-auto flex w-full flex-col items-start justify-start overflow-visible object-cover"
               unoptimized={shouldBypassImageOptimizer(image.sourceUrl)}
               priority
             />
