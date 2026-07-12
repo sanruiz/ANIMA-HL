@@ -52,9 +52,9 @@ export type BrandFields = {
   website: string | null;
   days: string | null;
   time: string | null;
+  featured: boolean | null;
   petfriendly: string | boolean | number | null;
   petfriendlyDescription: string | null;
-  gallery: { nodes: MediaItem[] } | null;
 } | null;
 
 export type BrandNode = {

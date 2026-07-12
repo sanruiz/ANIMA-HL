@@ -120,7 +120,7 @@ export const BRAND_BY_SLUG_QUERY = /* GraphQL */ `
           slug
         }
       }
-      brandFields: brands {
+      brandFields {
         store
         phone
         days
@@ -171,20 +171,15 @@ export const BRANDS_QUERY = /* GraphQL */ `
             slug
           }
         }
-        brandFields: brands {
+        brandFields {
           store
           phone
           website
           days
           time
+          featured
           petfriendly
           petfriendlyDescription
-          gallery {
-            nodes {
-              sourceUrl
-              altText
-            }
-          }
         }
       }
     }
