@@ -10,7 +10,6 @@ import { cn } from "@/lib/utils";
 import { shouldBypassImageOptimizer } from "@/lib/wp-image";
 
 const ALL_FILTER = "__all__";
-const FEATURED_FILTER = "__featured__";
 
 interface BrandsDirectoryProps {
   brands: BrandNode[];
@@ -40,9 +39,6 @@ export default function BrandsDirectory({ brands }: BrandsDirectoryProps) {
 
   const filtered = useMemo(() => {
     if (active === ALL_FILTER) return brands;
-    if (active === FEATURED_FILTER) {
-      return brands.filter((brand) => Boolean(brand.brandFields?.featured));
-    }
     return brands.filter(
       (brand) =>
         brand.brandTags?.nodes.some((tag) => tag.slug === active) ?? false
@@ -88,15 +84,6 @@ export default function BrandsDirectory({ brands }: BrandsDirectoryProps) {
           className={filterClass(active === ALL_FILTER)}
         >
           {t("filterAll")}
-        </button>
-        <button
-          type="button"
-          role="tab"
-          aria-selected={active === FEATURED_FILTER}
-          onClick={() => setActive(FEATURED_FILTER)}
-          className={filterClass(active === FEATURED_FILTER)}
-        >
-          {t("filterFeatured")}
         </button>
         {categories.map(({ slug, name }) => (
           <button

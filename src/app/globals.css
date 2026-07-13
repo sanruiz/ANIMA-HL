@@ -1102,7 +1102,7 @@ a {
    BRANDS — secciones (migrado de Webflow: /brands)
    ============================================================ */
 
-/* Hero: render aéreo full-bleed + gradiente + párrafo centrado en la base. */
+/* Hero: render aéreo full-bleed + gradiente + intro centrada. */
 .brands-hero {
   position: relative;
   width: 100%;
@@ -1111,7 +1111,7 @@ a {
   overflow: hidden;
   background: var(--color-oscuro);
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: center;
 }
 
@@ -1137,60 +1137,31 @@ a {
   z-index: 2;
   width: 95%;
   max-width: 900px;
-  padding: 0 0 90px;
-  text-align: center;
-}
-
-.brands-hero__lead {
-  margin: 0;
-  font-family: var(--font-primary);
-  font-weight: 400;
-  font-size: 28px;
-  line-height: 38px;
-  color: var(--color-claro);
-  text-wrap: balance;
-}
-
-.brands-hero__lead em {
-  font-style: italic;
-}
-
-/* Intro: heading + subheading centrados sobre claro. */
-.brands-intro {
-  width: 100%;
-  background: var(--color-claro);
-  color: var(--color-oscuro);
-  display: flex;
-  justify-content: center;
-}
-
-.brands-intro__inner {
-  width: 95%;
-  max-width: 900px;
-  padding: 90px 0 40px;
   display: flex;
   flex-direction: column;
   gap: 20px;
   text-align: center;
 }
 
-.brands-intro__heading {
+.brands-hero__heading {
   margin: 0;
   font-family: var(--font-primary);
   font-style: italic;
   font-weight: 500;
   font-size: 56px;
   line-height: 60px;
-  color: var(--color-oscuro);
+  color: var(--color-claro);
+  text-wrap: balance;
 }
 
-.brands-intro__lead {
+.brands-hero__lead {
   margin: 0;
   font-family: var(--font-primary);
   font-weight: 400;
   font-size: 22px;
   line-height: 30px;
-  color: color-mix(in srgb, var(--color-oscuro) 78%, transparent);
+  color: var(--color-claro);
+  text-wrap: balance;
 }
 
 /* Directorio: heading "Retail reimagined" + tabs de filtros + grid de marcas. */
@@ -1238,16 +1209,7 @@ a {
    __intro + __heading + __lead) permanece en BEM. */
 
 @media (max-width: 991px) {
-  .brands-hero__lead {
-    font-size: 24px;
-    line-height: 32px;
-  }
-
-  .brands-intro__inner {
-    padding: 70px 0 32px;
-  }
-
-  .brands-intro__heading {
+  .brands-hero__heading {
     font-size: 44px;
     line-height: 48px;
   }
@@ -1260,24 +1222,15 @@ a {
 
 @media (max-width: 767px) {
   .brands-hero__inner {
-    padding-bottom: 64px;
+    width: min(88%, 520px);
   }
 
-  .brands-hero__lead {
-    font-size: 20px;
-    line-height: 28px;
-  }
-
-  .brands-intro__inner {
-    padding: 56px 0 24px;
-  }
-
-  .brands-intro__heading {
+  .brands-hero__heading {
     font-size: 36px;
     line-height: 40px;
   }
 
-  .brands-intro__lead {
+  .brands-hero__lead {
     font-size: 19px;
     line-height: 27px;
   }

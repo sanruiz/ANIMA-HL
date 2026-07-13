@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import BrandsDirectory from "@/components/BrandsDirectory";
 import BrandsHero from "@/components/BrandsHero";
-import BrandsIntro from "@/components/BrandsIntro";
+import FeaturedBrandsCarousel from "@/components/featured-brands-carousel";
 import { BRANDS_QUERY } from "@/lib/queries";
 import type { BrandNode, BrandsResponse } from "@/lib/types";
 import { fetchGraphQL } from "@/lib/wp";
@@ -46,13 +46,20 @@ export default async function BrandsPage({
   return (
     <>
       <BrandsHero />
-      <BrandsIntro />
       {failed ? (
         <section className="brands-directory">
           <p className="brands-directory__empty">{t("error")}</p>
         </section>
       ) : (
-        <BrandsDirectory brands={brands} />
+        <>
+          <FeaturedBrandsCarousel
+            brands={brands.filter((brand) => Boolean(brand.brandFields?.featured))}
+            copy={t("featuredCarouselCopy")}
+            previousLabel={t("featuredCarouselPrevious")}
+            nextLabel={t("featuredCarouselNext")}
+          />
+          <BrandsDirectory brands={brands} />
+        </>
       )}
     </>
   );
