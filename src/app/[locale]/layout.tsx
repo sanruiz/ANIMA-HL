@@ -11,6 +11,7 @@ const cardo = Cardo({
   variable: "--font-cardo",
   subsets: ["latin"],
   weight: "400",
+  style: ["normal", "italic"],
 });
 
 const geistMono = Geist_Mono({
