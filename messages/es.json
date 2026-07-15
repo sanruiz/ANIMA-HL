@@ -35,8 +35,12 @@
     "heroHeading": "Agenda",
     "heroLead": "Descubre los próximos <em>eventos, experiencias y momentos</em> para vivir Ánima Village.",
     "upcomingHeading": "Próximos eventos",
+    "upcomingTab": "Próximos",
+    "pastTab": "Pasados",
     "filterAll": "Todo",
     "empty": "No hay eventos por ahora.",
+    "pastEmpty": "No hay eventos pasados por ahora.",
+    "pastBadge": "Finalizado",
     "error": "No se pudo cargar la agenda. Revisa la conexión con WordPress.",
     "featured": "Destacado",
     "detail": {

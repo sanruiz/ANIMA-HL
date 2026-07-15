@@ -14,26 +14,43 @@ import { shouldBypassImageOptimizer } from "@/lib/wp-image";
 
 const ALL_FILTER = "__all__";
 
+type EventCollection = "upcoming" | "past";
+
 interface AgendaEventsGridProps {
-  events: EventNode[];
+  upcomingEvents: EventNode[];
+  pastEvents: EventNode[];
   locale: string;
   heading: string;
   emptyMessage: string;
+  pastEmptyMessage: string;
+  upcomingTabLabel: string;
+  pastTabLabel: string;
   filterAllLabel: string;
+  pastBadgeLabel: string;
 }
 
 export default function AgendaEventsGrid({
-  events,
+  upcomingEvents,
+  pastEvents,
   locale,
   heading,
   emptyMessage,
+  pastEmptyMessage,
+  upcomingTabLabel,
+  pastTabLabel,
   filterAllLabel,
+  pastBadgeLabel,
 }: AgendaEventsGridProps) {
-  const [active, setActive] = useState<string>(ALL_FILTER);
+  const [activeCollection, setActiveCollection] =
+    useState<EventCollection>("upcoming");
+  const [activeCategory, setActiveCategory] = useState<string>(ALL_FILTER);
+
+  const activeEvents =
+    activeCollection === "upcoming" ? upcomingEvents : pastEvents;
 
   const categories = useMemo(() => {
     const map = new Map<string, string>();
-    for (const event of events) {
+    for (const event of activeEvents) {
       for (const tag of event.eventTags?.nodes ?? []) {
         if (!map.has(tag.slug)) {
           map.set(tag.slug, localizeTags(tag.name, locale));
@@ -44,17 +61,38 @@ export default function AgendaEventsGrid({
     return [...map.entries()]
       .map(([slug, name]) => ({ slug, name }))
       .sort((a, b) => a.name.localeCompare(b.name, locale));
-  }, [events, locale]);
+  }, [activeEvents, locale]);
 
   const filtered =
-    active === ALL_FILTER
-      ? events
-      : events.filter(
+    activeCategory === ALL_FILTER
+      ? activeEvents
+      : activeEvents.filter(
           (event) =>
-            event.eventTags?.nodes.some((tag) => tag.slug === active) ?? false,
+            event.eventTags?.nodes.some((tag) => tag.slug === activeCategory) ??
+            false,
         );
 
-  const filterKey = active;
+  const filterKey = `${activeCollection}:${activeCategory}`;
+  const activeEmptyMessage =
+    activeCollection === "upcoming" ? emptyMessage : pastEmptyMessage;
+
+  const handleCollectionChange = (collection: EventCollection) => {
+    setActiveCollection(collection);
+    setActiveCategory(ALL_FILTER);
+  };
+
+  const collectionTabClass = (isActive: boolean) =>
+    cn(
+      "appearance-none rounded-full border cursor-pointer",
+      "px-5 py-2.5 text-sm uppercase tracking-[0.06em]",
+      "font-[family-name:var(--font-ui-stack)] font-normal",
+      "transition-colors duration-200",
+      "border-brand-oscuro text-brand-oscuro",
+      "hover:bg-brand-oscuro hover:text-brand-claro",
+      isActive
+        ? "bg-brand-oscuro text-brand-claro"
+        : "bg-transparent text-brand-oscuro",
+    );
 
   const filterClass = (isActive: boolean) =>
     cn(
@@ -78,14 +116,39 @@ export default function AgendaEventsGrid({
       <div
         role="tablist"
         aria-label={heading}
-        className="flex w-[95%] max-w-(--width-max) flex-wrap justify-center gap-x-3 gap-y-2 pt-4 pb-10"
+        className="flex w-[95%] max-w-(--width-max) flex-wrap justify-center gap-3 pt-4 pb-6"
       >
         <button
           type="button"
           role="tab"
-          aria-selected={active === ALL_FILTER}
-          onClick={() => setActive(ALL_FILTER)}
-          className={filterClass(active === ALL_FILTER)}
+          aria-selected={activeCollection === "upcoming"}
+          onClick={() => handleCollectionChange("upcoming")}
+          className={collectionTabClass(activeCollection === "upcoming")}
+        >
+          {upcomingTabLabel}
+        </button>
+        <button
+          type="button"
+          role="tab"
+          aria-selected={activeCollection === "past"}
+          onClick={() => handleCollectionChange("past")}
+          className={collectionTabClass(activeCollection === "past")}
+        >
+          {pastTabLabel}
+        </button>
+      </div>
+
+      <div
+        role="tablist"
+        aria-label={filterAllLabel}
+        className="flex w-[95%] max-w-(--width-max) flex-wrap justify-center gap-x-3 gap-y-2 pb-10"
+      >
+        <button
+          type="button"
+          role="tab"
+          aria-selected={activeCategory === ALL_FILTER}
+          onClick={() => setActiveCategory(ALL_FILTER)}
+          className={filterClass(activeCategory === ALL_FILTER)}
         >
           {filterAllLabel}
         </button>
@@ -94,9 +157,9 @@ export default function AgendaEventsGrid({
             key={slug}
             type="button"
             role="tab"
-            aria-selected={active === slug}
-            onClick={() => setActive(slug)}
-            className={filterClass(active === slug)}
+            aria-selected={activeCategory === slug}
+            onClick={() => setActiveCategory(slug)}
+            className={filterClass(activeCategory === slug)}
           >
             {name}
           </button>
@@ -104,7 +167,7 @@ export default function AgendaEventsGrid({
       </div>
 
       {filtered.length === 0 ? (
-        <p className="agenda-events__empty">{emptyMessage}</p>
+        <p className="agenda-events__empty">{activeEmptyMessage}</p>
       ) : (
         <ul className="m-0 grid w-[95%] max-w-(--width-max) list-none grid-cols-1 gap-x-6 gap-y-10 p-0 sm:grid-cols-2 lg:grid-cols-3 lg:gap-x-8 lg:gap-y-12">
           {filtered.map((event) => {
@@ -135,6 +198,11 @@ export default function AgendaEventsGrid({
                   ) : null}
                 </div>
                 <div className="px-0.5">
+                  {activeCollection === "past" ? (
+                    <span className="mb-2 inline-flex rounded-full border border-brand-oscuro/20 px-2.5 py-1 font-(family-name:--font-ui-stack) text-[11px] leading-none font-normal tracking-[0.06em] text-brand-oscuro/60 uppercase">
+                      {pastBadgeLabel}
+                    </span>
+                  ) : null}
                   <h3 className="m-0 font-(family-name:--font-ui-stack) text-base leading-5.5 font-light text-brand-oscuro lg:text-[17px]">
                     {event.title}
                   </h3>

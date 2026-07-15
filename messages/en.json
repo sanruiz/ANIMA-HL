@@ -35,8 +35,12 @@
     "heroHeading": "Events",
     "heroLead": "Discover upcoming <em>events, experiences, and moments</em>  at Ánima Village.",
     "upcomingHeading": "Upcoming events",
+    "upcomingTab": "Upcoming",
+    "pastTab": "Past",
     "filterAll": "All",
     "empty": "No events yet.",
+    "pastEmpty": "No past events yet.",
+    "pastBadge": "Ended",
     "error": "Could not load events. Check the WordPress connection.",
     "featured": "Featured",
     "detail": {

@@ -33,6 +33,10 @@ function getEventSortDateKey(event: EventNode): number {
   );
 }
 
+function getPastEventSortDateKey(event: EventNode): number {
+  return getEventReferenceDateKey(event) ?? Number.MIN_SAFE_INTEGER;
+}
+
 function isPastByDate(event: EventNode, todayKey: number): boolean {
   const referenceDateKey = getEventReferenceDateKey(event);
   return referenceDateKey !== null && referenceDateKey < todayKey;
@@ -53,6 +57,27 @@ export function getUpcomingEvents(
     .toSorted((eventA, eventB) => {
       const dateComparison =
         getEventSortDateKey(eventA) - getEventSortDateKey(eventB);
+
+      if (dateComparison !== 0) return dateComparison;
+
+      return (eventA.title ?? "").localeCompare(eventB.title ?? "");
+    });
+}
+
+/**
+ * Returns events that have ended or are manually tagged as past, sorted newest first.
+ */
+export function getPastEvents(
+  events: EventNode[],
+  today: Date = new Date()
+): EventNode[] {
+  const todayKey = getTodayKey(today);
+
+  return events
+    .filter((event) => hasPastEventTag(event) || isPastByDate(event, todayKey))
+    .toSorted((eventA, eventB) => {
+      const dateComparison =
+        getPastEventSortDateKey(eventB) - getPastEventSortDateKey(eventA);
 
       if (dateComparison !== 0) return dateComparison;
 

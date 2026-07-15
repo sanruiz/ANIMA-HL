@@ -3,7 +3,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import AgendaEventsGrid from "@/components/agenda-events-grid";
 import AgendaHero from "@/components/agenda-hero";
 import JsonLd from "@/components/JsonLd";
-import { getUpcomingEvents } from "@/lib/events";
+import { getPastEvents, getUpcomingEvents } from "@/lib/events";
 import { EVENTS_QUERY } from "@/lib/queries";
 import { getLanguageAlternates, getLocalizedUrl } from "@/lib/seo";
 import type { EventsResponse, EventNode } from "@/lib/types";
@@ -47,7 +47,8 @@ export default async function AgendaPage({
   setRequestLocale(locale);
   const t = await getTranslations("agenda");
 
-  let events: EventNode[] = [];
+  let upcomingEvents: EventNode[] = [];
+  let pastEvents: EventNode[] = [];
   let failed = false;
 
   try {
@@ -57,7 +58,8 @@ export default async function AgendaPage({
       revalidate: 3600,
       tags: ["wp:events"],
     });
-    events = getUpcomingEvents(data.events.nodes);
+    upcomingEvents = getUpcomingEvents(data.events.nodes);
+    pastEvents = getPastEvents(data.events.nodes);
   } catch (err) {
     console.error("[agenda] error cargando eventos:", err);
     failed = true;
@@ -109,11 +111,16 @@ export default async function AgendaPage({
         </section>
       ) : (
         <AgendaEventsGrid
-          events={events}
+          upcomingEvents={upcomingEvents}
+          pastEvents={pastEvents}
           locale={locale}
           heading={t("upcomingHeading")}
           emptyMessage={t("empty")}
+          pastEmptyMessage={t("pastEmpty")}
+          upcomingTabLabel={t("upcomingTab")}
+          pastTabLabel={t("pastTab")}
           filterAllLabel={t("filterAll")}
+          pastBadgeLabel={t("pastBadge")}
         />
       )}
     </>

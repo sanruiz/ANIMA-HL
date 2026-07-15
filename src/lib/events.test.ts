@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { getUpcomingEvents } from "@/lib/events";
+import { getPastEvents, getUpcomingEvents } from "@/lib/events";
 import type { EventNode } from "@/lib/types";
 
 function createEvent({
@@ -122,6 +122,83 @@ describe("getUpcomingEvents()", () => {
       "first",
       "second",
       "third",
+    ]);
+  });
+});
+
+describe("getPastEvents()", () => {
+  const today = new Date(Date.UTC(2025, 6, 11));
+
+  it("includes events tagged as past even when their date is future", () => {
+    const events = [
+      createEvent({
+        id: "past-tagged",
+        title: "Past tagged",
+        startDate: "20250712",
+        tagSlugs: ["eventos-pasados"],
+      }),
+      createEvent({
+        id: "future",
+        title: "Future",
+        startDate: "20250712",
+      }),
+    ];
+
+    expect(getPastEvents(events, today).map((event) => event.id)).toEqual([
+      "past-tagged",
+    ]);
+  });
+
+  it("includes events whose reference date is before today", () => {
+    const events = [
+      createEvent({
+        id: "yesterday",
+        title: "Yesterday",
+        startDate: "20250710",
+      }),
+      createEvent({
+        id: "ended",
+        title: "Ended",
+        startDate: "20250708",
+        endDate: "20250710",
+      }),
+      createEvent({
+        id: "today",
+        title: "Today",
+        startDate: "20250711",
+      }),
+    ];
+
+    expect(getPastEvents(events, today).map((event) => event.id)).toEqual([
+      "ended",
+      "yesterday",
+    ]);
+  });
+
+  it("sorts past events by most recent reference date first", () => {
+    const events = [
+      createEvent({
+        id: "oldest",
+        title: "Oldest",
+        startDate: "20250401",
+      }),
+      createEvent({
+        id: "newest",
+        title: "Newest",
+        startDate: "20250701",
+      }),
+      createEvent({
+        id: "middle",
+        title: "Middle",
+        startDate: "20250501",
+        endDate: "20250503",
+      }),
+    ];
+
+    expect(getPastEvents(events, today).map((event) => event.id)).toEqual([
+      "newest",
+      "middle",
+      "oldest",
     ]);
   });
 });
