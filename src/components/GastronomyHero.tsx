@@ -8,7 +8,7 @@ export default async function GastronomyHero() {
   return (
     <section className="brands-hero" aria-labelledby="gastronomy-hero-heading">
       <Image
-        src="/brands/hero-aerial.avif"
+        src="/gastronomy/gastronomy-hero.avif"
         alt={t("heroImageAlt")}
         fill
         priority
