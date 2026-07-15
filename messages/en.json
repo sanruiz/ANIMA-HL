@@ -83,6 +83,23 @@
       "locationLabel": "Location"
     }
   },
+  "gastronomy": {
+    "title": "Gastronomy",
+    "metaDescription": "Discover Ánima Village's curated gastronomy selection in Cabo Del Sol.",
+    "heroImageAlt": "Aerial view of Ánima Village's gastronomy area",
+    "heroHeading": "Gastronomy",
+    "heroP1": "Ánima Village brings together <em>curated gastronomic experiences</em> designed to elevate every visit.",
+    "directoryHeading": "Flavors that inspire",
+    "directoryLead": "A curated selection of culinary experiences.",
+    "featuredCarouselCopy": "A curated selection of culinary experiences.",
+    "featuredCarouselPrevious": "Previous featured experiences",
+    "featuredCarouselNext": "Next featured experiences",
+    "searchLabel": "Search by name",
+    "searchPlaceholder": "Search experience by name",
+    "filterAll": "All",
+    "empty": "No gastronomic experiences yet.",
+    "error": "Could not load gastronomic experiences. Check the WordPress connection."
+  },
   "blog": {
     "title": "News",
     "metaDescription": "The latest updates, events, and highlights from the Ánima Village community in Cabo Del Sol — openings, art, wellness, and more.",

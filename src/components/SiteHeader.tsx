@@ -12,12 +12,13 @@ import AnimaLogo from "./AnimaLogo";
 // (arte, gastronomy) apuntan a rutas internas placeholder y darán 404
 // hasta que se migren; about, brands, map y blog ya existen.
 const NAV_ITEMS = [
-  { key: "about", href: "/about" },
-  { key: "arte", href: "/arte" },
   { key: "elevatedBrands", href: "/brands" },
   { key: "gastronomy", href: "/gastronomy" },
+  { key: "agenda", href: "/agenda" },
+  { key: "arte", href: "/arte" },
   { key: "map", href: "/map" },
   { key: "blog", href: "/blog" },
+  { key: "about", href: "/about" },
 ] as const;
 
 const ABOUT_IMAGE =

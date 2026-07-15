@@ -240,6 +240,11 @@ export const BRANDS_QUERY = /* GraphQL */ `
           nodes {
             name
             slug
+            ancestors {
+              nodes {
+                slug
+              }
+            }
           }
         }
         brandFields {

@@ -14,6 +14,9 @@ export type FeaturedImage = {
 export type TermNode = {
   name: string;
   slug: string;
+  ancestors?: {
+    nodes: { slug: string | null }[];
+  } | null;
 };
 
 export type MediaItem = {

@@ -14,13 +14,17 @@ const ALL_FILTER = "__all__";
 
 interface BrandsDirectoryProps {
   brands: BrandNode[];
+  copyNamespace?: "brands" | "gastronomy";
 }
 
 // Sección "Retail Reimagined" migrada de Webflow: heading + subheading (canvas
 // en BEM) + tabs de filtros + grid de tarjetas (interactivos/repetidos en
 // Tailwind — ver hybrid rule en CLAUDE.md).
-export default function BrandsDirectory({ brands }: BrandsDirectoryProps) {
-  const t = useTranslations("brands");
+export default function BrandsDirectory({
+  brands,
+  copyNamespace = "brands",
+}: BrandsDirectoryProps) {
+  const t = useTranslations(copyNamespace);
   const locale = useLocale();
   const [active, setActive] = useState<string>(ALL_FILTER);
   const [searchTerm, setSearchTerm] = useState("");

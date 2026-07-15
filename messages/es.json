@@ -83,6 +83,23 @@
       "locationLabel": "Ubicación"
     }
   },
+  "gastronomy": {
+    "title": "Gastronomía",
+    "metaDescription": "Descubre la selección gastronómica de Ánima Village en Cabo Del Sol.",
+    "heroImageAlt": "Vista aérea del área gastronómica de Ánima Village",
+    "heroHeading": "Gastronomía",
+    "heroP1": "Ánima Village reúne <em>experiencias gastronómicas</em> cuidadosamente seleccionadas para disfrutar cada momento.",
+    "directoryHeading": "Sabores que inspiran",
+    "directoryLead": "Una selección curada de propuestas gastronómicas.",
+    "featuredCarouselCopy": "Una selección curada de propuestas gastronómicas.",
+    "featuredCarouselPrevious": "Propuestas destacadas anteriores",
+    "featuredCarouselNext": "Siguientes propuestas destacadas",
+    "searchLabel": "Buscar por nombre",
+    "searchPlaceholder": "Buscar propuesta por nombre",
+    "filterAll": "Todo",
+    "empty": "No hay propuestas gastronómicas por ahora.",
+    "error": "No se pudieron cargar las propuestas gastronómicas. Revisa la conexión con WordPress."
+  },
   "blog": {
     "title": "Noticias",
     "metaDescription": "Lo último de la comunidad de Ánima Village en Cabo Del Sol: aperturas, eventos, arte, bienestar y más.",
