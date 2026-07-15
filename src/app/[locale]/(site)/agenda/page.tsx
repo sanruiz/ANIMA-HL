@@ -113,6 +113,7 @@ export default async function AgendaPage({
           locale={locale}
           heading={t("upcomingHeading")}
           emptyMessage={t("empty")}
+          filterAllLabel={t("filterAll")}
         />
       )}
     </>
