@@ -3,7 +3,6 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import BrandsDirectory from "@/components/BrandsDirectory";
 import GastronomyHero from "@/components/GastronomyHero";
 import FeaturedBrandsCarousel from "@/components/featured-brands-carousel";
-import { filterBrandsByExcludedTags } from "@/lib/brand-taxonomy";
 import { BRANDS_QUERY } from "@/lib/queries";
 import type { BrandNode, BrandsResponse } from "@/lib/types";
 import { fetchGraphQL } from "@/lib/wp";
@@ -41,9 +40,20 @@ export default async function GastronomyPage({
       locale,
     });
 
-    brands = filterBrandsByExcludedTags(data.brands.nodes, []).filter((brand) =>
-      brand.brandTags?.nodes.some((tag) => tag.slug === GASTRONOMY_TAG_SLUG),
-    );
+    brands = data.brands.nodes
+      .filter((brand) =>
+        brand.brandTags?.nodes.some((tag) => tag.slug === GASTRONOMY_TAG_SLUG),
+      )
+      .map((brand) => ({
+        ...brand,
+        brandTags: brand.brandTags
+          ? {
+              nodes: brand.brandTags.nodes.filter(
+                (tag) => tag.slug !== GASTRONOMY_TAG_SLUG,
+              ),
+            }
+          : null,
+      }));
   } catch (err) {
     console.error("[gastronomy] error cargando marcas:", err);
     failed = true;

@@ -1,10 +1,9 @@
 import Image from "next/image";
 import { getTranslations } from "next-intl/server";
-import type { ReactNode } from "react";
 
 export default async function GastronomyHero() {
   const t = await getTranslations("gastronomy");
-  const em = (chunks: ReactNode) => <em>{chunks}</em>;
+    const em = (chunks: React.ReactNode) => <em>{chunks}</em>;
 
   return (
     <section className="brands-hero" aria-labelledby="gastronomy-hero-heading">
