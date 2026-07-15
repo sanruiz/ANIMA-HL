@@ -30,9 +30,19 @@
   },
   "agenda": {
     "title": "Events",
+    "metaDescription": "Discover upcoming events, experiences, and programming at Ánima Village in Cabo Del Sol.",
+    "heroImageAlt": "Aerial view of Ánima Village retail promenade",
+    "heroHeading": "Events",
+    "heroLead": "Discover upcoming <em>events, experiences, and moments</em>  at Ánima Village.",
+    "upcomingHeading": "Upcoming events",
     "empty": "No events yet.",
     "error": "Could not load events. Check the WordPress connection.",
-    "featured": "Featured"
+    "featured": "Featured",
+    "detail": {
+      "addToCalendar": "Add to calendar",
+      "dateLabel": "Date",
+      "locationLabel": "Location:"
+    }
   },
   "brands": {
     "title": "Brands",

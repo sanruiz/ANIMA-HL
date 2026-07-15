@@ -29,9 +29,10 @@ export default function SiteHeader({ locale }: { locale: string }) {
   const t = useTranslations("nav");
   const pathname = usePathname();
   // Páginas cuya primera sección es un media full-bleed oscuro: el header
-  // flota encima en transparente con texto claro (home, about, brands).
+  // flota encima en transparente con texto claro (home, about, brands, agenda).
   const onHero =
     pathname === "/" ||
+    pathname === "/agenda" ||
     pathname === "/about" ||
     pathname === "/brands";
   const [open, setOpen] = useState(false);

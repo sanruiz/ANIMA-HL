@@ -1,8 +1,42 @@
+import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { fetchGraphQL } from "@/lib/wp";
+import AgendaEventsGrid from "@/components/agenda-events-grid";
+import AgendaHero from "@/components/agenda-hero";
+import JsonLd from "@/components/JsonLd";
+import { getUpcomingEvents } from "@/lib/events";
 import { EVENTS_QUERY } from "@/lib/queries";
+import { getLanguageAlternates, getLocalizedUrl } from "@/lib/seo";
 import type { EventsResponse, EventNode } from "@/lib/types";
-import { localizeTags } from "@/lib/i18n-tags";
+import { fetchGraphQL } from "@/lib/wp";
+
+export const revalidate = 3600;
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "agenda" });
+  const canonical = getLocalizedUrl(locale, "/agenda");
+  const description = t("metaDescription");
+  const title = `${t("title")} | Ánima Village`;
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical,
+      languages: getLanguageAlternates("/agenda"),
+    },
+    openGraph: {
+      title,
+      description,
+      type: "website",
+      url: canonical,
+    },
+  };
+}
 
 export default async function AgendaPage({
   params,
@@ -20,65 +54,67 @@ export default async function AgendaPage({
     const data = await fetchGraphQL<EventsResponse>({
       query: EVENTS_QUERY,
       locale,
+      revalidate: 3600,
+      tags: ["wp:events"],
     });
-    events = data.events.nodes;
+    events = getUpcomingEvents(data.events.nodes);
   } catch (err) {
     console.error("[agenda] error cargando eventos:", err);
     failed = true;
   }
 
-  return (
-    <div className="container">
-      <h1>{t("title")}</h1>
+  const agendaUrl = getLocalizedUrl(locale, "/agenda");
+  const homeUrl = getLocalizedUrl(locale, "/");
+  const jsonLd = [
+    {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      name: t("title"),
+      description: t("metaDescription"),
+      url: agendaUrl,
+      inLanguage: locale,
+      isPartOf: {
+        "@type": "WebSite",
+        name: "Ánima Village",
+        url: homeUrl,
+      },
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Ánima Village",
+          item: homeUrl,
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: t("title"),
+          item: agendaUrl,
+        },
+      ],
+    },
+  ];
 
+  return (
+    <>
+      <JsonLd data={jsonLd} />
+      <AgendaHero />
       {failed ? (
-        <p className="error">{t("error")}</p>
-      ) : events.length === 0 ? (
-        <p className="empty">{t("empty")}</p>
+        <section className="agenda-events">
+          <p className="agenda-events__empty">{t("error")}</p>
+        </section>
       ) : (
-        <div className="wp-list-grid">
-          {events.map((ev) => {
-            const img = ev.featuredImage?.node;
-            const f = ev.eventFields;
-            // startDate es un campo de fecha de ACF (medianoche UTC); se formatea
-            // en UTC para evitar desfase de un día. Fallback a la fecha del post.
-            const startDate = f?.startDate ?? ev.date;
-            return (
-              <article className="wp-list-card" key={ev.id}>
-                {img?.sourceUrl && (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={img.sourceUrl} alt={img.altText ?? ev.title ?? ""} />
-                )}
-                <div className="wp-list-card__body">
-                  {f?.featured && <span className="tag">★ {t("featured")}</span>}
-                  <h3>{ev.title}</h3>
-                  {startDate && (
-                    <div className="wp-list-card__meta">
-                      {new Date(startDate).toLocaleDateString(locale, {
-                        day: "numeric",
-                        month: "long",
-                        year: "numeric",
-                        timeZone: "UTC",
-                      })}
-                      {f?.startTime ? ` · ${f.startTime.slice(0, 5)}` : ""}
-                    </div>
-                  )}
-                  {f?.place && (
-                    <div className="wp-list-card__meta">{f.place}</div>
-                  )}
-                  <div>
-                    {ev.eventTags?.nodes.map((tag) => (
-                      <span className="tag" key={tag.slug}>
-                        {localizeTags(tag.name, locale)}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </article>
-            );
-          })}
-        </div>
+        <AgendaEventsGrid
+          events={events}
+          locale={locale}
+          heading={t("upcomingHeading")}
+          emptyMessage={t("empty")}
+        />
       )}
-    </div>
+    </>
   );
 }

@@ -30,9 +30,19 @@
   },
   "agenda": {
     "title": "Agenda",
+    "metaDescription": "Descubre los próximos eventos, experiencias y programación de Ánima Village en Cabo Del Sol.",
+    "heroImageAlt": "Vista aérea del paseo comercial de Ánima Village",
+    "heroHeading": "Agenda",
+    "heroLead": "Descubre los próximos <em>eventos, experiencias y momentos</em> para vivir Ánima Village.",
+    "upcomingHeading": "Próximos eventos",
     "empty": "No hay eventos por ahora.",
     "error": "No se pudo cargar la agenda. Revisa la conexión con WordPress.",
-    "featured": "Destacado"
+    "featured": "Destacado",
+    "detail": {
+      "addToCalendar": "Agregar a calendario",
+      "dateLabel": "Fecha",
+      "locationLabel": "Lugar"
+    }
   },
   "brands": {
     "title": "Marcas",

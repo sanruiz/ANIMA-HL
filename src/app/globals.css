@@ -1132,7 +1132,8 @@ a {
       color-mix(in srgb, var(--color-oscuro) 70%, transparent) 100%);
 }
 
-.brands-hero__inner {
+.brands-hero__inner,
+.agenda-hero__inner {
   position: relative;
   z-index: 2;
   width: 95%;
@@ -1243,7 +1244,8 @@ a {
 }
 
 @media (max-width: 767px) {
-  .brands-hero__inner {
+  .brands-hero__inner,
+  .agenda-hero__inner {
     width: min(88%, 520px);
   }
 
@@ -1269,6 +1271,331 @@ a {
   .brands-directory__lead {
     font-size: 18px;
     line-height: 26px;
+  }
+}
+
+/* ============================================================
+   AGENDA — event listing page
+   ============================================================ */
+
+.agenda-hero {
+  position: relative;
+  width: 100%;
+  height: 90svh;
+  min-height: 520px;
+  overflow: hidden;
+  background: var(--color-oscuro);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.agenda-hero__img {
+  object-fit: cover;
+  z-index: 0;
+}
+
+.agenda-hero__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(180deg,
+      color-mix(in srgb, var(--color-oscuro) 55%, transparent) 0%,
+      color-mix(in srgb, var(--color-oscuro) 12%, transparent) 22%,
+      transparent 45%,
+      color-mix(in srgb, var(--color-oscuro) 18%, transparent) 72%,
+      color-mix(in srgb, var(--color-oscuro) 70%, transparent) 100%);
+}
+
+.agenda-hero__heading {
+  margin: 0;
+  font-family: var(--font-primary);
+  font-style: italic;
+  font-weight: 500;
+  font-size: 56px;
+  line-height: 60px;
+  color: var(--color-claro);
+  text-wrap: balance;
+}
+
+.agenda-hero__lead {
+  margin: 0;
+  font-family: var(--font-primary);
+  font-weight: 400;
+  font-size: 22px;
+  line-height: 30px;
+  color: var(--color-claro);
+  text-wrap: balance;
+}
+
+.agenda-events {
+  width: 100%;
+  background: var(--color-claro);
+  color: var(--color-oscuro);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 0 100px;
+}
+
+.agenda-events__intro {
+  width: 95%;
+  max-width: 900px;
+  padding: 40px 0 32px;
+  text-align: center;
+}
+
+.agenda-events__heading {
+  margin: 0;
+  font-family: var(--font-primary);
+  font-style: italic;
+  font-weight: 500;
+  font-size: 48px;
+  line-height: 52px;
+  color: var(--color-oscuro);
+}
+
+.agenda-events__empty {
+  width: 95%;
+  max-width: 640px;
+  padding: 64px 0;
+  margin: 0;
+  text-align: center;
+  font-family: var(--font-primary);
+  font-size: 20px;
+  line-height: 28px;
+  color: color-mix(in srgb, var(--color-oscuro) 65%, transparent);
+}
+
+.agenda-events__item {
+  animation: agenda-events-card-enter 260ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes agenda-events-card-enter {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .agenda-events__item {
+    animation: none;
+  }
+}
+
+@media (max-width: 991px) {
+  .agenda-hero__heading {
+    font-size: 44px;
+    line-height: 48px;
+  }
+
+  .agenda-events__heading {
+    font-size: 40px;
+    line-height: 44px;
+  }
+}
+
+@media (max-width: 767px) {
+  .agenda-hero__heading {
+    font-size: 36px;
+    line-height: 40px;
+  }
+
+  .agenda-hero__lead {
+    font-size: 19px;
+    line-height: 27px;
+  }
+
+  .agenda-events {
+    padding: 24px 0 72px;
+  }
+
+  .agenda-events__heading {
+    font-size: 32px;
+    line-height: 36px;
+  }
+}
+
+/* ============================================================
+   EVENT DETAIL — single agenda page
+   ============================================================ */
+
+.event-detail {
+  width: 100%;
+  background: var(--color-claro);
+  color: var(--color-oscuro);
+  display: flex;
+  justify-content: center;
+  padding: 130px 0 50px;
+}
+
+.event-detail__inner {
+  width: 95%;
+  max-width: var(--width-max);
+}
+
+.event-detail__title {
+  margin: 0 0 24px;
+  font-family: var(--font-primary);
+  font-size: 36px;
+  line-height: 48px;
+  font-weight: 400;
+  color: var(--color-oscuro);
+  text-wrap: balance;
+}
+
+.event-detail__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 50px;
+  align-items: start;
+}
+
+.event-detail__body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.event-detail__meta {
+  width: 100%;
+  margin: 12px 0 0;
+  padding-top: 24px;
+  border-top: 1px solid var(--color-oscuro);
+}
+
+.event-detail__media {
+  width: 100%;
+  background: var(--color-beige);
+}
+
+.event-detail__img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+.event-detail__content {
+  margin: 0;
+  font-family: var(--font-ui-stack);
+  font-size: 18px;
+  line-height: 24px;
+  font-weight: 400;
+  color: var(--color-oscuro);
+}
+
+.event-detail__content > *:first-child {
+  margin-top: 0;
+}
+
+.event-detail__content > *:last-child {
+  margin-bottom: 0;
+}
+
+.event-detail__content p {
+  margin: 0 0 12px;
+}
+
+.event-detail__content em {
+  font-style: italic;
+}
+
+.event-detail__content a {
+  color: var(--color-gold);
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
+.event-detail__info {
+  width: 100%;
+  margin-top: 24px;
+  margin-bottom: 12px;
+  font-family: var(--font-ui-stack);
+}
+
+.event-detail__info-label {
+  margin: 0;
+  color: var(--color-rosa);
+  font-family: var(--font-ui-stack);
+  font-size: 18px;
+  line-height: 18px;
+  font-weight: 400;
+}
+
+.event-detail__info-value {
+  display: block;
+  margin: 0;
+  color: var(--color-oscuro);
+  font-family: var(--font-ui-stack);
+  font-size: 18px;
+  line-height: 24px;
+  font-weight: 400;
+  text-decoration: none;
+}
+
+.event-detail__calendar {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 32px;
+  padding: 12px 16px;
+  border: 1px solid var(--color-oscuro);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--color-oscuro);
+  font-family: var(--font-ui-stack);
+  font-size: 16px;
+  line-height: 1;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.event-detail__calendar:hover {
+  background: var(--color-oscuro);
+  color: var(--color-claro);
+}
+
+@media (max-width: 991px) {
+  .event-detail__inner {
+    width: 95%;
+  }
+
+  .event-detail__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .event-detail__media {
+    order: -1;
+  }
+}
+
+@media (max-width: 767px) {
+  .event-detail {
+    padding: 110px 0 50px;
+  }
+
+  .event-detail__title {
+    font-size: 32px;
+    line-height: 40px;
+  }
+
+  .event-detail__grid {
+    gap: 32px;
+  }
+
+  .event-detail__content,
+  .event-detail__info-label,
+  .event-detail__info-value {
+    font-size: 18px;
   }
 }
 

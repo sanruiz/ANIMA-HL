@@ -46,6 +46,19 @@ export type EventNode = {
   eventFields: EventFields;
 };
 
+export type EventSingle = {
+  id: string;
+  title: string | null;
+  slug: string | null;
+  date: string | null;
+  modified: string | null;
+  excerpt: string | null;
+  content: string | null;
+  featuredImage: FeaturedImage;
+  eventTags: { nodes: TermNode[] } | null;
+  eventFields: EventFields;
+};
+
 export type BrandFields = {
   store: string | null;
   phone: string | null;
@@ -76,6 +89,7 @@ export type PostNode = {
 };
 
 export type EventsResponse = { events: { nodes: EventNode[] } };
+export type EventBySlugResponse = { event: EventSingle | null };
 export type BrandsResponse = { brands: { nodes: BrandNode[] } };
 
 export type BrandHoursFields = {

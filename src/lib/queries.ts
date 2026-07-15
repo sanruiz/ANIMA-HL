@@ -1,8 +1,7 @@
 // Queries GraphQL contra los CPTs event/brand del plugin soma-malls-content-types.
 //
-// Campos ACF: el grupo ACF de Event se expone como el campo `events` dentro de
-// cada nodo Event (nombre del field group). Lo pedimos con el alias `eventFields`
-// para evitar el confuso `events { events { ... } }`.
+// Campos ACF: el grupo ACF de Event se expone como `eventFields` en el schema
+// remoto de WPGraphQL.
 
 export const EVENTS_QUERY = /* GraphQL */ `
   query Events($first: Int = 50) {
@@ -25,7 +24,7 @@ export const EVENTS_QUERY = /* GraphQL */ `
             slug
           }
         }
-        eventFields: events {
+        eventFields {
           startDate
           startTime
           endDate
@@ -36,6 +35,54 @@ export const EVENTS_QUERY = /* GraphQL */ `
             nodes {
               sourceUrl
               altText
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+export const EVENT_BY_SLUG_QUERY = /* GraphQL */ `
+  query EventBySlug($slug: ID!) {
+    event(id: $slug, idType: SLUG) {
+      id
+      title
+      slug
+      date
+      modified
+      excerpt
+      content
+      featuredImage {
+        node {
+          sourceUrl
+          altText
+          mediaDetails {
+            width
+            height
+          }
+        }
+      }
+      eventTags {
+        nodes {
+          name
+          slug
+        }
+      }
+      eventFields {
+        startDate
+        startTime
+        endDate
+        endTime
+        place
+        featured
+        gallery {
+          nodes {
+            sourceUrl
+            altText
+            mediaDetails {
+              width
+              height
             }
           }
         }
