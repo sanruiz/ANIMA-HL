@@ -80,6 +80,15 @@
     "galleryAlt": "Ánima Village",
     "closing": "La <em>comunidad</em> Ánima"
   },
+  "map": {
+    "title": "Mapa",
+    "metaDescription": "Ánima Village reúne marcas exclusivas, experiencias gastronómicas, cafés, arte y espacios para activar el cuerpo y la mente.",
+    "heading": "Visita Ánima",
+    "lead": "Encuentra todo lo que tenemos <em>para ti</em>.",
+    "masterplanAlt": "Plano maestro de Ánima Village",
+    "directionsTitle": "Cómo llegar",
+    "embedTitle": "Ubicación de Ánima Village en Google Maps"
+  },
   "footer": {
     "newsletterTitle": "Sé parte de nuestra comunidad",
     "newsletterLead": "Regístrate para recibir acceso anticipado a eventos, noticias y oportunidades.",

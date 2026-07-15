@@ -80,6 +80,15 @@
     "galleryAlt": "Ánima Village",
     "closing": "We can't wait for you to <em>be part of this story</em>"
   },
+  "map": {
+    "title": "Map",
+    "metaDescription": "Ánima Village is a neighborhood and retail destination dedicated to exclusive brands, wellness, art, nature and community.",
+    "heading": "Find us",
+    "lead": "Discover Ánima Village and get ready to explore.",
+    "masterplanAlt": "Ánima Village masterplan",
+    "directionsTitle": "How to get here",
+    "embedTitle": "Ánima Village location on Google Maps"
+  },
   "footer": {
     "newsletterTitle": "Become part of our community",
     "newsletterLead": "Sign up to receive early access to events, news and opportunities.",

@@ -1385,11 +1385,79 @@ a.brand-detail__info-value:hover {
 }
 
 /* ============================================================
+   MAP — sección "Find us" (migrado de Webflow: /map)
+   ============================================================ */
+
+/* Canvas: plano maestro y embed de Google Maps sobre fondo claro. */
+.map-find {
+  width: 100%;
+  background: var(--color-claro);
+  color: var(--color-oscuro);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 0 100px;
+}
+
+/* Plano maestro: imagen vertical centrada, ancho contenido. */
+.map-find__plan {
+  width: 95%;
+  max-width: 900px;
+}
+
+.map-find__plan-img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Embed de Google Maps: mismo iframe que Webflow (100% x 450). */
+.map-find__embed {
+  width: 95%;
+  max-width: var(--width-max);
+  margin-top: 60px;
+}
+
+.map-find__embed-title {
+  margin: 0 0 24px;
+  font-family: var(--font-primary);
+  font-size: 40px;
+  font-style: italic;
+  font-weight: 500;
+  line-height: 44px;
+  text-align: center;
+  color: var(--color-oscuro);
+}
+
+.map-find__embed-frame {
+  width: 100%;
+  height: 450px;
+  border: 0;
+  display: block;
+}
+
+@media (max-width: 767px) {
+  .map-find {
+    padding-bottom: 72px;
+  }
+
+  .map-find__embed {
+    margin-top: 40px;
+  }
+
+  .map-find__embed-title {
+    font-size: 32px;
+    line-height: 36px;
+  }
+}
+/* ============================================================
    BLOG — sections migrated from Webflow /news.
    ============================================================ */
 
 /* Intro canvas matching Webflow section.intro-text.blog. */
 .blog-intro {
+  --intro-title-offset: 76px;
+
   width: 100%;
   height: 300px;
   margin-top: 100px;
@@ -1404,8 +1472,9 @@ a.brand-detail__info-value:hover {
   max-width: 900px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
+  padding-top: var(--intro-title-offset);
   text-align: center;
 }
 

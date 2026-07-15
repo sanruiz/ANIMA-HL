@@ -5,7 +5,14 @@ import { getLanguageAlternates, getLocalizedUrl } from "@/lib/seo";
 import type { BrandSlugsResponse, NewsSlugsResponse } from "@/lib/types";
 import { fetchGraphQL } from "@/lib/wp";
 
-const STATIC_PATHS = ["/", "/about", "/brands", "/agenda", "/blog"] as const;
+const STATIC_PATHS = [
+  "/",
+  "/about",
+  "/brands",
+  "/agenda",
+  "/blog",
+  "/map",
+] as const;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticEntries = routing.locales.flatMap((locale) =>
