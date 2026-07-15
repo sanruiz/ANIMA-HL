@@ -28,6 +28,10 @@
     "soulImageAlt": "Ánima Village",
     "ritualsHeading": "Donde los <em>rituales diarios</em><br></br>se transforman en una<br></br><em>experiencia extraordinaria</em>"
   },
+  "metadata": {
+    "defaultTitle": "Ánima Village",
+    "defaultDescription": "Ánima Village reúne marcas exclusivas, experiencias gastronómicas, cafés, arte y espacios para activar el cuerpo y la mente."
+  },
   "agenda": {
     "title": "Agenda",
     "metaDescription": "Descubre los próximos eventos, experiencias y programación de Ánima Village en Cabo Del Sol.",
@@ -108,6 +112,16 @@
     "masterplanAlt": "Plano maestro de Ánima Village",
     "directionsTitle": "Cómo llegar",
     "embedTitle": "Ubicación de Ánima Village en Google Maps"
+  },
+  "notFound": {
+    "eyebrow": "Error 404",
+    "heading": "Esta página no encontró su camino.",
+    "lead": "La dirección que buscas no existe o fue movida. Puedes volver al inicio y seguir explorando Ánima Village.",
+    "home": "Volver al inicio",
+    "map": "Ver mapa",
+    "detailLabel": "Detalle del error 404",
+    "status": "Page Not Found",
+    "hint": "Revisa la URL o regresa a una ruta principal del sitio."
   },
   "footer": {
     "newsletterTitle": "Sé parte de nuestra comunidad",

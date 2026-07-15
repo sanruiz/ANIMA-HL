@@ -130,6 +130,30 @@ export const NEWS_BY_SLUG_QUERY = /* GraphQL */ `
   }
 `;
 
+export const PAGE_BY_URI_QUERY = /* GraphQL */ `
+  query PageByUri($uri: ID!) {
+    page(id: $uri, idType: URI) {
+      id
+      uri
+      slug
+      title
+      date
+      modified
+      content(format: RENDERED)
+      featuredImage {
+        node {
+          sourceUrl
+          altText
+          mediaDetails {
+            width
+            height
+          }
+        }
+      }
+    }
+  }
+`;
+
 export const NEWS_SLUGS_QUERY = /* GraphQL */ `
   query NewsSlugs($first: Int = 100) {
     posts(first: $first, where: { orderby: { field: DATE, order: DESC } }) {

@@ -67,5 +67,5 @@ export default function proxy(request: NextRequest) {
 
 export const config = {
   // No interceptar API, assets de Next, ni archivos con extensión.
-  matcher: ["/((?!api|_next|_vercel|.*\\..*).*)"],
+  matcher: ["/((?!api|assets|_next|_vercel|.*\\..*).*)"],
 };

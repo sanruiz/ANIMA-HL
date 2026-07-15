@@ -131,6 +131,19 @@ export type PostSingle = {
 };
 export type NewsBySlugResponse = { post: PostSingle | null };
 
+export type PageSingle = {
+  id: string;
+  uri: string | null;
+  slug: string | null;
+  title: string | null;
+  date: string | null;
+  modified: string | null;
+  content: string | null;
+  featuredImage: FeaturedImage;
+};
+
+export type PageByUriResponse = { page: PageSingle | null };
+
 export type NewsSlugNode = {
   id: string;
   slug: string | null;

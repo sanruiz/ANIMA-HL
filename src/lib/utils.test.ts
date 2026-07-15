@@ -1,5 +1,13 @@
 import { describe, expect, it } from "vitest";
-import { cn, formatBrandHours, formatMonthYear, stripHtml } from "./utils";
+import {
+  buildWordPressUriPath,
+  cn,
+  decodeHtmlEntities,
+  formatBrandHours,
+  formatMonthYear,
+  stripHtml,
+  transformContentToAssetProxy,
+} from "./utils";
 
 describe("cn()", () => {
   it("combina clases simples", () => {
@@ -64,6 +72,70 @@ describe("stripHtml()", () => {
 
   it("elimina etiquetas self-closing", () => {
     expect(stripHtml("Antes<br />Después")).toBe("AntesDespués");
+  });
+});
+
+describe("decodeHtmlEntities()", () => {
+  it("decodifica entidades HTML nombradas comunes", () => {
+    expect(decodeHtmlEntities("Tom &amp; Jerry &quot;Club&quot;")).toBe(
+      'Tom & Jerry "Club"'
+    );
+  });
+
+  it("decodifica entidades numéricas decimales y hexadecimales", () => {
+    expect(decodeHtmlEntities("Caf&#233; &#x26; té")).toBe("Café & té");
+  });
+
+  it("preserva entidades desconocidas", () => {
+    expect(decodeHtmlEntities("Texto &unknown;")).toBe("Texto &unknown;");
+  });
+
+  it("null o undefined → string vacío", () => {
+    expect(decodeHtmlEntities(null)).toBe("");
+    expect(decodeHtmlEntities(undefined)).toBe("");
+  });
+});
+
+describe("buildWordPressUriPath()", () => {
+  it("convierte segmentos catch-all en URI de WordPress", () => {
+    expect(buildWordPressUriPath(["legal", "privacy"])).toBe("/legal/privacy");
+  });
+
+  it("decodifica segmentos URL-encoded", () => {
+    expect(buildWordPressUriPath(["privacy%20notice"])).toBe("/privacy notice");
+  });
+
+  it("sin segmentos → null", () => {
+    expect(buildWordPressUriPath(undefined)).toBeNull();
+    expect(buildWordPressUriPath([])).toBeNull();
+  });
+});
+
+describe("transformContentToAssetProxy()", () => {
+  it("reescribe rutas relativas de /wp-content/uploads", () => {
+    expect(
+      transformContentToAssetProxy('<img src="/wp-content/uploads/foo.png" />')
+    ).toBe('<img src="/assets/uploads/foo.png" />');
+  });
+
+  it("reescribe URLs absolutas conservando query string", () => {
+    expect(
+      transformContentToAssetProxy(
+        '<link href="https://cms.example.com/wp-content/themes/main.css?ver=1" />'
+      )
+    ).toBe('<link href="/assets/themes/main.css?ver=1" />');
+  });
+
+  it("reescribe URLs protocol-relative de plugins", () => {
+    expect(
+      transformContentToAssetProxy(
+        "url(//cms.example.com/wp-content/plugins/form/style.css)"
+      )
+    ).toBe("url(/assets/plugins/form/style.css)");
+  });
+
+  it("no cambia contenido sin assets de WordPress", () => {
+    expect(transformContentToAssetProxy("<p>Hola</p>")).toBe("<p>Hola</p>");
   });
 });
 

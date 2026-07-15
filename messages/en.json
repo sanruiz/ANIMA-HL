@@ -28,6 +28,10 @@
     "soulImageAlt": "Ánima Village",
     "ritualsHeading": "Where <em>daily rituals</em><br></br>of modern life are experienced<br></br><em>like never before</em>"
   },
+  "metadata": {
+    "defaultTitle": "Ánima Village",
+    "defaultDescription": "Ánima Village is a neighborhood and retail destination dedicated to exclusive brands, wellness, art, nature and community."
+  },
   "agenda": {
     "title": "Events",
     "metaDescription": "Discover upcoming events, experiences, and programming at Ánima Village in Cabo Del Sol.",
@@ -108,6 +112,16 @@
     "masterplanAlt": "Ánima Village masterplan",
     "directionsTitle": "How to get here",
     "embedTitle": "Ánima Village location on Google Maps"
+  },
+  "notFound": {
+    "eyebrow": "Error 404",
+    "heading": "This page lost its way.",
+    "lead": "The address you are looking for does not exist or has moved. You can return home and keep exploring Ánima Village.",
+    "home": "Back home",
+    "map": "View map",
+    "detailLabel": "Error 404 detail",
+    "status": "Page Not Found",
+    "hint": "Check the URL or return to one of the main site paths."
   },
   "footer": {
     "newsletterTitle": "Become part of our community",
