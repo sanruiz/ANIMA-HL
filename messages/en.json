@@ -40,8 +40,13 @@
     "featured": "Featured",
     "detail": {
       "addToCalendar": "Add to calendar",
+      "closeGallery": "Close gallery",
       "dateLabel": "Date",
-      "locationLabel": "Location:"
+      "galleryLabel": "Event gallery",
+      "locationLabel": "Location",
+      "nextImage": "Next image",
+      "openGalleryImage": "Open image {number}",
+      "previousImage": "Previous image"
     }
   },
   "brands": {

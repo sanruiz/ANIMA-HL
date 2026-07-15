@@ -1,6 +1,7 @@
 import { CalendarPlus } from "lucide-react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
+import EventGallery from "@/components/event-gallery";
 import {
   formatEventDateRange,
   parseEventDate,
@@ -112,6 +113,9 @@ export default function EventDetail({ event, locale }: EventDetailProps) {
   const imageWidth = hasMediaDimensions ? mediaWidth : 1200;
   const imageHeight = hasMediaDimensions ? mediaHeight : 900;
   const fallbackDescription = event.excerpt ? stripHtml(event.excerpt) : "";
+  const galleryImages =
+    fields?.gallery?.nodes.filter((galleryImage) => galleryImage.sourceUrl) ??
+    [];
 
   return (
     <article className="event-detail">
@@ -178,6 +182,10 @@ export default function EventDetail({ event, locale }: EventDetailProps) {
             </div>
           ) : null}
         </div>
+
+        {galleryImages.length > 0 ? (
+          <EventGallery images={galleryImages} title={event.title} />
+        ) : null}
       </div>
     </article>
   );
