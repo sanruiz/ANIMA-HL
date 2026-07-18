@@ -45,14 +45,23 @@ export default function SiteFooter() {
             aria-hidden
             className="footer-news-section__mark footer-news-section__mark--tablet"
           />
+          {/* Móvil: marco SIN emblema (estirable con object-fit: fill sin distorsión). */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/footer-mark-mobile.svg"
+            src="/footer-mark-mobile-frame.svg"
             alt=""
             aria-hidden
             className="footer-news-section__mark footer-news-section__mark--mobile"
           />
           <div className="footer-news-section__content">
+            {/* Emblema aparte, solo visible en móvil (en desktop/tablet va dentro del marco). */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/footer-emblem.svg"
+              alt=""
+              aria-hidden
+              className="footer-news-section__emblem"
+            />
             <h2 className="footer-news-section__title">{t("newsletterTitle")}</h2>
             <p className="footer-news-section__lead">{t("newsletterLead")}</p>
             <NewsletterForm />

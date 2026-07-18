@@ -2589,6 +2589,11 @@ a.brand-detail__info-value:hover {
   display: block;
 }
 
+/* Emblema separado: solo se usa en móvil (desktop/tablet lo traen en su marco). */
+.footer-news-section__emblem {
+  display: none;
+}
+
 .footer-news-section__content {
   position: relative;
   z-index: 1;
@@ -2859,8 +2864,9 @@ a.brand-detail__info-value:hover {
 
 /* Mobile (≤767px): SVG portrait + altura 85vh + content top 90 + width 80% */
 @media (max-width: 767px) {
+  /* La caja se ajusta al contenido (antes: 85vh forzaba una caja gigante vacía). */
   .footer-news-section__inner {
-    min-height: 85vh;
+    min-height: 0;
   }
 
   .footer-news-section__mark--tablet {
@@ -2869,11 +2875,23 @@ a.brand-detail__info-value:hover {
 
   .footer-news-section__mark--mobile {
     display: block;
+    /* Estira el marco para que envuelva el contenido a cualquier alto, en vez de
+       flotar centrado con object-fit: contain (que hacía que el emblema del SVG
+       cayera sobre el título). */
+    object-fit: fill;
   }
 
   .footer-news-section__content {
-    width: 80%;
-    padding-top: 90px;
+    width: 84%;
+    padding-top: 48px;
+    padding-bottom: 44px;
+  }
+
+  .footer-news-section__emblem {
+    display: block;
+    width: 92px;
+    height: auto;
+    margin: -50px auto 4px;
   }
 
   .footer-news-section__title {
