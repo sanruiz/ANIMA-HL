@@ -1099,6 +1099,366 @@ a {
 }
 
 /* ============================================================
+   ARTE ABIERTO — secciones (migrado de Webflow: /arte)
+   ============================================================ */
+
+/* Hero: título grande centrado sobre oscuro (header transparente en claro). */
+.arte-hero {
+  position: relative;
+  width: 100%;
+  height: 90svh;
+  min-height: 520px;
+  overflow: hidden;
+  background: var(--color-oscuro);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.arte-hero__img {
+  object-fit: cover;
+  z-index: 0;
+}
+
+.arte-hero__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    radial-gradient(ellipse at center,
+      color-mix(in srgb, var(--color-oscuro) 42%, transparent) 0%,
+      color-mix(in srgb, var(--color-oscuro) 28%, transparent) 26%,
+      color-mix(in srgb, var(--color-oscuro) 14%, transparent) 54%,
+      transparent 80%),
+    linear-gradient(180deg,
+      color-mix(in srgb, var(--color-oscuro) 6%, transparent) 0%,
+      color-mix(in srgb, var(--color-oscuro) 38%, transparent) 50%,
+      color-mix(in srgb, var(--color-oscuro) 6%, transparent) 100%);
+}
+
+.arte-hero__inner,
+.agenda-hero__inner {
+  position: relative;
+  z-index: 2;
+  width: 95%;
+  max-width: 700px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  text-align: center;
+}
+
+.arte-hero__heading {
+  margin: 0;
+  font-family: var(--font-primary);
+  font-style: italic;
+  font-weight: 500;
+  font-size: 56px;
+  line-height: 60px;
+  color: var(--color-claro);
+  text-wrap: balance;
+}
+
+.arte-hero__lead {
+  margin: 0;
+  font-family: var(--font-primary);
+  font-weight: 400;
+  font-size: 22px;
+  line-height: 30px;
+  color: var(--color-claro);
+  text-wrap: balance;
+}
+
+.arte-hero__lead em {
+  font-style: italic;
+}
+
+/* Secciones split (imagen + texto). */
+.arte-split {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.arte-split--claro {
+  background: var(--color-claro);
+  color: var(--color-oscuro);
+}
+
+.arte-split--verde {
+  background: var(--color-verde);
+  color: var(--color-beige);
+}
+
+.arte-split--beige {
+  background: var(--color-beige);
+  color: var(--color-oscuro);
+}
+
+.arte-split__inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 56px;
+  align-items: center;
+  width: 95%;
+  max-width: var(--width-max);
+  padding: 90px 0;
+}
+
+.arte-split__inner--reverse .arte-split__media {
+  order: -1;
+}
+
+.arte-split__text {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  align-items: center;
+}
+
+.arte-split__heading {
+  margin: 0;
+  font-family: var(--font-primary);
+  font-weight: 400;
+  font-size: 44px;
+  line-height: 48px;
+}
+
+.arte-split__p {
+  margin: 0;
+  font-family: var(--font-primary);
+  font-size: 21px;
+  line-height: 30px;
+}
+
+.arte-split__p em {
+  font-style: italic;
+}
+
+.arte-split__p--muted {
+  opacity: 0.75;
+}
+
+.arte-split__eyebrow {
+  margin: 0;
+  font-family: var(--font-primary);
+  font-style: italic;
+  font-size: 18px;
+  color: color-mix(in srgb, currentColor 68%, transparent);
+}
+
+.arte-split__media {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  margin-inline: auto;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--color-oscuro) 12%, transparent);
+}
+
+.arte-split__img {
+  object-fit: cover;
+}
+
+/* Botón outline estilo Arte Abierto. */
+.arte-button {
+  display: inline-block;
+  margin-top: 4px;
+  padding: 12px 26px;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  font-family: var(--font-ui-stack);
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease;
+}
+
+.arte-split--claro .arte-button:hover {
+  background: var(--color-oscuro);
+  color: var(--color-claro);
+}
+
+.arte-split--verde .arte-button:hover {
+  background: var(--color-beige);
+  color: var(--color-verde);
+}
+
+.arte-split--beige .arte-button:hover {
+  background: var(--color-oscuro);
+  color: var(--color-beige);
+}
+
+/* Sección de texto centrado (Sobre Arte Abierto, sin imagen). */
+.arte-intro {
+  width: 100%;
+  background: var(--color-claro);
+  color: var(--color-oscuro);
+  display: flex;
+  justify-content: center;
+}
+
+.arte-intro__inner {
+  width: 95%;
+  max-width: 820px;
+  padding: 90px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 22px;
+  text-align: center;
+}
+
+.arte-intro__heading {
+  margin: 0;
+  font-family: var(--font-primary);
+  font-weight: 400;
+  font-size: 44px;
+  line-height: 48px;
+}
+
+.arte-intro__p {
+  margin: 0;
+  font-family: var(--font-primary);
+  font-size: 21px;
+  line-height: 30px;
+}
+
+.arte-intro__p em {
+  font-style: italic;
+}
+
+.arte-intro__p--muted {
+  opacity: 0.75;
+}
+
+@media (max-width: 767px) {
+  .arte-intro__inner {
+    padding: 64px 0;
+  }
+
+  .arte-intro__heading {
+    font-size: 32px;
+    line-height: 36px;
+  }
+}
+
+/* Colección: cierre centrado (solo texto) sobre beige. */
+.arte-collection {
+  width: 100%;
+  background: var(--color-beige);
+  color: var(--color-oscuro);
+  display: flex;
+  justify-content: center;
+}
+
+.arte-collection__inner {
+  width: 95%;
+  max-width: 900px;
+  padding: 90px 0;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+}
+
+.arte-collection__eyebrow {
+  margin: 0;
+  font-family: var(--font-primary);
+  font-style: italic;
+  font-size: 18px;
+  color: color-mix(in srgb, var(--color-oscuro) 70%, transparent);
+}
+
+.arte-collection__heading {
+  margin: 0;
+  font-family: var(--font-primary);
+  font-weight: 400;
+  font-size: 48px;
+  line-height: 52px;
+}
+
+.arte-collection__p {
+  margin: 0;
+  max-width: 680px;
+  font-family: var(--font-primary);
+  font-size: 21px;
+  line-height: 30px;
+}
+
+.arte-collection__p em {
+  font-style: italic;
+}
+
+@media (max-width: 991px) {
+  .arte-hero__heading {
+    font-size: 44px;
+    line-height: 48px;
+  }
+
+  .arte-split__inner {
+    grid-template-columns: 1fr;
+    gap: 32px;
+    padding: 70px 0;
+  }
+
+  .arte-split__inner--reverse .arte-split__media {
+    order: 0;
+  }
+
+  .arte-split__media {
+    aspect-ratio: 1 / 1;
+    max-width: 360px;
+  }
+
+  .arte-split__heading {
+    font-size: 36px;
+    line-height: 40px;
+  }
+}
+
+@media (max-width: 767px) {
+
+  .arte-hero__inner,
+  .agenda-hero__inner {
+    width: min(88%, 520px);
+  }
+
+  .arte-hero__heading {
+    font-size: 36px;
+    line-height: 40px;
+  }
+
+  .arte-hero__lead {
+    font-size: 19px;
+    line-height: 27px;
+  }
+
+  .arte-split__p {
+    font-size: 19px;
+    line-height: 27px;
+  }
+
+  .arte-collection__inner {
+    padding: 64px 0;
+  }
+
+  .arte-collection__heading {
+    font-size: 34px;
+    line-height: 38px;
+  }
+
+  .arte-collection__p {
+    font-size: 19px;
+    line-height: 27px;
+  }
+}
+/* ============================================================
    BRANDS — secciones (migrado de Webflow: /brands)
    ============================================================ */
 

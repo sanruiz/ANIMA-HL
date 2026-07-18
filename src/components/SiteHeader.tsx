@@ -36,6 +36,7 @@ export default function SiteHeader({ locale }: { locale: string }) {
     pathname === "/agenda" ||
     pathname === "/about" ||
     pathname === "/gastronomy" ||
+    pathname === "/arte" ||
     pathname === "/brands";
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
