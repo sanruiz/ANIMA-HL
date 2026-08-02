@@ -194,6 +194,7 @@ export const BRAND_BY_SLUG_QUERY = /* GraphQL */ `
       brandFields {
         store
         phone
+        email
         days
         time
         gallery {
@@ -250,6 +251,7 @@ export const BRANDS_QUERY = /* GraphQL */ `
         brandFields {
           store
           phone
+          email
           website
           days
           time

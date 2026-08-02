@@ -65,6 +65,7 @@ export type EventSingle = {
 export type BrandFields = {
   store: string | null;
   phone: string | null;
+  email: string | null;
   website: string | null;
   days: string | null;
   time: string | null;
@@ -98,6 +99,7 @@ export type BrandsResponse = { brands: { nodes: BrandNode[] } };
 export type BrandHoursFields = {
   store: string | null;
   phone: string | null;
+  email: string | null;
   days: string | null;
   time: string | null;
   gallery: { nodes: MediaItem[] } | null;
