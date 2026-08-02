@@ -3,6 +3,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import BrandDetail from "@/components/BrandDetail";
 import JsonLd from "@/components/JsonLd";
+import { collectionTag, itemTag } from "@/lib/cache-tags";
 import { BRAND_BY_SLUG_QUERY } from "@/lib/queries";
 import { getLanguageAlternates, getLocalizedUrl } from "@/lib/seo";
 import type { BrandBySlugResponse } from "@/lib/types";
@@ -21,7 +22,7 @@ async function getBrand(locale: string, slug: string) {
     variables: { slug },
     locale,
     revalidate: 3600,
-    tags: ["wp:brands", `wp:brand:${slug}`],
+    tags: [collectionTag("brand"), itemTag("brand", slug)],
   });
 
   return data.brand;

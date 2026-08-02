@@ -3,6 +3,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import BlogPostHeader from "@/components/BlogPostHeader";
 import JsonLd from "@/components/JsonLd";
+import { collectionTag, itemTag } from "@/lib/cache-tags";
 import { NEWS_BY_SLUG_QUERY } from "@/lib/queries";
 import { getLanguageAlternates, getLocalizedUrl } from "@/lib/seo";
 import type { NewsBySlugResponse } from "@/lib/types";
@@ -21,7 +22,7 @@ async function getPost(locale: string, slug: string) {
     variables: { slug },
     locale,
     revalidate: 3600,
-    tags: ["wp:posts", `wp:post:${slug}`],
+    tags: [collectionTag("post"), itemTag("post", slug)],
   });
 
   return data.post;

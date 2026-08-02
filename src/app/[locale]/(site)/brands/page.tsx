@@ -4,6 +4,7 @@ import BrandsDirectory from "@/components/BrandsDirectory";
 import BrandsHero from "@/components/BrandsHero";
 import FeaturedBrandsCarousel from "@/components/featured-brands-carousel";
 import { filterBrandsByExcludedTags } from "@/lib/brand-taxonomy";
+import { collectionTag } from "@/lib/cache-tags";
 import { BRANDS_QUERY } from "@/lib/queries";
 import type { BrandNode, BrandsResponse } from "@/lib/types";
 import { fetchGraphQL } from "@/lib/wp";
@@ -39,6 +40,7 @@ export default async function BrandsPage({
     const data = await fetchGraphQL<BrandsResponse>({
       query: BRANDS_QUERY,
       locale,
+      tags: [collectionTag("brand")],
     });
     brands = filterBrandsByExcludedTags(data.brands.nodes, EXCLUDED_TAG_SLUGS);
   } catch (err) {

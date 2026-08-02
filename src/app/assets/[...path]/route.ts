@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { ASSETS_TAG } from "@/lib/cache-tags";
 
 const DEFAULT_WORDPRESS_ORIGIN = "https://anima-headless.local";
 const ASSET_CACHE_CONTROL =
@@ -57,7 +58,7 @@ export async function GET(request: Request, { params }: AssetRouteParams) {
   assetUrl.search = new URL(request.url).search;
 
   const response = await fetch(assetUrl, {
-    next: { revalidate: 31536000, tags: ["wp:assets"] },
+    next: { revalidate: 31536000, tags: [ASSETS_TAG] },
   });
 
   if (!response.ok || !response.body) {

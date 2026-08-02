@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import JsonLd from "@/components/JsonLd";
+import { collectionTag, itemTag } from "@/lib/cache-tags";
 import { PAGE_BY_URI_QUERY } from "@/lib/queries";
 import { getLanguageAlternates, getLocalizedUrl } from "@/lib/seo";
 import type { PageByUriResponse } from "@/lib/types";
@@ -25,7 +26,7 @@ async function getPage(locale: string, uriPath: string) {
     variables: { uri: uriPath },
     locale,
     revalidate: 3600,
-    tags: ["wp:pages", `wp:page:${uriPath}`],
+    tags: [collectionTag("page"), itemTag("page", uriPath)],
   });
 
   return data.page;

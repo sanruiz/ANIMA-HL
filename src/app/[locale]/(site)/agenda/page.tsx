@@ -4,6 +4,7 @@ import AgendaEventsGrid from "@/components/agenda-events-grid";
 import AgendaHero from "@/components/agenda-hero";
 import JsonLd from "@/components/JsonLd";
 import { getPastEvents, getUpcomingEvents } from "@/lib/events";
+import { collectionTag } from "@/lib/cache-tags";
 import { EVENTS_QUERY } from "@/lib/queries";
 import { getLanguageAlternates, getLocalizedUrl } from "@/lib/seo";
 import type { EventsResponse, EventNode } from "@/lib/types";
@@ -56,7 +57,7 @@ export default async function AgendaPage({
       query: EVENTS_QUERY,
       locale,
       revalidate: 3600,
-      tags: ["wp:events"],
+      tags: [collectionTag("event")],
     });
     upcomingEvents = getUpcomingEvents(data.events.nodes);
     pastEvents = getPastEvents(data.events.nodes);

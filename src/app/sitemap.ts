@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { routing } from "@/i18n/routing";
+import { collectionTag } from "@/lib/cache-tags";
 import { BRAND_SLUGS_QUERY, NEWS_SLUGS_QUERY } from "@/lib/queries";
 import { getLanguageAlternates, getLocalizedUrl } from "@/lib/seo";
 import type { BrandSlugsResponse, NewsSlugsResponse } from "@/lib/types";
@@ -40,7 +41,7 @@ async function getPostEntries(): Promise<MetadataRoute.Sitemap> {
           query: NEWS_SLUGS_QUERY,
           locale,
           revalidate: 3600,
-          tags: ["wp:posts"],
+          tags: [collectionTag("post")],
         });
 
         return data.posts.nodes
@@ -73,7 +74,7 @@ async function getBrandEntries(): Promise<MetadataRoute.Sitemap> {
           query: BRAND_SLUGS_QUERY,
           locale,
           revalidate: 3600,
-          tags: ["wp:brands"],
+          tags: [collectionTag("brand")],
         });
 
         return data.brands.nodes
