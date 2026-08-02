@@ -46,15 +46,25 @@ export default function BrandDetail({ brand }: BrandDetailProps) {
             </div>
           )}
 
-          {fields?.phone && (
+          {(fields?.phone || fields?.email) && (
             <div className="brand-detail__info mt-4">
               <p className="brand-detail__info-label">{t("contactLabel")}</p>
-              <a
-                href={`tel:${fields.phone}`}
-                className="brand-detail__info-value"
-              >
-                {fields.phone}
-              </a>
+              {fields?.phone && (
+                <a
+                  href={`tel:${fields.phone.replace(/\s+/g, "")}`}
+                  className="brand-detail__info-value block"
+                >
+                  {fields.phone}
+                </a>
+              )}
+              {fields?.email && (
+                <a
+                  href={`mailto:${fields.email}`}
+                  className="brand-detail__info-value block"
+                >
+                  {fields.email}
+                </a>
+              )}
             </div>
           )}
 
