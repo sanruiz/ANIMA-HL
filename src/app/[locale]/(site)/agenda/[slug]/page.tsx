@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import EventDetail from "@/components/event-detail";
 import JsonLd from "@/components/JsonLd";
 import { parseEventDate } from "@/lib/event-date-formatter";
+import { collectionTag, itemTag } from "@/lib/cache-tags";
 import { EVENT_BY_SLUG_QUERY } from "@/lib/queries";
 import { getLanguageAlternates, getLocalizedUrl } from "@/lib/seo";
 import type { EventBySlugResponse, EventSingle } from "@/lib/types";
@@ -34,7 +35,7 @@ async function getEvent(locale: string, slug: string) {
     variables: { slug },
     locale,
     revalidate: 3600,
-    tags: ["wp:events", `wp:event:${slug}`],
+    tags: [collectionTag("event"), itemTag("event", slug)],
   });
 
   return data.event;

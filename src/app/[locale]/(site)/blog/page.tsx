@@ -3,13 +3,15 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import BlogIntro from "@/components/BlogIntro";
 import BlogList from "@/components/BlogList";
 import JsonLd from "@/components/JsonLd";
+import { collectionTag } from "@/lib/cache-tags";
 import { NEWS_QUERY } from "@/lib/queries";
 import { getLanguageAlternates, getLocalizedUrl } from "@/lib/seo";
 import type { NewsResponse, PostNode } from "@/lib/types";
 import { fetchGraphQL } from "@/lib/wp";
 
 // Segment ISR: WPGraphQL uses POST reads, so the route needs its own
-// revalidate export. The 1h tier is temporary until WP webhooks exist.
+// revalidate export. The 1h tier is now only a fallback: WordPress invalidates
+// the cache tags on save. See docs/on-demand-revalidation.md.
 export const revalidate = 3600;
 
 export async function generateMetadata({
@@ -56,7 +58,7 @@ export default async function BlogPage({
       query: NEWS_QUERY,
       locale,
       revalidate: 3600,
-      tags: ["wp:posts"],
+      tags: [collectionTag("post")],
     });
     posts = data.posts.nodes;
   } catch (err) {

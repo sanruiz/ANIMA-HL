@@ -3,6 +3,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import BrandsDirectory from "@/components/BrandsDirectory";
 import GastronomyHero from "@/components/GastronomyHero";
 import FeaturedBrandsCarousel from "@/components/featured-brands-carousel";
+import { collectionTag } from "@/lib/cache-tags";
 import { BRANDS_QUERY } from "@/lib/queries";
 import type { BrandNode, BrandsResponse } from "@/lib/types";
 import { fetchGraphQL } from "@/lib/wp";
@@ -38,6 +39,7 @@ export default async function GastronomyPage({
     const data = await fetchGraphQL<BrandsResponse>({
       query: BRANDS_QUERY,
       locale,
+      tags: [collectionTag("brand")],
     });
 
     brands = data.brands.nodes
