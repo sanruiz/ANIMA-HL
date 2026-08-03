@@ -1,8 +1,7 @@
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 
-const OPEN_IMG =
-  "https://s3.amazonaws.com/webflow-prod-assets/67323ae4f125fe55a3034503/6a2d9f3bb7d2374814eb674f_2.jpg";
+const OPEN_IMG = "/art/open-space.jpg";
 
 // "Espacio Abierto": Autorretrato flameante de Cruzvillegas. Imagen + texto,
 // invertido, sobre verde.
