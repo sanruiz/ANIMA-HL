@@ -2,8 +2,7 @@ import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 
-const PROGRAM_IMG =
-  "https://s3.amazonaws.com/webflow-prod-assets/67323ae4f125fe55a3034503/6a2d9f3b75b3d1a493dbeac8_1.jpg";
+const PROGRAM_IMG = "/art/public-program.jpg";
 
 // "Programa Público": talleres/conferencias + CTA interno a la agenda. Texto + imagen.
 export default function ArtePublicProgram() {

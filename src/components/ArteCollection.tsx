@@ -2,7 +2,7 @@ import Image from "next/image";
 import { useTranslations } from "next-intl";
 
 const COLLECTION_IMG =
-  "https://s3.amazonaws.com/webflow-prod-assets/67323ae4f125fe55a3034503/696ff8e450b07e9297e06cd6_AnimaVillage_VirroyLola_0011.avif";
+  "/art/696ff8e450b07e9297e06cd6_AnimaVillage_VirroyLola_0011.avif";
 
 // "Colección": Joint Effort de Jose Dávila. Imagen + texto (con eyebrow) sobre beige.
 export default function ArteCollection() {

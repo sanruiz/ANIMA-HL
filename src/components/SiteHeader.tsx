@@ -21,8 +21,8 @@ const NAV_ITEMS = [
   { key: "about", href: "/about" },
 ] as const;
 
-const ABOUT_IMAGE =
-  "https://cdn.prod.website-files.com/67323ae4f125fe55a3034503/674f0d79c06947329efdeeaf_616_View_Ae%CC%81rea-04_HQ-RENDER--LOGO.avif";
+// Mismo archivo que el hero de /about (checksum idéntico al original de Webflow).
+const ABOUT_IMAGE = "/about/hero-aerial.avif";
 
 const INSTAGRAM_URL = "https://www.instagram.com/animavillagecabo/";
 
@@ -115,7 +115,7 @@ export default function SiteHeader({ locale }: { locale: string }) {
         <div className="nav-panel">
           <aside className="nav-about" aria-hidden>
             <div className="nav-about__img">
-              {/* Render aéreo del Village (asset original de Webflow). */}
+              {/* Render aéreo del Village. */}
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={ABOUT_IMAGE} alt="" loading="lazy" />
             </div>
