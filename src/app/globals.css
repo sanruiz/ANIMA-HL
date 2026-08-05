@@ -491,7 +491,6 @@ a {
   justify-content: flex-end;
   gap: 24px;
   padding: 48px;
-  background: var(--color-beige);
 }
 
 .nav-about__img {

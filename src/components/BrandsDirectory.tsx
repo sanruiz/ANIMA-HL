@@ -72,12 +72,12 @@ export default function BrandsDirectory({
   const filterClass = (isActive: boolean) =>
     cn(
       "appearance-none rounded-full border bg-transparent cursor-pointer",
-      "px-4 py-2 text-[13px] uppercase tracking-[0.06em]",
+      "px-4 py-2 text-[13px] tracking-[0.06em]",
       "font-[family-name:var(--font-ui-stack)] font-normal",
       "transition-colors duration-200",
       "border-brand-oscuro/20 text-brand-oscuro",
       "hover:border-brand-oscuro",
-      isActive && "border-brand-oscuro bg-brand-oscuro text-brand-claro"
+      isActive && "border-brand-oscuro bg-brand-oscuro text-brand-claro",
     );
 
   return (

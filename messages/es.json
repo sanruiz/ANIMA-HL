@@ -13,7 +13,7 @@
     "menu": "Menú",
     "close": "Cerrar",
     "followUs": "Síguenos",
-    "aboutBlurb": "Ánima Village reúne más de 84 marcas exclusivas, experiencias gastronómicas, estudios de bienestar y cafés. Un espacio que celebra lo mejor de la vida: naturaleza, bienestar, gastronomía, arte y comunidad."
+    "aboutBlurb": "Ánima Village reúne marcas, gastronomía, Arte Abierto, naturaleza, bienestar y comunidad en el corazón de Cabo Del Sol."
   },
   "home": {
     "title": "Ánima Village",
@@ -22,15 +22,15 @@
     "viewAgenda": "Ver agenda",
     "viewBrands": "Ver marcas",
     "soulHeading": "Nuestra Esencia",
-    "soulP1": "Ánima Village reúne <em>más de 80 marcas exclusivas, experiencias gastronómicas, actividades de bienestar, restaurantes y cafés.</em>",
-    "soulP2": "Un espacio que celebra lo mejor de la vida: naturaleza, bienestar, gastronomía, arte y comunidad.",
+    "soulP1": "Ánima Village reúne <em>marcas, gastronomía, Arte Abierto, naturaleza, bienestar, y comunidad</em> en el corazón de Cabo Del Sol.",
+    "soulP2": "",
     "soulCaption": "Cada rincón es una invitación a <em>disfrutar el momento y estar presente.</em>",
     "soulImageAlt": "Ánima Village",
     "ritualsHeading": "Donde los <em>rituales diarios</em><br></br>se transforman en una<br></br><em>experiencia extraordinaria</em>"
   },
   "metadata": {
     "defaultTitle": "Ánima Village",
-    "defaultDescription": "Ánima Village reúne marcas exclusivas, experiencias gastronómicas, cafés, arte y espacios para activar el cuerpo y la mente."
+    "defaultDescription": "Ánima Village reúne marcas, experiencias gastronómicas, cafés, arte y espacios para activar el cuerpo y la mente."
   },
   "agenda": {
     "title": "Agenda",
@@ -62,8 +62,8 @@
     "title": "Marcas",
     "metaDescription": "Descubre la selección exclusiva de marcas de Ánima Village: moda, belleza, joyería, hogar, tecnología y gastronomía en Cabo Del Sol.",
     "heroImageAlt": "Vista aérea del paseo comercial de Ánima Village",
-    "heroP1": "Ánima Village reúne <em>más de 84 marcas exclusivas</em>, experiencias gastronómicas, cafés y espacios para activar el cuerpo y la mente.",
-    "introHeading": "Directorio de tiendas",
+    "heroP1": "Ánima Village reúne <em>más de 84 marcas </em>, experiencias gastronómicas, cafés y espacios para activar el cuerpo y la mente.",
+    "introHeading": "Curaduría de Marca",
     "introLead": "Una selección cuidadosamente elegida de las marcas que debes conocer.",
     "directoryHeading": "Marcas que inspiran",
     "directoryLead": "Para quienes buscan lo extraordinario.",
@@ -71,7 +71,7 @@
     "featuredCarouselPrevious": "Marcas destacadas anteriores",
     "featuredCarouselNext": "Siguientes marcas destacadas",
     "searchLabel": "Buscar tiendas por nombre",
-    "searchPlaceholder": "Buscar tienda por nombre",
+    "searchPlaceholder": "Buscar",
     "filterAll": "Todo",
     "empty": "No hay marcas por ahora.",
     "error": "No se pudieron cargar las marcas. Revisa la conexión con WordPress.",
@@ -95,7 +95,7 @@
     "featuredCarouselPrevious": "Propuestas destacadas anteriores",
     "featuredCarouselNext": "Siguientes propuestas destacadas",
     "searchLabel": "Buscar por nombre",
-    "searchPlaceholder": "Buscar propuesta por nombre",
+    "searchPlaceholder": "Buscar",
     "filterAll": "Todo",
     "empty": "No hay propuestas gastronómicas por ahora.",
     "error": "No se pudieron cargar las propuestas gastronómicas. Revisa la conexión con WordPress."
@@ -110,9 +110,9 @@
   },
   "about": {
     "title": "Acerca",
-    "metaDescription": "Ánima Village reúne marcas exclusivas, experiencias gastronómicas, cafés, arte y espacios para activar el cuerpo y la mente.",
+    "metaDescription": "Ánima Village reúne marcas, experiencias gastronómicas, cafés, arte y espacios para activar el cuerpo y la mente.",
     "heroImageAlt": "Render aéreo de Ánima Village",
-    "heroP1": "Ánima Village reúne más de 84 <em>marcas exclusivas</em>, <em>experiencias gastronómicas</em>, cafés y <em>espacios para activar el cuerpo y la mente</em>.",
+    "heroP1": "Ánima Village reúne más de 84 <em>marcas</em>, <em>experiencias gastronómicas</em>, cafés y <em>espacios para activar el cuerpo y la mente</em>.",
     "heroP2": "Celebra lo mejor de la vida: la naturaleza, el bienestar, la gastronomía, el arte y la comunidad. Cada espacio te invita a <em>disfrutar</em> y a <em>estar presente.</em>",
     "essenceHeading": "Acerca de Ánima",
     "essenceP1": "Un destino de SOMA Group, diseñado por Sordo Madaleno.",
@@ -126,7 +126,6 @@
     "metaDescription": "Arte Abierto en Ánima Village: un espacio de experimentación continua que activa procesos colectivos y conexiones con el arte y la cultura contemporánea.",
     "heroImageAlt": "Instalación de Arte Abierto en Ánima Village",
     "collectionImageAlt": "Joint Effort, de Jose Dávila",
-    "heroImageAlt": "Vista aérea de Arte Abierto en Ánima Village",
     "heroHeading": "Creatividad en cada espacio",
     "heroLead": "Una invitación a <em>mirar, sentir y descubrir</em><br></br>desde nuevas perspectivas",
     "aboutHeading": "Sobre Arte Abierto",
@@ -147,7 +146,7 @@
   },
   "map": {
     "title": "Mapa",
-    "metaDescription": "Ánima Village reúne marcas exclusivas, experiencias gastronómicas, cafés, arte y espacios para activar el cuerpo y la mente.",
+    "metaDescription": "Ánima Village reúne marcas, experiencias gastronómicas, cafés, arte y espacios para activar el cuerpo y la mente.",
     "heading": "Visita Ánima",
     "lead": "Encuentra todo lo que tenemos <em>para ti</em>.",
     "masterplanAlt": "Plano maestro de Ánima Village",
@@ -178,9 +177,9 @@
     "consentBefore": "He leído y acepto el",
     "privacyNotice": "Aviso de Privacidad",
     "hoursTitle": "Horario del Village",
-    "hours": "10 AM – 9 PM",
+    "hours": "Lunes–Jueves: 11:00 AM – 8:00 PM<br></br>Viernes–Domingo: 11:00 AM – 9:00 PM",
     "offerTitle": "Qué Ofrecemos",
-    "offerBrands": "Elevated Brands",
+    "offerBrands": "Marcas",
     "offerArte": "Arte Abierto",
     "offerGastronomy": "Gastronomía",
     "offerProgramming": "Programación",
@@ -190,7 +189,7 @@
     "legalPrivacy": "Legal / Privacidad",
     "guidelines": "Reglamento del Village",
     "destinationBy": "Un destino de",
-    "credits": "© 2025 SOMA Group. Todos los derechos reservados."
+    "credits": "© 2026 SOMA Group. Todos los derechos reservados."
   },
   "localeSwitcher": {
     "es": "Español",

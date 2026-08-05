@@ -84,7 +84,7 @@ export default function AgendaEventsGrid({
   const collectionTabClass = (isActive: boolean) =>
     cn(
       "appearance-none rounded-full border cursor-pointer",
-      "px-5 py-2.5 text-sm uppercase tracking-[0.06em]",
+      "px-5 py-2.5 text-sm  tracking-[0.06em]",
       "font-[family-name:var(--font-ui-stack)] font-normal",
       "transition-colors duration-200",
       "border-brand-oscuro text-brand-oscuro",
@@ -97,7 +97,7 @@ export default function AgendaEventsGrid({
   const filterClass = (isActive: boolean) =>
     cn(
       "appearance-none rounded-full border bg-transparent cursor-pointer",
-      "px-4 py-2 text-[13px] uppercase tracking-[0.06em]",
+      "px-4 py-2 text-[13px]  tracking-[0.06em]",
       "font-[family-name:var(--font-ui-stack)] font-normal",
       "transition-colors duration-200",
       "border-brand-oscuro/20 text-brand-oscuro",
