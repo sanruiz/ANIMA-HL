@@ -6,15 +6,19 @@ import SomaLogo from "./SomaLogo";
 
 const MAPS_URL =
   "https://www.google.com/maps/dir//Anima+village,+Tourist+Corridor,+23455+Cabo+San+Lucas,+B.C.S.,+Mexico/@22.919928,-109.8330288,17z";
-const INSTAGRAM_URL = "https://www.instagram.com/animavillagecabo";
-const INSTAGRAM_ICON_URL = "https://www.instagram.com/animavillagecabos";
+const INSTAGRAM_ICON_URL = "https://www.instagram.com/animavillagecabo";
 const SOMA_URL = "https://soma.group/";
 
 // "What We Offer": brands y news→/blog ya existen en headless; arte
 // y gastronomy son placeholders hasta migrar; programming→/agenda existe.
 const OFFER_LINKS = [
   { key: "offerBrands", href: "/brands" },
-  { key: "offerArte", href: "/arte" },
+  {
+    key: "offerArte",
+    href: "https://arteabierto.org/",
+    target: "_blank",
+    rel: "noopener noreferrer",
+  },
   { key: "offerGastronomy", href: "/gastronomy" },
   { key: "offerProgramming", href: "/agenda" },
   { key: "offerNews", href: "/blog" },
@@ -62,7 +66,9 @@ export default function SiteFooter() {
               aria-hidden
               className="footer-news-section__emblem"
             />
-            <h2 className="footer-news-section__title">{t("newsletterTitle")}</h2>
+            <h2 className="footer-news-section__title">
+              {t("newsletterTitle")}
+            </h2>
             <p className="footer-news-section__lead">{t("newsletterLead")}</p>
             <NewsletterForm />
           </div>
@@ -76,7 +82,8 @@ export default function SiteFooter() {
           <div className="footer-col">
             <h3 className="footer-col__title">{t("hoursTitle")}</h3>
             <p className="footer-col__text">
-              {t("hours")}
+              {/* accept br tag for line break in the address */}
+              {t.rich("hours", { br: () => <br /> })}
               <br />
               <br />
               Cabo Del Sol
@@ -93,9 +100,14 @@ export default function SiteFooter() {
 
           {/* Col 2: What We Offer */}
           <div className="footer-col">
-            <h3 className="footer-col__title">{t("offerTitle")}</h3>
             {OFFER_LINKS.map((l) => (
-              <Link key={l.key} href={l.href} className="footer-col__link">
+              <Link
+                key={l.key}
+                {...("target" in l && { target: l.target })}
+                {...("rel" in l && { rel: l.rel })}
+                href={l.href}
+                className="footer-col__link"
+              >
                 {t(l.key)}
               </Link>
             ))}
@@ -105,13 +117,10 @@ export default function SiteFooter() {
           <div className="footer-col">
             <a
               className="footer-col__link"
-              href={INSTAGRAM_URL}
+              href={MAPS_URL}
               target="_blank"
               rel="noopener noreferrer"
             >
-              {t("followUs")}
-            </a>
-            <a className="footer-col__link" href={MAPS_URL} target="_blank" rel="noopener noreferrer">
               {t("findUs")}
             </a>
             <Link href="/privacy-notice" className="footer-col__link">
@@ -131,7 +140,9 @@ export default function SiteFooter() {
             </a>
 
             <div className="footer-col__soma">
-              <span className="footer-col__soma-label">{t("destinationBy")}</span>
+              <span className="footer-col__soma-label">
+                {t("destinationBy")}
+              </span>
               <a
                 href={SOMA_URL}
                 target="_blank"

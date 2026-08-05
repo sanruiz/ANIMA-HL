@@ -13,7 +13,7 @@
     "menu": "Menu",
     "close": "Close",
     "followUs": "Follow Us",
-    "aboutBlurb": "Ánima Village brings together over 84 exclusive brands, gastronomic experiences, wellness studios, and cafes. A space that celebrates the best of life: nature, wellness, gastronomy, art, and community."
+    "aboutBlurb": "Ánima Village brings together brands, gastronomy, Arte Abierto, wellness, nature, and community in the heart of Cabo Del Sol."
   },
   "home": {
     "title": "Ánima Village",
@@ -22,15 +22,15 @@
     "viewAgenda": "View events",
     "viewBrands": "View brands",
     "soulHeading": "Our Soul",
-    "soulP1": "Ánima Village brings together <em>over 80 elevated brands, gastronomic experiences, wellness activities, restaurants and cafes.</em>",
-    "soulP2": "A space that celebrates the best of life: nature, wellness, gastronomy, art, and community.",
+    "soulP1": "Ánima Village brings together <em>brands, gastronomy, Arte Abierto, wellness, nature, and community</em> in the heart of Cabo Del Sol.",
+    "soulP2": "",
     "soulCaption": "Each corner is an invitation to <em>enjoy the moment and be present.</em>",
     "soulImageAlt": "Ánima Village",
     "ritualsHeading": "Where <em>daily rituals</em><br></br>of modern life are experienced<br></br><em>like never before</em>"
   },
   "metadata": {
     "defaultTitle": "Ánima Village",
-    "defaultDescription": "Ánima Village is a neighborhood and retail destination dedicated to exclusive brands, wellness, art, nature and community."
+    "defaultDescription": "Ánima Village is a neighborhood and retail destination dedicated to brands, wellness, art, nature and community."
   },
   "agenda": {
     "title": "Events",
@@ -60,9 +60,9 @@
   },
   "brands": {
     "title": "Brands",
-    "metaDescription": "Discover Ánima Village's hand-picked selection of exclusive brands — fashion, beauty, jewelry, home, technology and gastronomy in Cabo Del Sol.",
+    "metaDescription": "Discover Ánima Village's hand-picked selection of brands — fashion, beauty, jewelry, home, technology and gastronomy in Cabo Del Sol.",
     "heroImageAlt": "Aerial view of Ánima Village retail promenade",
-    "heroP1": "Ánima Village brings together <em>over 84 exclusive brands</em>, gastronomic experiences, wellness studios, and cafes.",
+    "heroP1": "Ánima Village brings together <em>over 84 brands</em>, gastronomic experiences, and <em>cafés</em>.",
     "introHeading": "Store Directory",
     "introLead": "Our hand-picked selection of the brands you need to know.",
     "directoryHeading": "Retail reimagined",
@@ -95,7 +95,7 @@
     "featuredCarouselPrevious": "Previous featured experiences",
     "featuredCarouselNext": "Next featured experiences",
     "searchLabel": "Search by name",
-    "searchPlaceholder": "Search experience by name",
+    "searchPlaceholder": "Search",
     "filterAll": "All",
     "empty": "No gastronomic experiences yet.",
     "error": "Could not load gastronomic experiences. Check the WordPress connection."
@@ -110,9 +110,9 @@
   },
   "about": {
     "title": "About",
-    "metaDescription": "Ánima Village is a neighborhood and retail destination dedicated to exclusive brands, wellness, art, nature and community.",
+    "metaDescription": "Ánima Village is a neighborhood and retail destination dedicated to brands, wellness, art, nature and community.",
     "heroImageAlt": "Aerial render of Ánima Village",
-    "heroP1": "Ánima Village brings together <em>over 84 exclusive brands, gastronomic experiences, wellness studios, and cafes</em>.",
+    "heroP1": "Ánima Village brings together <em>over 84 brands, gastronomic experiences, and cafés</em>.",
     "heroP2": "A space that celebrates the best of life: nature, wellness, gastronomy, art, and community. Each corner is an invitation to <em>enjoy the moment and be present.</em>",
     "essenceHeading": "Our Essence",
     "essenceP1": "A SOMA Group destination, designed by Sordo Madaleno.",
@@ -126,7 +126,6 @@
     "metaDescription": "Arte Abierto at Ánima Village: a platform for continuous exploration that sparks collective processes and connections within contemporary art and culture.",
     "heroImageAlt": "Arte Abierto installation at Ánima Village",
     "collectionImageAlt": "Joint Effort by Jose Dávila",
-    "heroImageAlt": "Aerial view of Arte Abierto at Ánima Village",
     "heroHeading": "Creativity in every corner",
     "heroLead": "Art and culture come alive to <em>inspire, connect, and nurture</em><br></br>every moment",
     "aboutHeading": "About Arte Abierto",
@@ -147,7 +146,7 @@
   },
   "map": {
     "title": "Map",
-    "metaDescription": "Ánima Village is a neighborhood and retail destination dedicated to exclusive brands, wellness, art, nature and community.",
+    "metaDescription": "Ánima Village is a neighborhood and retail destination dedicated to brands, wellness, art, nature and community.",
     "heading": "Find us",
     "lead": "Discover Ánima Village and get ready to explore.",
     "masterplanAlt": "Ánima Village masterplan",
@@ -178,9 +177,9 @@
     "consentBefore": "I have read, and agree to the",
     "privacyNotice": "Privacy Notice",
     "hoursTitle": "Village Hours",
-    "hours": "10 AM – 9 PM",
+    "hours": "Monday–Thursday: 11:00 AM – 8:00 PM<br></br>Friday–Sunday: 11:00 AM – 9:00 PM",
     "offerTitle": "What We Offer",
-    "offerBrands": "Elevated Brands",
+    "offerBrands": "Brands",
     "offerArte": "Arte Abierto",
     "offerGastronomy": "Gastronomy",
     "offerProgramming": "Programming",
@@ -190,7 +189,7 @@
     "legalPrivacy": "Legal / Privacy",
     "guidelines": "Village Guidelines",
     "destinationBy": "A destination by",
-    "credits": "© 2025 SOMA Group. All Rights Reserved."
+    "credits": "© 2026 SOMA Group. All Rights Reserved."
   },
   "localeSwitcher": {
     "es": "Español",
