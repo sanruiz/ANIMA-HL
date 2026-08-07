@@ -5,8 +5,6 @@ const HERO_IMAGE = "/art/AnimaVillage_VirroyLola_0039.avif";
 
 export default async function ArteHero() {
   const t = await getTranslations("arte");
-  const em = (chunks: React.ReactNode) => <em>{chunks}</em>;
-  const br = () => <br />;
 
   return (
     <section className="arte-hero" aria-labelledby="arte-hero-heading">
@@ -23,7 +21,6 @@ export default async function ArteHero() {
         <h1 id="arte-hero-heading" className="arte-hero__heading">
           {t("heroHeading")}
         </h1>
-        <p className="arte-hero__lead">{t.rich("heroLead", { em, br })}</p>
       </div>
     </section>
   );

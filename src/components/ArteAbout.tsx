@@ -12,6 +12,10 @@ export default function ArteAbout() {
           {t("aboutHeading")}
         </h2>
         <p className="arte-intro__p arte-intro__p--muted">{t("aboutP1")}</p>
+
+        <p className="arte-intro__p arte-intro__p--muted">
+          {t.rich("aboutP2", { em })}
+        </p>
         <a
           className="arte-button"
           href="https://arteabierto.org/"
@@ -20,9 +24,6 @@ export default function ArteAbout() {
         >
           {t("aboutCta")}
         </a>
-        <p className="arte-intro__p arte-intro__p--muted">
-          {t.rich("aboutP2", { em })}
-        </p>
       </div>
     </section>
   );

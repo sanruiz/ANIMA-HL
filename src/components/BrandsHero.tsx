@@ -5,8 +5,6 @@ import { useTranslations } from "next-intl";
 // centrada sobre gradiente para legibilidad del header transparente.
 export default function BrandsHero() {
   const t = useTranslations("brands");
-    const em = (chunks: React.ReactNode) => <em>{chunks}</em>;
-
 
   return (
     <section className="brands-hero" aria-labelledby="brands-hero-heading">
@@ -23,7 +21,6 @@ export default function BrandsHero() {
         <h1 id="brands-hero-heading" className="brands-hero__heading">
           {t("introHeading")}
         </h1>
-        <p className="brands-hero__lead">{t.rich("heroP1", { em })}</p>
       </div>
     </section>
   );

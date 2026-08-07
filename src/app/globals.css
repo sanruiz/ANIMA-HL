@@ -1105,8 +1105,8 @@ a {
 .arte-hero {
   position: relative;
   width: 100%;
-  height: 90svh;
-  min-height: 520px;
+  height: 55svh;
+    min-height: 360px;
   overflow: hidden;
   background: var(--color-oscuro);
   display: flex;
@@ -1271,7 +1271,6 @@ a {
   font-family: var(--font-ui-stack);
   font-size: 14px;
   letter-spacing: 0.02em;
-  text-transform: uppercase;
   transition:
     background-color 0.25s ease,
     color 0.25s ease;
@@ -1465,8 +1464,8 @@ a {
 .brands-hero {
   position: relative;
   width: 100%;
-  height: 90svh;
-  min-height: 520px;
+  height: 55svh;
+    min-height: 360px;
   overflow: hidden;
   background: var(--color-oscuro);
   display: flex;
@@ -1640,8 +1639,8 @@ a {
 .agenda-hero {
   position: relative;
   width: 100%;
-  height: 90svh;
-  min-height: 520px;
+  height: 55svh;
+    min-height: 360px;
   overflow: hidden;
   background: var(--color-oscuro);
   display: flex;
@@ -2338,18 +2337,22 @@ a.brand-detail__info-value:hover {
   color: var(--color-oscuro);
 }
 
+.blog-post__layout {
+  width: 90%;
+  max-width: 1320px;
+  margin: 0 auto;
+}
 .blog-post-hero {
   width: 100%;
   margin-top: 100px;
   background: var(--color-claro);
   display: flex;
   justify-content: center;
-  padding: 72px 0 64px;
+  padding: 72px 0 56px;
 }
 
 .blog-post-hero__inner {
-  width: 60%;
-  max-width: 960px;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -2387,16 +2390,36 @@ a.brand-detail__info-value:hover {
 }
 
 .blog-post__body {
+  grid-area: content;
   width: 100%;
   background: var(--color-claro);
   display: flex;
   justify-content: center;
-  padding: 0 0 96px;
+  padding: 0;
+  }
+  
+  .blog-post__columns {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    grid-template-areas: "media content";
+    column-gap: clamp(48px, 7vw, 70px);
+    align-items: start;
+    padding-bottom: 120px;
+  }
+  
+  .blog-post__media {
+    grid-area: media;
+    width: 100%;
+  }
+  
+  .blog-post__img {
+    display: block;
+    width: 100%;
+    height: auto;
 }
 
 .blog-post__content {
-  width: 60%;
-  max-width: 960px;
+  width: 100%;
   font-family: var(--font-primary);
   font-size: 21px;
   line-height: 32px;
@@ -2481,11 +2504,14 @@ a.brand-detail__info-value:hover {
     line-height: 44px;
   }
 
-  .blog-post-hero__inner,
-  .blog-post__content {
+    .blog-post__layout {
     width: 95%;
   }
 
+    .blog-post__columns {
+      grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+      column-gap: 40px;
+    }
   .blog-post-hero__title {
     font-size: 40px;
     line-height: 44px;
@@ -2503,6 +2529,13 @@ a.brand-detail__info-value:hover {
     line-height: 28px;
   }
 
+    .blog-post__layout {
+      width: 95%;
+    }
+  
+    .blog-post__columns {
+      display: block;
+    }
   .blog-post-hero {
     padding: 48px 0 44px;
   }
@@ -2518,6 +2551,14 @@ a.brand-detail__info-value:hover {
   }
 
   .blog-post__body {
+    padding: 0;
+    }
+    
+    .blog-post__media {
+      margin-bottom: 44px;
+    }
+    
+    .blog-post__columns {
     padding-bottom: 72px;
   }
 
