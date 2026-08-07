@@ -276,9 +276,9 @@ export default function AgendaEventsList({
         )}
 
         <div className="mt-16">
-          <h3 className="mb-2 font-(family-name:--font-primary) text-2xl font-medium text-brand-oscuro/70 italic">
+          <h2 className="mb-2 font-(family-name:--font-primary) text-2xl font-medium text-brand-oscuro/70 italic">
             {pastHeading}
-          </h3>
+          </h2>
           {filteredPast.length === 0 ? (
             <p className="agenda-events__empty">{pastEmptyMessage}</p>
           ) : (

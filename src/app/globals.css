@@ -2407,11 +2407,16 @@ a.brand-detail__info-value:hover {
     padding-bottom: 120px;
   }
   
+  .blog-post__columns--full {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "content";
+  }
+
   .blog-post__media {
     grid-area: media;
     width: 100%;
   }
-  
+
   .blog-post__img {
     display: block;
     width: 100%;
@@ -2511,6 +2516,10 @@ a.brand-detail__info-value:hover {
     .blog-post__columns {
       grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
       column-gap: 40px;
+    }
+
+    .blog-post__columns--full {
+      grid-template-columns: minmax(0, 1fr);
     }
   .blog-post-hero__title {
     font-size: 40px;

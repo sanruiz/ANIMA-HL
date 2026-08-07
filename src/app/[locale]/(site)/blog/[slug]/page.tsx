@@ -8,7 +8,7 @@ import { collectionTag, itemTag } from "@/lib/cache-tags";
 import { NEWS_BY_SLUG_QUERY } from "@/lib/queries";
 import { getLanguageAlternates, getLocalizedUrl } from "@/lib/seo";
 import type { NewsBySlugResponse } from "@/lib/types";
-import { stripHtml } from "@/lib/utils";
+import { cn, stripHtml } from "@/lib/utils";
 import { fetchGraphQL } from "@/lib/wp";
 import { shouldBypassImageOptimizer } from "@/lib/wp-image";
 
@@ -139,7 +139,12 @@ export default async function BlogPostPage({ params }: BlogPostParams) {
           locale={locale}
           title={post.title}
         />
-        <div className="blog-post__columns">
+        <div
+          className={cn(
+            "blog-post__columns",
+            !post.featuredImage?.node?.sourceUrl && "blog-post__columns--full",
+          )}
+        >
           {post.featuredImage?.node?.sourceUrl && (
             <div className="blog-post__media">
               <Image
