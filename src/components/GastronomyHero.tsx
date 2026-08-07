@@ -3,7 +3,6 @@ import { getTranslations } from "next-intl/server";
 
 export default async function GastronomyHero() {
   const t = await getTranslations("gastronomy");
-    const em = (chunks: React.ReactNode) => <em>{chunks}</em>;
 
   return (
     <section className="brands-hero" aria-labelledby="gastronomy-hero-heading">
@@ -20,7 +19,6 @@ export default async function GastronomyHero() {
         <h1 id="gastronomy-hero-heading" className="brands-hero__heading">
           {t("heroHeading")}
         </h1>
-        <p className="brands-hero__lead">{t.rich("heroP1", { em })}</p>
       </div>
     </section>
   );

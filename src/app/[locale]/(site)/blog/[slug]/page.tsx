@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import BlogPostHeader from "@/components/BlogPostHeader";
@@ -7,8 +8,9 @@ import { collectionTag, itemTag } from "@/lib/cache-tags";
 import { NEWS_BY_SLUG_QUERY } from "@/lib/queries";
 import { getLanguageAlternates, getLocalizedUrl } from "@/lib/seo";
 import type { NewsBySlugResponse } from "@/lib/types";
-import { stripHtml } from "@/lib/utils";
+import { cn, stripHtml } from "@/lib/utils";
 import { fetchGraphQL } from "@/lib/wp";
+import { shouldBypassImageOptimizer } from "@/lib/wp-image";
 
 export const revalidate = 3600;
 
@@ -131,20 +133,44 @@ export default async function BlogPostPage({ params }: BlogPostParams) {
   return (
     <article className="blog-post">
       <JsonLd data={jsonLd} />
-      <BlogPostHeader
-        date={post.date}
-        featuredImage={post.featuredImage}
-        locale={locale}
-        title={post.title}
-      />
-      {post.content && (
-        <section className="blog-post__body">
-          <div
-            className="blog-post__content"
-            dangerouslySetInnerHTML={{ __html: post.content }}
-          />
-        </section>
-      )}
+      <div className="blog-post__layout">
+        <BlogPostHeader
+          date={post.date}
+          locale={locale}
+          title={post.title}
+        />
+        <div
+          className={cn(
+            "blog-post__columns",
+            !post.featuredImage?.node?.sourceUrl && "blog-post__columns--full",
+          )}
+        >
+          {post.featuredImage?.node?.sourceUrl && (
+            <div className="blog-post__media">
+              <Image
+                src={post.featuredImage.node.sourceUrl}
+                alt={post.featuredImage.node.altText ?? post.title ?? ""}
+                width={1200}
+                height={800}
+                sizes="(max-width: 767px) 95vw, (max-width: 991px) 42vw, 40vw"
+                className="blog-post__img"
+                unoptimized={shouldBypassImageOptimizer(
+                  post.featuredImage.node.sourceUrl,
+                )}
+                priority
+              />
+            </div>
+          )}
+          {post.content && (
+            <section className="blog-post__body">
+              <div
+                className="blog-post__content"
+                dangerouslySetInnerHTML={{ __html: post.content }}
+              />
+            </section>
+          )}
+        </div>
+      </div>
     </article>
   );
 }

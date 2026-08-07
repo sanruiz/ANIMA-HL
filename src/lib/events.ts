@@ -1,7 +1,7 @@
 import type { EventNode } from "@/lib/types";
 import { parseEventDate } from "@/lib/event-date-formatter";
 
-const PAST_EVENT_TAG_SLUG = "eventos-pasados";
+export const PAST_EVENT_TAG_SLUG = "eventos-pasados";
 
 function getTodayKey(today: Date): number {
   const year = today.getUTCFullYear();
@@ -43,6 +43,18 @@ function isPastByDate(event: EventNode, todayKey: number): boolean {
 }
 
 /**
+ * Returns whether an event has ended or is manually marked as past.
+ */
+export function isPastEvent(
+  event: EventNode,
+  today: Date = new Date(),
+): boolean {
+  const todayKey = getTodayKey(today);
+
+  return hasPastEventTag(event) || isPastByDate(event, todayKey);
+}
+
+/**
  * Returns events that are active/upcoming and sorts them by closest start date first.
  */
 export function getUpcomingEvents(
@@ -71,10 +83,8 @@ export function getPastEvents(
   events: EventNode[],
   today: Date = new Date()
 ): EventNode[] {
-  const todayKey = getTodayKey(today);
-
   return events
-    .filter((event) => hasPastEventTag(event) || isPastByDate(event, todayKey))
+    .filter((event) => isPastEvent(event, today))
     .toSorted((eventA, eventB) => {
       const dateComparison =
         getPastEventSortDateKey(eventB) - getPastEventSortDateKey(eventA);

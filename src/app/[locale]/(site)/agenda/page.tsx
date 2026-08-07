@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import AgendaEventsGrid from "@/components/agenda-events-grid";
+import AgendaEventsList from "@/components/agenda-events-list";
 import AgendaHero from "@/components/agenda-hero";
 import JsonLd from "@/components/JsonLd";
 import { getPastEvents, getUpcomingEvents } from "@/lib/events";
@@ -111,15 +111,14 @@ export default async function AgendaPage({
           <p className="agenda-events__empty">{t("error")}</p>
         </section>
       ) : (
-        <AgendaEventsGrid
+        <AgendaEventsList
           upcomingEvents={upcomingEvents}
           pastEvents={pastEvents}
           locale={locale}
           heading={t("upcomingHeading")}
+          pastHeading={t("pastHeading")}
           emptyMessage={t("empty")}
           pastEmptyMessage={t("pastEmpty")}
-          upcomingTabLabel={t("upcomingTab")}
-          pastTabLabel={t("pastTab")}
           filterAllLabel={t("filterAll")}
           pastBadgeLabel={t("pastBadge")}
         />

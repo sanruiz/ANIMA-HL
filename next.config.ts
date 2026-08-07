@@ -9,6 +9,7 @@ const wordpressUrl = new URL(
 );
 
 const nextConfig: NextConfig = {
+  allowedDevOrigins: ["192.168.1.27"],
   turbopack: {
     root: process.cwd(),
   },

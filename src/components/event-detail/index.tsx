@@ -6,6 +6,7 @@ import {
   formatEventDateRange,
   parseEventDate,
 } from "@/lib/event-date-formatter";
+import { isPastEvent } from "@/lib/events";
 import type { EventSingle } from "@/lib/types";
 import { stripHtml } from "@/lib/utils";
 import { shouldBypassImageOptimizer } from "@/lib/wp-image";
@@ -106,7 +107,7 @@ export default function EventDetail({ event, locale }: EventDetailProps) {
   });
   const parsedStartDate = parseEventDate(fields?.startDate ?? event.date);
   const dateTime = parsedStartDate?.date.toISOString().slice(0, 10);
-  const calendarLink = getCalendarLink(event);
+  const calendarLink = isPastEvent(event) ? null : getCalendarLink(event);
   const mediaWidth = image?.mediaDetails?.width ?? 0;
   const mediaHeight = image?.mediaDetails?.height ?? 0;
   const hasMediaDimensions = mediaWidth > 0 && mediaHeight > 0;

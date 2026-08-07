@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { getPastEvents, getUpcomingEvents } from "@/lib/events";
+import { getPastEvents, getUpcomingEvents, isPastEvent } from "@/lib/events";
 import type { EventNode } from "@/lib/types";
 
 function createEvent({
@@ -123,6 +123,42 @@ describe("getUpcomingEvents()", () => {
       "second",
       "third",
     ]);
+  });
+});
+
+describe("isPastEvent()", () => {
+  const today = new Date(Date.UTC(2025, 6, 11));
+
+  it("recognizes events marked as past", () => {
+    const event = createEvent({
+      id: "past-tagged",
+      title: "Past tagged",
+      startDate: "20250712",
+      tagSlugs: ["eventos-pasados"],
+    });
+
+    expect(isPastEvent(event, today)).toBe(true);
+  });
+
+  it("recognizes events whose reference date has passed", () => {
+    const event = createEvent({
+      id: "ended",
+      title: "Ended",
+      startDate: "20250708",
+      endDate: "20250710",
+    });
+
+    expect(isPastEvent(event, today)).toBe(true);
+  });
+
+  it("keeps active events available", () => {
+    const event = createEvent({
+      id: "upcoming",
+      title: "Upcoming",
+      startDate: "20250712",
+    });
+
+    expect(isPastEvent(event, today)).toBe(false);
   });
 });
 
