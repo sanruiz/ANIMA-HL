@@ -1,261 +1,85 @@
-# Event Date Formatter - 2-Minute Executive Summary
+# Event Date Formatter
 
-> Para WordPress Headless + Next.js con **i18n (multi-idioma)**
->
-> **NOTA:** La solución recomendada para producción usa **`date-fns`** (no arrays).  
-> ✅ Multi-idioma nativo | ✅ SSR compatible | ✅ Bajo mantenimiento  
+> Formateo de fechas y horas de eventos para el front-end Next.js (`src/lib/event-date-formatter.ts`).
+> WordPress (headless, vía WPGraphQL) es un repo separado — este documento cubre solo el lado Next.js.
 
-## El Problema
+## Dónde vive el código
 
-Necesitas mostrar fechas de eventos de forma legible en **múltiples idiomas**:
-- Single day: `"11 de julio"`
-- With time: `"11 de julio a las 14:00"`
-- Range: `"11 de julio al 13 de julio"`
-- Range + time: `"11 de julio al 13 de julio de 10:00 a 18:00"`
+| Archivo | Rol |
+|---|---|
+| `src/lib/event-date-formatter.ts` | `parseEventDate()` + `formatEventDateRange()` — el formateador central |
+| `src/lib/event-date-formatter.test.ts` | Tests unitarios de ambas funciones |
+| `src/components/agenda-events-list/index.tsx` | Lista `/agenda` — consume el formateador para la línea de fecha de cada fila |
+| `src/components/event-detail/index.tsx` | Detalle `/agenda/[slug]` — consume el formateador y además genera el link `.ics` (formato distinto, ver abajo) |
 
----
+No se usa `date-fns` ni ninguna librería externa: solo `Intl.DateTimeFormat` nativo + dos regex.
 
-## La Solución
+## Locales soportados
 
-**Una función JavaScript que toma 5 parámetros (incluyendo `locale`).**
+Solo `"es"` y `"en"` (los locales reales del sitio, definidos en `src/i18n/routing`). Cualquier valor que no sea `"en"` se trata como `"es"`. Internamente, `"en"` mapea al locale Intl `"en-GB"` (día antes que mes: `"11 July"`), y `"es"` usa el locale Intl `"es"`.
 
-```typescript
+## Formatos de entrada aceptados
+
+- **Fecha** (`startDate`/`endDate`): `YYYYMMDD`, `YYYY-MM-DD`, o el prefijo de fecha de un string ISO (`2025-07-11T00:00:00`). Se valida que sea una fecha calendario real — `"2025-02-31"` retorna `null`.
+- **Hora** (`startTime`/`endTime`): `HH:MM` o `HH:MM:SS` en 24H, tal cual llega de ACF/WPGraphQL (los segundos se ignoran).
+
+## Qué produce hoy: 12H con AM/PM
+
+Desde el cambio de formato, `normalizeTime()` convierte la hora 24H de entrada a 12H con sufijo `AM`/`PM` (mayúsculas, sin puntos — misma convención que el resto del copy del sitio, ver `messages/es.json`/`messages/en.json`, ej. `"9 PM"`). Esto aplica igual en `es` y en `en`; solo cambia el texto que rodea la hora (`"a las"` vs `"at"`, `"de...a"` vs `"from...to"`).
+
+```ts
+formatEventDateRange({ startDate: "20250711" });
+// "11 de julio"
+
+formatEventDateRange({ startDate: "20250711", startTime: "14:00:00", locale: "es" });
+// "11 de julio a las 2:00 PM"
+
+formatEventDateRange({ startDate: "20250711", endDate: "20250713", locale: "es" });
+// "11 de julio al 13 de julio"
+
 formatEventDateRange({
-  startDate: "20250711",      // YYYYMMDD o YYYY-MM-DD
-  endDate: "20250713",        // Opcional
-  startTime: "10:00",         // Opcional
-  endTime: "18:00",           // Opcional
-  locale: "es"                // ← NUEVO: "es" | "en" | "fr" | "de"
-})
-// Español: "11 de julio al 13 de julio de 10:00 a 18:00"
+  startDate: "20250711", endDate: "20250713",
+  startTime: "10:00", endTime: "18:00", locale: "es",
+});
+// "11 de julio al 13 de julio de 10:00 AM a 6:00 PM"
 
 formatEventDateRange({
-  startDate: "20250711",
-  startTime: "14:00",
-  locale: "en"
-})
-// Inglés: "11 July at 14:00"
+  startDate: "20250711", endDate: "20250713",
+  startTime: "10:00", endTime: "18:00", locale: "en",
+});
+// "11 July to 13 July from 10:00 AM to 6:00 PM"
 ```
 
----
-
-## La Lógica (en 30 segundos)
+## Lógica interna
 
 ```
-¿start_date? NO → ""
-¿start_date? SÍ → Parse + Format (con date-fns)
+¿startDate no parsea? → ""
+¿startDate parsea? → formatear con Intl.DateTimeFormat (day: "numeric", month: "long", timeZone: "UTC")
     ↓
-¿end_date & diferente? NO → single date
-¿end_date & diferente? SÍ → date range
+¿endDate parsea y su "key" (YYYYMMDD numérico) difiere del de startDate? → es un rango ("... al ..." / "... to ...")
+    Si endDate es igual a startDate, se trata como fecha única (no rango).
     ↓
-¿Horas? → Agregar al output (respetando formato de idioma)
-    ↓
-Return string (ej: "11 de julio a las 14:00")
+¿Hay startTime Y endTime, Y es un rango? → agrega " de {t1} a {t2}" / " from {t1} to {t2}" y retorna
+¿Hay solo startTime (fecha única, o rango sin endTime)? → agrega " a las {t1}" / " at {t1}"
+¿No hay horas? → retorna solo el label de fecha
 ```
 
-**Con date-fns:** Meses y formatos se manejan automáticamente en 4 idiomas.
+**Caso límite documentado:** un rango con `startTime` pero sin `endTime` NO entra en la rama "rango + ambas horas" — cae en la rama de una sola hora y produce algo como `"11 de julio al 13 de julio a las 10:00 AM"` (la hora de inicio se pega al final del rango de fechas, sin mencionar que es la hora de inicio). Es el comportamiento actual, no un bug pendiente de arreglar; tenerlo en cuenta si se recibe contenido con `startTime` sin `endTime` en un rango de días.
 
----
+## `parseEventDate()`
 
-## Implementación Mínima (Copy-Paste) - CON DATE-FNS ✅
+Exportada por separado porque `agenda-events-list` y `event-detail` también la usan para construir el atributo `dateTime` del `<time>` (vía `parsedDate.date.toISOString().slice(0, 10)`), y `src/lib/events.ts` la usa para calcular si un evento es pasado/futuro y para ordenar (ver `docs/HOME-EVENTS-LISTING-LOGIC.md`).
 
-```bash
-npm install date-fns
-```
+Retorna `{ date: Date, key: number }` o `null`. `key` es `YYYYMMDD` como número (ej. `20250711`), pensado para comparar/ordenar fechas sin reconstruir objetos `Date`. La fecha se construye con `Date.UTC(...)`, así que no hay desplazamiento por timezone del servidor.
 
-```typescript
-// lib/eventDateFormatter.ts
+## Lo que el formateador NO hace: el link "Agregar al calendario" (`.ics`)
 
-import { format, parse, isValid } from 'date-fns';
-import { es, en, fr, de } from 'date-fns/locale';
+`event-detail/index.tsx` (líneas 24-94) tiene su **propia** lógica de formateo de fecha/hora para generar el archivo `.ics` de descarga (`getCalendarLink()`, `formatCalendarDate()`, `formatCalendarDateTime()`). Esto es intencional y **no debe tocarse** al ajustar el formateador de visualización:
 
-const LOCALE_MAP = { es, en, fr, de } as const;
-export type Locale = keyof typeof LOCALE_MAP;
-
-function parseDate(d: string): Date | null {
-  if (!d) return null;
-  let date: Date;
-  if (d.length === 8 && /^\d{8}$/.test(d)) {
-    const y = d.substring(0, 4);
-    const m = d.substring(4, 6);
-    const day = d.substring(6, 8);
-    date = parse(`${y}-${m}-${day}`, 'yyyy-MM-dd', new Date());
-  } else if (d.length === 10 && /^\d{4}-\d{2}-\d{2}$/.test(d)) {
-    date = parse(d, 'yyyy-MM-dd', new Date());
-  } else {
-    return null;
-  }
-  return isValid(date) ? date : null;
-}
-
-export function formatEventDateRange({
-  startDate,
-  endDate,
-  startTime,
-  endTime,
-  locale = 'es',
-}: {
-  startDate?: string | null;
-  endDate?: string | null;
-  startTime?: string | null;
-  endTime?: string | null;
-  locale?: Locale;
-} = {}): string {
-  if (!startDate) return '';
-
-  const start = parseDate(startDate);
-  if (!start) return '';
-
-  const dateLocale = LOCALE_MAP[locale];
-  const startStr = format(start, 'd MMMM', { locale: dateLocale });
-
-  const end = endDate && endDate !== startDate ? parseDate(endDate) : null;
-
-  if (end) {
-    const endStr = format(end, 'd MMMM', { locale: dateLocale });
-    let output: string;
-    switch (locale) {
-      case 'es': output = `${startStr} al ${endStr}`; break;
-      case 'en': output = `${startStr} to ${endStr}`; break;
-      case 'fr': output = `${startStr} – ${endStr}`; break;
-      case 'de': output = `${startStr} bis ${endStr}`; break;
-      default: output = `${startStr} to ${endStr}`;
-    }
-
-    if (startTime && endTime) {
-      switch (locale) {
-        case 'es': output += ` de ${startTime} a ${endTime}`; break;
-        case 'en': output += ` from ${startTime} to ${endTime}`; break;
-        case 'fr': output += ` de ${startTime} à ${endTime}`; break;
-        case 'de': output += ` von ${startTime} bis ${endTime}`; break;
-      }
-    } else if (startTime) {
-      switch (locale) {
-        case 'es': output += ` a las ${startTime}`; break;
-        case 'en': output += ` at ${startTime}`; break;
-        case 'fr': output += ` à ${startTime}`; break;
-        case 'de': output += ` um ${startTime}`; break;
-      }
-    }
-    return output;
-  }
-
-  let output = startStr;
-  if (startTime) {
-    switch (locale) {
-      case 'es': output += ` a las ${startTime}`; break;
-      case 'en': output += ` at ${startTime}`; break;
-      case 'fr': output += ` à ${startTime}`; break;
-      case 'de': output += ` um ${startTime}`; break;
-    }
-  }
-  return output;
-}
-```
-
----
-
-## Uso en React
-
-```tsx
-import { formatEventDateRange } from '@/lib/eventDateFormatter';
-
-export function EventCard({ event }) {
-  const dateText = formatEventDateRange({
-    startDate: event.startDate,
-    endDate: event.endDate,
-    startTime: event.startTime,
-    endTime: event.endTime,
-  });
-
-  return (
-    <div>
-      <h3>{event.title}</h3>
-      <p>📅 {dateText}</p>
-    </div>
-  );
-}
-```
-
----
-
-## Los 4 Casos
-
-| Entrada | Salida |
-|---------|--------|
-| `{ startDate: "20250711" }` | `"11 de julio"` |
-| `{ startDate: "20250711", startTime: "14:00" }` | `"11 de julio a las 14:00"` |
-| `{ startDate: "20250711", endDate: "20250713" }` | `"11 de julio al 13 de julio"` |
-| `{ startDate: "20250711", endDate: "20250713", startTime: "10:00", endTime: "18:00" }` | `"11 de julio al 13 de julio de 10:00 a 18:00"` |
-
----
+- El estándar iCalendar (`DTSTART`/`DTEND`) requiere `YYYYMMDDTHHMMSS` en 24H — no acepta AM/PM.
+- Si el evento no tiene `startTime`, se genera un evento "todo el día" (`DTSTART;VALUE=DATE:...`), con `DTEND` calculado como `endDate + 1 día` (el estándar iCal usa fin exclusivo para eventos de día completo).
+- El link se oculta por completo (`calendarLink = null`) si `isPastEvent(event)` es `true` — no tiene sentido agregar al calendario un evento que ya pasó.
 
 ## Testing
 
-```typescript
-test('Single date', () => {
-  expect(formatEventDateRange({ startDate: '20250711' })).toBe('11 de julio');
-});
-
-test('With time', () => {
-  expect(formatEventDateRange({ startDate: '20250711', startTime: '14:00' }))
-    .toBe('11 de julio a las 14:00');
-});
-
-test('Range', () => {
-  expect(formatEventDateRange({ startDate: '20250711', endDate: '20250713' }))
-    .toBe('11 de julio al 13 de julio');
-});
-
-test('Full', () => {
-  expect(formatEventDateRange({
-    startDate: '20250711',
-    endDate: '20250713',
-    startTime: '10:00',
-    endTime: '18:00',
-  })).toBe('11 de julio al 13 de julio de 10:00 a 18:00');
-});
-```
-
----
-
-## Checkpoints
-
-✅ Crear `lib/eventDateFormatter.ts`  
-✅ Copiar código (arriba)  
-✅ Usar en componentes  
-✅ Test cases  
-✅ Integrar con API  
-
----
-
-## FAQ
-
-**¿Qué formatos de fecha soporta?**  
-→ `YYYYMMDD` (20250711) o `YYYY-MM-DD` (2025-07-11)
-
-**¿Qué pasa si la fecha es inválida?**  
-→ Retorna cadena vacía
-
-**¿Puedo agregar más idiomas?**  
-→ Sí, crear más arrays de meses en `toSpanish()`
-
-**¿Performance?**  
-→ O(1), no hay queries DB, puro string parsing
-
-**¿Browser support?**  
-→ Todos (solo usa Date nativo)
-
----
-
-## Documentación Completa
-
-Para más detalles, ver:
-- 📖 [Full Guide](./EVENT-DATE-FORMATTING-GUIDE.md)
-- 📋 [Quick Ref](./EVENT-DATE-QUICK-REFERENCE.md)
-- 🎨 [Visual Guide](./EVENT-DATE-VISUAL-GUIDE.md)
-- 🚀 [Tutorial](./NEXTJS-IMPLEMENTATION-TUTORIAL.md)
-
----
-
-**Total lines of code: ~50 | Time to implement: 5 minutes**
+Ver `src/lib/event-date-formatter.test.ts` para los casos reales (fecha única, fecha única con hora, rango, rango con horas, ambos locales, valores inválidos). Actualiza esos tests si cambias cualquier regla de formateo — son la fuente de verdad, no este documento.
