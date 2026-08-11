@@ -35,7 +35,7 @@ describe("formatEventDateRange()", () => {
         startTime: "14:00:00",
         locale: "es",
       })
-    ).toBe("11 de julio a las 14:00");
+    ).toBe("11 de julio a las 2:00 PM");
   });
 
   it("formats a Spanish date range", () => {
@@ -57,7 +57,7 @@ describe("formatEventDateRange()", () => {
         endTime: "18:00",
         locale: "es",
       })
-    ).toBe("11 de julio al 13 de julio de 10:00 a 18:00");
+    ).toBe("11 de julio al 13 de julio de 10:00 AM a 6:00 PM");
   });
 
   it("formats English dates with day before month", () => {
@@ -69,6 +69,6 @@ describe("formatEventDateRange()", () => {
         endTime: "18:00",
         locale: "en",
       })
-    ).toBe("11 July to 13 July from 10:00 to 18:00");
+    ).toBe("11 July to 13 July from 10:00 AM to 6:00 PM");
   });
 });

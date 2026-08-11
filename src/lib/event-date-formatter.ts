@@ -35,8 +35,12 @@ function normalizeTime(value: string | null | undefined): string {
 
   if (!match) return trimmedValue;
 
-  const hour = match[1].padStart(2, "0");
-  return `${hour}:${match[2]}`;
+  const hour24 = Number(match[1]);
+  const minutes = match[2];
+  const period = hour24 >= 12 ? "PM" : "AM";
+  const hour12 = hour24 % 12 || 12;
+
+  return `${hour12}:${minutes} ${period}`;
 }
 
 /**

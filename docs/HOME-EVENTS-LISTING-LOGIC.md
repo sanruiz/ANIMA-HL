@@ -1,237 +1,112 @@
-# Cómo Se Listan Los Eventos en el Home
+# Cómo Se Listan los Eventos (`/agenda`)
 
-> Explicación clara y sencilla del sistema de filtrado y ordenamiento de eventos
+> Refleja la implementación real en el repo Next.js (`ANIMA-HL`), no la del CMS de WordPress.
 
----
+## Dato importante: no hay eventos en el Home
 
-## 📋 Concepto General
+El home (`src/app/[locale]/(site)/page.tsx`) renderiza `VideoHero`, `OurSoul`, `OfferBanner` y `DailyRituals` — ninguno de estos componentes lee eventos. **No existe hoy una sección de "eventos" ni "eventos destacados" en el home.** Todo el listado, filtrado y ordenamiento de eventos vive exclusivamente en la ruta **`/agenda`**:
 
-El home muestra **eventos que están sucediendo ahora o van a suceder en el futuro**, ordenados del **más cercano al más lejano**. Los eventos pasados nunca se muestran (a menos que entres a la página individual del evento).
+- `src/app/[locale]/(site)/agenda/page.tsx` — listado completo (próximos + pasados)
+- `src/app/[locale]/(site)/agenda/[slug]/page.tsx` — detalle de un evento individual
 
----
+Si en el futuro se agrega una sección de eventos al home, este documento debe actualizarse — hoy no aplica.
 
-## 🎯 Los 3 Niveles de Lógica
+## De dónde vienen los datos
 
-### **Nivel 1: Identificar Qué Eventos Son "Pasados"**
+WordPress (headless, plugin `soma-malls-content-types` + ACF + WPGraphQL) vive en **otro repositorio**. Este repo solo consume la API GraphQL vía `fetchGraphQL()` (`src/lib/wp.ts`).
 
-Cada día, un **proceso automático en background** revisa todos los eventos y pregunta:
+`EVENTS_QUERY` (`src/lib/queries.ts`) pide **todos** los eventos en una sola llamada, ordenados por `DATE DESC` a nivel WordPress (ese orden es solo el de la respuesta cruda; el orden final que ve el usuario se recalcula en TypeScript, ver abajo):
 
-> ¿La fecha final del evento ya pasó?
-
-**Las reglas:**
-- Si el evento tiene `end_date` → ¿es anterior a hoy? → **Pasado**
-- Si el evento NO tiene `end_date` → ¿el `start_date` ya pasó? → **Pasado**
-
-Si es pasado, WordPress **etiqueta automáticamente** el evento con la etiqueta `"eventos-pasados"` (es como ponerle una bandera roja).
-
-**Ejemplo Real:**
-- Evento "Concierto" con `start_date: 2024-06-15` (ya pasó)
-- El 15 de junio, WordPress etiqueta automáticamente: `evento → "eventos-pasados"` ✓
-
----
-
-### **Nivel 2: Filtrar en el Home**
-
-Cuando necesitas mostrar eventos (en el home o en cualquier página), WordPress dice:
-
-> "Dame todos los eventos **EXCEPTO** los etiquetados como `eventos-pasados`"
-
-Esto excluye automáticamente los eventos viejos. **Es simple: solo una exclusión por etiqueta.**
-
-**Ventaja:** No necesitas revisar fechas cada vez que cargas el home. La etiqueta está lista 24/7.
-
----
-
-### **Nivel 3: Ordenar**
-
-Una vez que tienes solo los eventos "vivos" (no pasados), los ordena así:
-
-> "Ordena por `start_date` de menor a mayor (ASC)"
-
-Esto hace que:
-- Primero aparezcan los eventos que empiezan **pronto**
-- Al final, los que empiezan en el futuro lejano
-
-**Ejemplo de Orden Real:**
-```
-1. "Concierto" → start_date: 2025-07-20 ← Aparece primero (más cercano)
-2. "Festival" → start_date: 2025-08-15
-3. "Carnaval" → start_date: 2025-12-01 ← Aparece último (más lejano)
+```graphql
+events(first: $first, where: { orderby: { field: DATE, order: DESC } }) {
+  nodes {
+    id title slug date excerpt
+    featuredImage { node { sourceUrl altText } }
+    eventTags { nodes { name slug } }
+    eventFields {
+      startDate startTime endDate endTime place featured
+      gallery { nodes { sourceUrl altText } }
+    }
+  }
+}
 ```
 
----
+- `eventFields.featured` **existe en el esquema y se consulta**, pero **no se usa en ningún lugar del código de eventos hoy** (no hay sección de "destacados" para eventos). El único lugar del repo donde un flag `featured` sí filtra contenido es en **marcas** (`brandFields.featured`, usado por `FeaturedBrandsCarousel` en `/brands` y `/gastronomy`) — es un dominio distinto, no confundir.
+- La página `/agenda` (`agenda/page.tsx`) llama a `EVENTS_QUERY` una sola vez con revalidación (`revalidate: 3600`, cache tag `collectionTag("event")` → `"wp:events"`), y separa el resultado en dos arreglos con `getUpcomingEvents()` / `getPastEvents()`.
 
-## 🏠 El Home en Específico: 2 Secciones
+## Pasado vs. próximo: se calcula en Next.js, no en WordPress
 
-El home tiene **2 tipos de listas de eventos**:
+Todo vive en `src/lib/events.ts` (96 líneas). No hay cron de WordPress ni `functions.php` en este repo — ese código, si existe, está en el repo de WordPress y **no puede documentarse ni verificarse desde aquí**.
 
-### **Sección 1: "Todos los Eventos"** (o Similar)
+```ts
+export const PAST_EVENT_TAG_SLUG = "eventos-pasados";
 
-| Aspecto | Valor |
-|---------|-------|
-| **Muestra** | Todos los próximos eventos |
-| **Filtro** | Excluye `eventos-pasados` |
-| **Orden** | Por fecha más cercana (ASC) |
-| **Query ID** | `"events_closest_first"` |
-| **Función** | `elementor_events_query_modification()` |
-
----
-
-### **Sección 2: "Eventos Destacados"** (o Similar)
-
-| Aspecto | Valor |
-|---------|-------|
-| **Muestra** | Solo eventos marcados como "Featured on Homepage" |
-| **Filtros** | 1. Excluye `eventos-pasados` 2. Solo `featured = 1` ✓ |
-| **Orden** | Por fecha más cercana (ASC) |
-| **Query ID** | `"featured_events"` |
-| **Función** | `elementor_featured_events_query_modification()` |
-
----
-
-## 🔄 El Flujo Completo en el Home
-
-```
-Visitante entra al home
-    ↓
-Elementor dice: "Necesito eventos"
-    ↓
-WordPress busca:
-  1. ¿Tiene la etiqueta "eventos-pasados"? NO ✓
-  2. ¿Tiene featured = 1? (solo en sección destacados)
-  3. ¿Cuál es el start_date?
-    ↓
-Ordena por start_date (más cercano primero)
-    ↓
-Muestra:
-  - Sección 1: "Próximos eventos" (10 eventos, ordenados)
-  - Sección 2: "Destacados" (3-5 eventos, ordenados)
+export function isPastEvent(event: EventNode, today = new Date()): boolean {
+  return hasPastEventTag(event) || isPastByDate(event, todayKey);
+}
 ```
 
----
+Un evento se considera **pasado** si se cumple cualquiera de estas dos condiciones (evaluadas en cada request):
 
-## 🤖 Lo Inteligente: El Proceso Automático
+1. **Override manual por tag**: el evento tiene la etiqueta de taxonomía `eventos-pasados` en `eventTags` (viene de WordPress; este repo solo la lee, no la asigna).
+2. **Por fecha**: la fecha de referencia del evento (`endDate` si existe, si no `startDate`, si no el `date` del post de WP) es anterior a hoy — comparando enteros `YYYYMMDD` en UTC, mismo mecanismo que usa `parseEventDate()` (ver `docs/README-EVENT-DATE-FORMATTER.md`).
 
-**¿Quién decide qué eventos son pasados?**
+**Diferencia clave con el diseño legado:** antes se documentaba un cron diario de WordPress que etiquetaba/desetiquetaba eventos. Eso ya no es necesario para que este front-end funcione: `isPastEvent()`/`getUpcomingEvents()`/`getPastEvents()` recalculan el estado "pasado" en cada request a partir de las fechas, sin depender de que ningún proceso batch haya corrido. El tag `eventos-pasados` solo se respeta como señal manual adicional, si WordPress lo sigue asignando.
 
-No es manual. Hay un **proceso automático que corre cada día** (en background) que:
+## Filtrado y orden
 
-1. Revisa **TODOS** los eventos
-2. Compara sus fechas (`start_date`, `end_date`) con hoy
-3. Si están pasados, les pone la etiqueta `"eventos-pasados"`
-4. Si aún no han pasado, la quita
-
-**Archivo responsable:** `includes/update-events.php`
-
-**Ventaja principal:** El home **SIEMPRE** muestra la información correcta sin que alguien tenga que ir y "publicar/despublicar" eventos manualmente.
-
----
-
-## 📊 Tabla Resumen: Qué se Excluye vs Qué se Muestra
-
-| Caso | ¿Se Muestra en Home? | ¿Por Qué? |
-|------|----------------------|-----------|
-| Evento pasado (2024) | ❌ No | Tiene etiqueta `eventos-pasados` |
-| Evento hoy | ✅ Sí | No tiene etiqueta; aparece primero |
-| Evento próxima semana | ✅ Sí | No tiene etiqueta; ordenado por fecha |
-| Evento en diciembre | ✅ Sí | No tiene etiqueta; ordenado al final |
-| Evento destacado pero pasado | ❌ No | Aunque es destacado, tiene `eventos-pasados` |
-| Evento destacado y futuro | ✅ Sí | Ambas condiciones se cumplen |
-
----
-
-## 🛠️ Componentes del Sistema
-
-### **1. Proceso Automático (Backend)**
-- **Archivo:** `includes/update-events.php`
-- **Frecuencia:** Diariamente (WordPress cron)
-- **Qué hace:** Etiqueta automáticamente eventos pasados
-
-### **2. Filtrado en Queries (WordPress)**
-- **Archivo:** `functions.php`
-- **Funciones:**
-  - `sort_events_by_closest_date()` - General (archives, home)
-  - `elementor_events_query_modification()` - Sección "Todos"
-  - `elementor_featured_events_query_modification()` - Sección "Destacados"
-- **Qué hace:** Excluye `eventos-pasados` y ordena por fecha
-
-### **3. Configuración en Elementor**
-- **Widget:** Loop Grid
-- **Query ID:** `"events_closest_first"` o `"featured_events"`
-- **Número de posts:** Configurable (10, 5, 20, etc.)
-
----
-
-## 💡 Cómo Configurar un Evento como "Destacado"
-
-En WordPress Admin:
-1. Edita un evento
-2. Ve a ACF Fields
-3. Busca "Featured on Homepage"
-4. Marca ✓ la opción
-5. Guarda
-
-**Automáticamente:**
-- Desaparece de "Todos" si ya está ahí
-- Aparece en sección "Destacados"
-- Se ordena con otros destacados por fecha
-
----
-
-## ⚠️ Casos Especiales
-
-### Evento Pasado pero Visitado Directamente
-
-Si alguien va a `/events/concierto-viejo/`:
-- ✅ **SÍ se ve** el evento (aunque sea pasado)
-- La página individual del evento **NO aplica los filtros**
-- Solo aplican en archives/listados
-
-**Razón:** Un visitante puede querer ver un evento pasado (para leer detalles, fotos, etc.).
-
----
-
-## 🔧 Archivos Clave del Sistema
-
+```ts
+getUpcomingEvents(events, today)
 ```
-plazasatelite/
-├── includes/
-│   ├── update-events.php          ← Proceso automático diario
-│   └── ...
-├── functions.php                  ← Filtrado y ordenamiento
-└── docs/
-    └── HOME-EVENTS-LISTING-LOGIC.md ← Este archivo
+- Excluye eventos con el tag `eventos-pasados` **y** eventos cuya fecha de referencia ya pasó.
+- Ordena ascendente por `startDate` (más cercano primero); si dos eventos empatan en fecha, ordena por título (`localeCompare`).
+
+```ts
+getPastEvents(events, today)
 ```
+- Incluye eventos pasados por tag **o** por fecha.
+- Ordena **descendente** por fecha de referencia (más reciente primero); empate por título.
 
----
+`agenda/page.tsx` llama a ambas funciones sobre el mismo array crudo de `EVENTS_QUERY` y pasa los dos resultados a `<AgendaEventsList upcomingEvents={...} pastEvents={...} />`.
 
-## 📝 Resumen en 1 Frase
+## Cómo se renderiza `/agenda`
 
-> **El home muestra automáticamente los eventos que no están marcados como pasados, ordenados del más cercano al más lejano, usando 2 secciones diferentes: todos los próximos eventos y los destacados.**
+`src/components/agenda-events-list/index.tsx` (client component):
 
----
+- Recibe `upcomingEvents` y `pastEvents` ya separados y ordenados — no vuelve a decidir qué es pasado.
+- Construye un filtro de categorías a partir de los `eventTags` de **ambos** arreglos combinados (excluyendo siempre `eventos-pasados`), como un set de tabs "Todos" + una por tag. El filtro es 100% client-side (`useState`), sin nueva consulta a WordPress.
+- Renderiza dos secciones dentro de la misma lista: próximos primero, luego "pasados" debajo (con su propio heading/empty-state), ambas afectadas por el filtro de categoría activo.
+- Cada fila (`EventRow`) usa `parseEventDate()` para el chip de día/mes-año, y `formatEventDateRange()` para la línea de fecha legible (ver el otro documento). Si `isPast`, se aplican estilos atenuados y un badge distinto en vez del tag de categoría.
 
-## ❓ Preguntas Frecuentes
+`src/components/event-detail/index.tsx` (`/agenda/[slug]`, server component) no aplica ningún filtro de pasado/futuro — un evento pasado sigue siendo visible en su propia página; solo se le oculta el link "Agregar al calendario" (`isPastEvent(event) ? null : getCalendarLink(event)`).
 
-### P: ¿Qué pasa si creo un evento hoy?
-R: Aparece en el home **en el mismo momento** (no necesita cron, está en el futuro).
+## Tabla resumen
 
-### P: ¿Y si edito la fecha a una fecha pasada?
-R: El **siguiente cron diario** (mañana) lo etiquetará como `eventos-pasados` y desaparecerá del home.
+| Caso | ¿Se muestra en `/agenda`? | ¿Dónde? |
+|---|---|---|
+| Evento futuro, sin tag `eventos-pasados` | ✅ Sí | Sección "próximos", ordenado por fecha ascendente |
+| Evento de hoy | ✅ Sí | Sección "próximos" (su fecha de referencia no es `< hoy`) |
+| Evento con `endDate` pasado pero `startDate` futuro | ❌ No (se usa `endDate` como referencia) | Sección "pasados" |
+| Evento sin tag pasado pero con fecha ya vencida | ❌ No | Sección "pasados", recalculado en cada request |
+| Evento con tag `eventos-pasados` pero fecha futura | ❌ No (el tag manda) | Sección "pasados" |
+| Visita directa a `/agenda/[slug]` de un evento pasado | ✅ Sí, se ve completo | Sin filtro en la página de detalle; solo se oculta "Agregar al calendario" |
 
-### P: ¿Puedo ver eventos pasados en el home?
-R: No, a menos que los desmarques manualmente quitando la etiqueta `eventos-pasados` (no recomendado).
+## Preguntas frecuentes
 
-### P: ¿Los eventos destacados aparecen también en "Todos"?
-R: No, si están en "Destacados" no aparecen en "Todos" (son secciones separadas con diferentes queries).
+**¿Hay un cron o proceso batch en este repo que actualice el estado "pasado"?**
+No. Se recalcula en cada request desde las fechas. El tag `eventos-pasados` es solo un override manual opcional que, si WordPress lo asigna, este repo respeta.
 
-### P: ¿Qué pasa si un evento no tiene `end_date`?
-R: Se considera pasado cuando `start_date` < hoy. Si no tiene fecha final, el `start_date` es la fecha de referencia.
+**¿Puedo marcar un evento como "destacado" y que aparezca en otra sección?**
+No hoy — `eventFields.featured` se consulta pero no se usa en ningún componente de eventos. Si se necesita esa funcionalidad, hay que construirla (filtrar por `fields?.featured` y decidir dónde renderizarla; no hay sección de home para eventos todavía).
 
----
+**¿Qué pasa si un evento no tiene `endDate`?**
+Se considera pasado cuando `startDate` (o el `date` del post si `startDate` está vacío) es anterior a hoy.
 
-## 🎓 Próximos Pasos
+**¿Dónde vive la lógica de "past event" del lado de WordPress (si existe)?**
+Fuera de este repo. No hay `functions.php` ni PHP alguno en `ANIMA-HL` — es puramente un consumidor de WPGraphQL (ver `README.md` del repo y `src/lib/cache-tags.ts`, que documenta la división de responsabilidades entre ambos codebases).
 
-- [EVENT-DATE-FORMATTING-GUIDE.md](./EVENT-DATE-FORMATTING-GUIDE.md) - Cómo formatea las fechas para mostrar
-- [WORDPRESS-HEADLESS-NEXTJS-I18N.md](./WORDPRESS-HEADLESS-NEXTJS-I18N.md) - Si usas Next.js frontend
-- [AUTO-UNPUBLISH-DOCUMENTATION.md](./AUTO-UNPUBLISH-DOCUMENTATION.md) - Más detalles del proceso automático
+## Ver también
+
+- [README-EVENT-DATE-FORMATTER.md](./README-EVENT-DATE-FORMATTER.md) — cómo se formatean fecha y hora para mostrar (incluye el cambio a formato 12H AM/PM)
+- `src/lib/events.ts` — código fuente de todo lo descrito aquí
+- `src/lib/cache-tags.ts` — contrato de cache tags entre este repo y WordPress
