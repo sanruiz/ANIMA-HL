@@ -100,7 +100,7 @@ function EventRow({ event, locale, isPast, pastBadgeLabel }: EventRowProps) {
             sizes="80px"
             className={cn(
               "object-cover transition-transform duration-200 group-hover:scale-[1.03]",
-              isPast && "grayscale",
+              isPast && "sepia",
             )}
             unoptimized={shouldBypassImageOptimizer(image.sourceUrl)}
           />
