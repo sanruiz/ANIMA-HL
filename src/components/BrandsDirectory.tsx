@@ -92,7 +92,7 @@ export default function BrandsDirectory({
         <p className="brands-directory__lead">{t("directoryLead")}</p>
       </div>
 
-      <div className="w-[95%] max-w-160 pb-6">
+      <div className="w-[95%] max-w-(--width-compact) pb-6">
         <label htmlFor="brands-search" className="sr-only">
           {t("searchLabel")}
         </label>
@@ -142,7 +142,7 @@ export default function BrandsDirectory({
       </div>
 
       {filtered.length === 0 ? (
-        <p className="w-[95%] max-w-160 py-16 text-center font-(family-name:--font-primary) text-xl text-brand-oscuro/65">
+        <p className="w-[95%] max-w-(--width-compact) py-16 text-center font-(family-name:--font-primary) text-xl text-brand-oscuro/65">
           {t("empty")}
         </p>
       ) : (

@@ -9,7 +9,7 @@ export default async function NotFoundPage() {
 
   return (
     <section className="flex min-h-[calc(100svh-100px)] w-full items-center justify-center overflow-hidden bg-brand-claro px-5 pb-18 pt-36 text-brand-oscuro md:px-8 md:pb-24 md:pt-44">
-      <div className="grid w-full max-w-[var(--width-max)] gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(340px,0.58fr)] lg:items-center">
+      <div className="grid w-full max-w-(--width-max) gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(340px,0.58fr)] lg:items-center">
         <div className="max-w-190">
           <p className="mb-5 font-(family-name:--font-ui-stack) text-xs font-medium uppercase tracking-[0.18em] text-brand-verde">
             {t("eyebrow")}

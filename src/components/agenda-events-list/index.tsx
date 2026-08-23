@@ -233,7 +233,7 @@ export default function AgendaEventsList({
       <div
         role="tablist"
         aria-label={filterAllLabel}
-        className="flex w-full max-w-(--width-max) flex-wrap justify-center gap-x-3 gap-y-2 pb-10 lg:w-[70%]"
+        className="flex w-[95%] max-w-(--width-max) flex-wrap justify-center gap-x-3 gap-y-2 pb-10"
       >
         <button
           type="button"
@@ -258,7 +258,7 @@ export default function AgendaEventsList({
         ))}
       </div>
 
-      <div className="p-4 max-w-(--width-max) lg:w-[50%]">
+      <div className="w-[95%] max-w-(--width-content) p-4">
         {filteredUpcoming.length === 0 ? (
           <p className="agenda-events__empty">{emptyMessage}</p>
         ) : (

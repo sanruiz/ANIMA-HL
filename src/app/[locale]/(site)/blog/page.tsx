@@ -108,7 +108,7 @@ export default async function BlogPage({
       <BlogIntro />
       {failed || posts.length === 0 ? (
         <section className="flex w-full justify-center bg-brand-claro pb-24">
-          <p className="w-[95%] max-w-[640px] py-16 text-center font-[family-name:var(--font-primary)] text-xl text-brand-oscuro/65">
+          <p className="w-[95%] max-w-(--width-compact) py-16 text-center font-[family-name:var(--font-primary)] text-xl text-brand-oscuro/65">
             {failed ? t("error") : t("empty")}
           </p>
         </section>
