@@ -13,7 +13,7 @@ interface BlogListProps {
 export default function BlogList({ posts, locale }: BlogListProps) {
   return (
     <section className="flex w-full justify-center bg-brand-claro pb-24">
-      <ul className="m-0 grid w-[95%] max-w-[var(--width-max)] list-none grid-cols-1 gap-[50px] p-0 md:grid-cols-3">
+      <ul className="m-0 grid w-[95%] max-w-(--width-max) list-none grid-cols-1 gap-[50px] p-0 md:grid-cols-3">
         {posts.map((post) => {
           const img = post.featuredImage?.node;
           if (!post.slug) return null;

@@ -46,7 +46,7 @@ export default function FeaturedBrandsCarousel({
 
   return (
     <section className="bg-brand-oscuro py-12 text-brand-claro md:py-16">
-      <div className="mx-auto flex w-[95%] max-w-[var(--width-max)] items-center justify-between gap-6 pb-8 md:w-[90%]">
+      <div className="mx-auto flex w-[95%] max-w-(--width-max) items-center justify-between gap-6 pb-8 md:w-[90%]">
         <p className="m-0 max-w-[760px] font-[family-name:var(--font-primary)] text-xl leading-7 text-brand-claro/90 md:text-2xl md:leading-8">
           {copy}
         </p>

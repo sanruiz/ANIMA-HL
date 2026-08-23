@@ -153,8 +153,8 @@ export default async function WordPressPage({ params }: WordPressPageParams) {
     <article className="w-full bg-brand-claro">
       <JsonLd data={jsonLd} />
       <header className="mt-32 flex w-full justify-center bg-brand-oscuro pb-11 pt-32 text-brand-claro md:pb-14 md:pt-37 lg:pb-18 lg:pt-45">
-        <div className="w-[95%] max-w-240">
-          <h1 className="max-w-215 font-(family-name:--font-primary) text-[34px] leading-10 font-normal text-brand-claro md:text-[44px] md:leading-12.5 lg:text-[56px] lg:leading-15.5">
+        <div className="w-[95%] max-w-(--width-max)">
+          <h1 className="max-w-(--width-content) font-(family-name:--font-primary) text-[34px] leading-10 font-normal text-brand-claro md:text-[44px] md:leading-12.5 lg:text-[56px] lg:leading-15.5">
             {title}
           </h1>
         </div>
@@ -162,7 +162,7 @@ export default async function WordPressPage({ params }: WordPressPageParams) {
       {content ? (
         <section className="flex w-full justify-center pb-19 pt-13 md:pb-26 md:pt-18">
           <div
-            className="blog-post__content w-[95%] lg:w-[70%]"
+            className="blog-post__content w-[95%] max-w-(--width-content)"
             dangerouslySetInnerHTML={{ __html: content }}
           />
         </section>
