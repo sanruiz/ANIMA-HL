@@ -22,7 +22,7 @@ const NAV_ITEMS = [
 ] as const;
 
 // Mismo archivo que el hero de /about (checksum idéntico al original de Webflow).
-const ABOUT_IMAGE = "/about/hero-aerial.avif";
+const ABOUT_IMAGE = "/about/menu-background.avif";
 
 const INSTAGRAM_URL = "https://www.instagram.com/animavillagecabo/";
 
