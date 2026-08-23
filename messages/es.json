@@ -13,15 +13,15 @@
     "menu": "Menú",
     "close": "Cerrar",
     "followUs": "Síguenos",
-    "aboutBlurb": "Ánima Village reúne marcas, gastronomía, Arte Abierto, naturaleza, bienestar y comunidad en el corazón de Cabo Del Sol."
+    "aboutBlurb": "Ánima Village reúne marcas, sabores, arte, naturaleza, bienestar y comunidad en el corazón de Cabo Del Sol."
   },
   "home": {
     "title": "Ánima Village",
     "subtitle": "Sitio headless con WordPress + Next.js",
-    "heroText": "Un destino donde <em>marcas, bienestar, arte</em> y naturaleza convergen.",
+    "heroText": "Un destino donde <em>marcas, bienestar, arte</em> y naturaleza convergen",
     "viewAgenda": "Ver agenda",
     "viewBrands": "Ver marcas",
-    "soulHeading": "Nuestra Esencia",
+    "soulHeading": "",
     "soulP1": "Ánima Village reúne <em>marcas, gastronomía, Arte Abierto, naturaleza, bienestar, y comunidad</em> en el corazón de Cabo Del Sol.",
     "soulP2": "",
     "soulCaption": "Cada rincón es una invitación a <em>disfrutar el momento y estar presente.</em>",

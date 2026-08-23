@@ -78,7 +78,8 @@
       "Bash(curl -s http://localhost:3000/en/brands/nike -o /tmp/nike-local.html -w \"%{http_code}\\\\n\")",
       "Bash(curl -s http://localhost:3000/es/brands/nike -o /tmp/nike-local-es.html -w \"%{http_code}\\\\n\")",
       "Bash(curl -s http://localhost:3000/en/brands -o /tmp/brands-list.html -w \"%{http_code}\\\\n\")",
-      "Bash(curl -s http://localhost:3000/sitemap.xml)"
+      "Bash(curl -s http://localhost:3000/sitemap.xml)",
+      "Bash(gh auth *)"
     ],
     "additionalDirectories": [
       "/Users/santiagoramirez/Sites/ANIMA-HL/src/app/[locale]/(site)/brands"
