@@ -35,7 +35,7 @@ export default async function AboutPage({
       <AboutVideo />
       <AboutEssence />
       <AboutGallery />
-      <AboutClosing />
+      {/* <AboutClosing /> */}
     </>
   );
 }
