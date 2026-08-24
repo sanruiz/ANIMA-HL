@@ -58,8 +58,10 @@ export default async function BrandsPage({
       ) : (
         <>
           <FeaturedBrandsCarousel
-            brands={brands.filter((brand) => Boolean(brand.brandFields?.featured))}
-            copy={t("featuredCarouselCopy")}
+            brands={brands.filter((brand) =>
+              Boolean(brand.brandFields?.featured),
+            )}
+            copy={t.rich("featuredCarouselCopy", { br: () => <br /> })}
             previousLabel={t("featuredCarouselPrevious")}
             nextLabel={t("featuredCarouselNext")}
           />

@@ -2,14 +2,14 @@
 
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import Image from "next/image";
-import { useRef } from "react";
+import { type ReactNode, useRef } from "react";
 import { Link } from "@/i18n/navigation";
 import type { BrandNode } from "@/lib/types";
 import { shouldBypassImageOptimizer } from "@/lib/wp-image";
 
 interface FeaturedBrandsCarouselProps {
   brands: BrandNode[];
-  copy: string;
+  copy: ReactNode;
   nextLabel: string;
   previousLabel: string;
 }
