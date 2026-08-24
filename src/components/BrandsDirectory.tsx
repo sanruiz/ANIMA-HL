@@ -87,7 +87,7 @@ export default function BrandsDirectory({
     >
       <div className="brands-directory__intro">
         <h2 id="brands-directory-heading" className="brands-directory__heading">
-          {t("directoryHeading")}
+          {t.rich("directoryHeading", { br: () => <br /> })}
         </h2>
         <p className="brands-directory__lead">{t("directoryLead")}</p>
       </div>
@@ -115,7 +115,7 @@ export default function BrandsDirectory({
 
       <div
         role="tablist"
-        aria-label={t("directoryHeading")}
+        aria-label={t("searchLabel")}
         className="w-[95%] max-w-(--width-max) flex flex-wrap justify-center gap-x-3 gap-y-2 pt-4 pb-10"
       >
         <button

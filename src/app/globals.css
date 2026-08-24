@@ -1793,7 +1793,7 @@ a {
 
 .event-detail__inner {
   width: 95%;
-  max-width: var(--width-max);
+  max-width: var(--width-content);
 }
 
 .event-detail__title {
@@ -2337,7 +2337,7 @@ a.brand-detail__info-value:hover {
 
 .blog-post__layout {
   width: 95%;
-  max-width: var(--width-max);
+  max-width: var(--width-content);
   margin: 0 auto;
 }
 .blog-post-hero {
