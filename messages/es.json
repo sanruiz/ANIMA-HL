@@ -71,6 +71,7 @@
     "featuredCarouselNext": "Siguientes marcas destacadas",
     "searchLabel": "Buscar tiendas por nombre",
     "searchPlaceholder": "Buscar",
+    "categoryFilterLabel": "Filtrar marcas por categoría",
     "filterAll": "Todo",
     "empty": "No hay marcas por ahora.",
     "error": "No se pudieron cargar las marcas. Revisa la conexión con WordPress.",
@@ -95,6 +96,7 @@
     "featuredCarouselNext": "Siguientes propuestas destacadas",
     "searchLabel": "Buscar por nombre",
     "searchPlaceholder": "Buscar",
+    "categoryFilterLabel": "Filtrar gastronomía por categoría",
     "filterAll": "Todo",
     "empty": "No hay propuestas gastronómicas por ahora.",
     "error": "No se pudieron cargar las propuestas gastronómicas. Revisa la conexión con WordPress."

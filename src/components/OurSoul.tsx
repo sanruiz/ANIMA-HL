@@ -6,9 +6,13 @@ import { useTranslations } from "next-intl";
 export default function OurSoul() {
   const t = useTranslations("home");
   const em = (chunks: React.ReactNode) => <em>{chunks}</em>;
+  const soulHeading = t("soulHeading");
 
   return (
-    <section className="our-soul" aria-labelledby="our-soul-heading">
+    <section
+      className="our-soul"
+      aria-labelledby={soulHeading ? "our-soul-heading" : undefined}
+    >
       <div className="our-soul__cols">
         <div className="our-soul__text">
           <p className="our-soul__paragraph">
@@ -16,9 +20,11 @@ export default function OurSoul() {
             <br />
             {t.rich("soulP2", { em })}
           </p>
-          <h2 id="our-soul-heading" className="our-soul__h2">
-            {t("soulHeading")}
-          </h2>
+          {soulHeading ? (
+            <h2 id="our-soul-heading" className="our-soul__h2">
+              {soulHeading}
+            </h2>
+          ) : null}
         </div>
 
         <div className="our-soul__media">

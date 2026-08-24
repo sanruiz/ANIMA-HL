@@ -71,6 +71,7 @@
     "featuredCarouselNext": "Next featured brands",
     "searchLabel": "Search stores by name",
     "searchPlaceholder": "Search store by name",
+    "categoryFilterLabel": "Filter brands by category",
     "filterAll": "All",
     "empty": "No brands yet.",
     "error": "Could not load brands. Check the WordPress connection.",
@@ -95,6 +96,7 @@
     "featuredCarouselNext": "Next featured experiences",
     "searchLabel": "Search by name",
     "searchPlaceholder": "Search",
+    "categoryFilterLabel": "Filter gastronomy by category",
     "filterAll": "All",
     "empty": "No gastronomic experiences yet.",
     "error": "Could not load gastronomic experiences. Check the WordPress connection."
