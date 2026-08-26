@@ -125,8 +125,6 @@
   "arte": {
     "title": "Arte Abierto",
     "metaDescription": "Arte Abierto at Ánima Village: a platform for continuous exploration that sparks collective processes and connections within contemporary art and culture.",
-    "heroImageAlt": "Arte Abierto installation at Ánima Village",
-    "collectionImageAlt": "Joint Effort by Jose Dávila",
     "heroHeading": "Creativity in every corner",
     "heroLead": "Art and culture come alive to <em>inspire, connect, and nurture</em><br></br>every moment.",
     "aboutHeading": "About Arte Abierto",
@@ -134,16 +132,47 @@
     "aboutP2": "Its mission is to engage audiences through an inclusive and innovative approach, breaking boundaries to create a shared space for <em>creativity</em> and <em>inspiration</em>.",
     "aboutCta": "Learn more",
     "aboutImageAlt": "Arte Abierto at Ánima Village",
-    "openSpaceHeading": "Open Space",
-    "openSpaceP1": "Come discover <em>Autorretrato flameante</em> by Abraham Cruzvillegas, an installation that transforms everyday materials into a dialogue between community, landscape, and creativity.",
-    "openSpaceImageAlt": "Autorretrato flameante by Abraham Cruzvillegas",
-    "programHeading": "Public Program",
-    "programP1": "Workshops, conferences and activities",
-    "programCta": "View agenda",
-    "programImageAlt": "Arte Abierto public program",
-    "collectionEyebrow": "discover our…",
-    "collectionHeading": "Collection",
-    "collectionP1": "<em>Joint Effort</em> (2019) by Jose Dávila is a large-scale sculpture that explores tension, balance, and the relationship between materials."
+    "sections": {
+      "openSpace": { "label": "Open Space" },
+      "program": { "label": "Public Program" },
+      "collection": { "label": "Art Collection" }
+    },
+    "detail": {
+      "openSpace": {
+        "title": "Open Space",
+        "metaDescription": "Flaming Self-Portrait, Looking at Two Seas at Once…, by Abraham Cruzvillegas: a paint-and-steel installation created on-site in Los Cabos, on view at Arte Abierto Baja through October 31, 2026.",
+        "heading": "Open Space",
+        "artist": "Abraham Cruzvillegas",
+        "artworkTitleYear": "Flaming Self-Portrait, Looking at Two Seas at Once…, 2025",
+        "medium": "Paint and steel",
+        "descriptionP1": "Created on-site with everyday objects and materials gathered in Los Cabos, this installation by Abraham Cruzvillegas emerges directly from the landscape that surrounds it.",
+        "descriptionP2": "The work brings together paint and steel to explore labor, self-construction, and what the artist calls his “mineral soul,” or ánima. More than representing Baja California Sur, it is made from its materials, stories, and energy.",
+        "note": "On view at Arte Abierto Baja through October 31, 2026.",
+        "imageAlt": "Flaming Self-Portrait, by Abraham Cruzvillegas — photo {number}"
+      },
+      "program": {
+        "title": "Public Program",
+        "metaDescription": "Gatherings, workshops, conversations, and tours that bring us closer to art through new perspectives at Ánima Village.",
+        "heading": "Public Program",
+        "descriptionP1": "Gatherings, workshops, conversations, and tours that bring us closer to art through new perspectives. A space to learn, create, and share as a community.",
+        "descriptionP2": "Check the agenda and discover the activities we've prepared for you.",
+        "cta": "View agenda",
+        "imageAlt": "Public Program activities at Arte Abierto — photo {number}"
+      },
+      "collection": {
+        "title": "Art Collection",
+        "metaDescription": "Joint Effort (2019), by Jose Dávila: a work of concrete, volcanic rock, and ratchet straps that's part of the permanent art collection at Ánima Village.",
+        "eyebrow": "discover our…",
+        "heading": "Art Collection",
+        "descriptionP1": "Art is also part of the journey. Throughout the Village you'll find pieces that engage in dialogue with the architecture, the landscape, and everyday life.",
+        "descriptionP2": "The collection begins with Joint Effort (2019), by Jose Dávila, a work of concrete, volcanic rock, and ratchet straps where each element depends on the other to maintain balance.",
+        "descriptionP3": "Explore, let yourself be surprised, and find inspiration at every turn.",
+        "artist": "Jose Dávila",
+        "artworkTitleYear": "Joint Effort, 2019",
+        "medium": "Concrete volumes, volcanic rock, and ratchet straps.",
+        "imageAlt": "Joint Effort, by Jose Dávila — photo {number}"
+      }
+    }
   },
   "map": {
     "title": "Map",

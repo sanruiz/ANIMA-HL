@@ -1,10 +1,8 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import ArteHero from "@/components/ArteHero";
 import ArteAbout from "@/components/ArteAbout";
-import ArteOpenSpace from "@/components/ArteOpenSpace";
-import ArtePublicProgram from "@/components/ArtePublicProgram";
-import ArteCollection from "@/components/ArteCollection";
+import ArteHero from "@/components/ArteHero";
+import ArteSections from "@/components/arte-sections";
 
 export async function generateMetadata({
   params,
@@ -30,10 +28,8 @@ export default async function ArtePage({
   return (
     <>
       <ArteHero />
+      <ArteSections />
       <ArteAbout />
-      <ArteOpenSpace />
-      <ArtePublicProgram />
-      <ArteCollection />
     </>
   );
 }
