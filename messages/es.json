@@ -125,8 +125,6 @@
   "arte": {
     "title": "Arte Abierto",
     "metaDescription": "Arte Abierto en Ánima Village: un espacio de experimentación continua que activa procesos colectivos y conexiones con el arte y la cultura contemporánea.",
-    "heroImageAlt": "Instalación de Arte Abierto en Ánima Village",
-    "collectionImageAlt": "Joint Effort, de Jose Dávila",
     "heroHeading": "Creatividad en cada espacio",
     "heroLead": "Una invitación a <em>mirar, sentir y descubrir</em><br></br>desde nuevas perspectivas",
     "aboutHeading": "Sobre Arte Abierto",
@@ -134,16 +132,47 @@
     "aboutP2": "Su objetivo es acercar al público de una manera abierta, incluyente, dinámica y estimulante.",
     "aboutCta": "Conoce más",
     "aboutImageAlt": "Arte Abierto en Ánima Village",
-    "openSpaceHeading": "Espacio Abierto",
-    "openSpaceP1": "Ven a descubrir <em>Autorretrato flameante</em> de Abraham Cruzvillegas, una instalación que transforma materiales cotidianos en un diálogo entre comunidad, paisaje y creatividad.",
-    "openSpaceImageAlt": "Autorretrato flameante, de Abraham Cruzvillegas",
-    "programHeading": "Programa Público",
-    "programP1": "Talleres, conferencias y actividades",
-    "programCta": "Ver agenda",
-    "programImageAlt": "Programa público de Arte Abierto",
-    "collectionEyebrow": "descubre nuestra…",
-    "collectionHeading": "Colección",
-    "collectionP1": "<em>Joint Effort</em> (2019), de Jose Dávila, es una escultura de gran formato que explora la tensión, el equilibrio y la relación entre materiales."
+    "sections": {
+      "openSpace": { "label": "Espacio Abierto" },
+      "program": { "label": "Programa Público" },
+      "collection": { "label": "Colección de Arte" }
+    },
+    "detail": {
+      "openSpace": {
+        "title": "Espacio Abierto",
+        "metaDescription": "Autorretrato flameante, mirando al mismo tiempo a dos mares…, de Abraham Cruzvillegas: una instalación de pintura y acero creada in situ en Los Cabos, en exhibición en Arte Abierto Baja hasta el 31 de octubre de 2026.",
+        "heading": "Espacio Abierto",
+        "artist": "Abraham Cruzvillegas",
+        "artworkTitleYear": "Autorretrato flameante, mirando al mismo tiempo a dos mares…, 2025",
+        "medium": "Pintura y acero",
+        "descriptionP1": "Creada in situ con objetos cotidianos y materiales recolectados en Los Cabos, esta instalación de Abraham Cruzvillegas nace directamente del paisaje que la rodea.",
+        "descriptionP2": "La obra reúne pintura y acero para explorar el trabajo, la autoconstrucción y aquello que el artista llama su “alma mineral” o ánima. Más que representar a Baja California Sur, está hecha con sus materiales, historias y energía.",
+        "note": "En exhibición en Arte Abierto Baja hasta el 31 de octubre de 2026.",
+        "imageAlt": "Autorretrato flameante, de Abraham Cruzvillegas — foto {number}"
+      },
+      "program": {
+        "title": "Programa Público",
+        "metaDescription": "Encuentros, talleres, conversaciones y recorridos para acercarnos al arte desde nuevas miradas en Ánima Village.",
+        "heading": "Programa Público",
+        "descriptionP1": "Encuentros, talleres, conversaciones y recorridos para acercarnos al arte desde nuevas miradas. Un espacio para aprender, crear y compartir en comunidad.",
+        "descriptionP2": "Revisa la agenda y descubre las actividades que tenemos preparadas para ti.",
+        "cta": "Ver agenda",
+        "imageAlt": "Actividades del Programa Público de Arte Abierto — foto {number}"
+      },
+      "collection": {
+        "title": "Colección de Arte",
+        "metaDescription": "Joint Effort (2019), de Jose Dávila: una obra de concreto, roca volcánica y correas de trinquete que forma parte de la colección permanente de arte en Ánima Village.",
+        "eyebrow": "descubre nuestra…",
+        "heading": "Colección de Arte",
+        "descriptionP1": "El arte también forma parte del recorrido. Alrededor del Village encontrarás piezas que dialogan con la arquitectura, el paisaje y la vida cotidiana.",
+        "descriptionP2": "La colección comienza con Joint Effort (2019), de Jose Dávila, una obra de concreto, roca volcánica y correas donde cada elemento depende del otro para mantener el equilibrio.",
+        "descriptionP3": "Explora, déjate sorprender e inspírate en cada recorrido.",
+        "artist": "Jose Dávila",
+        "artworkTitleYear": "Joint Effort, 2019",
+        "medium": "Volúmenes de concreto, roca volcánica y correas de trinquete.",
+        "imageAlt": "Joint Effort, de Jose Dávila — foto {number}"
+      }
+    }
   },
   "map": {
     "title": "Mapa",
