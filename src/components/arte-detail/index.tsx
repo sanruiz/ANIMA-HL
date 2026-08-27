@@ -74,7 +74,7 @@ export default function ArteDetail({
 
   return (
     <section className={cn("flex w-full justify-center", TONE_CLASSES[tone])}>
-      <div className="grid w-[95%] max-w-(--width-content) grid-cols-1 items-center gap-10 py-16 lg:grid-cols-2 lg:gap-16 lg:py-24">
+      <div className="grid w-[95%] max-w-(--width-content) grid-cols-1 items-center gap-10 pt-27.5 pb-16 lg:grid-cols-2 lg:gap-16 lg:pt-32.5 lg:pb-24">
         <div className={cn("flex flex-col gap-5", reverse && "lg:order-2")}>
           {eyebrow ? (
             <p className="m-0 font-(family-name:--font-primary) text-lg italic opacity-70">
@@ -113,20 +113,32 @@ export default function ArteDetail({
           ) : null}
         </div>
         <div className="grid grid-cols-2 gap-4 lg:gap-6">
-          {images.map((image, index) => (
-            <div
-              key={`${image.src}:${index}`}
-              className="relative aspect-4/5 overflow-hidden"
-            >
-              <Image
-                src={image.src}
-                alt={image.alt}
-                fill
-                sizes="(max-width: 1023px) 50vw, 25vw"
-                className="object-cover"
-              />
-            </div>
-          ))}
+          {images.map((image, index) => {
+            const isOddOut =
+              images.length % 2 === 1 && index === images.length - 1;
+
+            return (
+              <div
+                key={`${image.src}:${index}`}
+                className={cn(
+                  "relative overflow-hidden",
+                  isOddOut ? "col-span-2 aspect-video" : "aspect-4/5",
+                )}
+              >
+                <Image
+                  src={image.src}
+                  alt={image.alt}
+                  fill
+                  sizes={
+                    isOddOut
+                      ? "(max-width: 1023px) 95vw, 50vw"
+                      : "(max-width: 1023px) 50vw, 25vw"
+                  }
+                  className="object-cover"
+                />
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>
