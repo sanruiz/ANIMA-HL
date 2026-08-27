@@ -28,8 +28,8 @@ export default async function ArtePage({
   return (
     <>
       <ArteHero />
-      <ArteSections />
       <ArteAbout />
+      <ArteSections />
     </>
   );
 }
