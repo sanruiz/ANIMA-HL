@@ -5,7 +5,7 @@ import JsonLd from "@/components/JsonLd";
 import { getLanguageAlternates, getLocalizedUrl } from "@/lib/seo";
 
 const SLUG = "programa-publico";
-const IMAGES = ["/art/158.jpg", "/art/160.jpg", "/art/161.jpg"];
+const IMAGES = ["/art/158.jpg", "/art/160.jpg", "/art/161.jpg", "/art/arte4.jpg"];
 
 export async function generateMetadata({
   params,
