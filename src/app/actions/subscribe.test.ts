@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { subscribe, INITIAL_STATE } from "./subscribe";
+import { subscribe } from "./subscribe";
+import { INITIAL_STATE } from "./subscribe-state";
 
 // Helper para armar FormData declarativamente.
 function formData(fields: Record<string, string>): FormData {

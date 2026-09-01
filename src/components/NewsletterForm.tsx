@@ -3,11 +3,8 @@
 import { useActionState } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
-import {
-  subscribe,
-  INITIAL_STATE,
-  type SubscribeErrorCode,
-} from "@/app/actions/subscribe";
+import { subscribe, type SubscribeErrorCode } from "@/app/actions/subscribe";
+import { INITIAL_STATE } from "@/app/actions/subscribe-state";
 
 // Mapea el código de error del server action a la clave de traducción.
 const ERROR_KEY: Record<SubscribeErrorCode, string> = {

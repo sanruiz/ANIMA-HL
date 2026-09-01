@@ -18,8 +18,6 @@ export type SubscribeState =
   | { status: "success" }
   | { status: "error"; code: SubscribeErrorCode };
 
-export const INITIAL_STATE: SubscribeState = { status: "idle" };
-
 export async function subscribe(
   _prev: SubscribeState,
   formData: FormData
