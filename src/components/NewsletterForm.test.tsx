@@ -18,6 +18,9 @@ vi.mock("@/i18n/navigation", () => ({
 
 vi.mock("@/app/actions/subscribe", () => ({
   subscribe: vi.fn(),
+}));
+
+vi.mock("@/app/actions/subscribe-state", () => ({
   INITIAL_STATE: { status: "idle" },
 }));
 
