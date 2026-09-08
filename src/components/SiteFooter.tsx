@@ -3,6 +3,7 @@ import { Link } from "@/i18n/navigation";
 import NewsletterForm from "./NewsletterForm";
 import InstagramIcon from "./InstagramIcon";
 import SomaLogo from "./SomaLogo";
+import TripAdvisorIcon from "./TripAdvisorIcon";
 
 const MAPS_URL =
   "https://www.google.com/maps/dir//Anima+village,+Tourist+Corridor,+23455+Cabo+San+Lucas,+B.C.S.,+Mexico/@22.919928,-109.8330288,17z";
@@ -131,23 +132,26 @@ export default function SiteFooter() {
             <Link href="/regulations" className="footer-col__link">
               {t("guidelines")}
             </Link>
-            <a
-              className="footer-col__link"
-              href={TRIPADVISOR_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {t("tripadvisor")}
-            </a>
-            <a
-              className="footer-col__social"
-              href={INSTAGRAM_ICON_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Instagram"
-            >
-              <InstagramIcon size={22} />
-            </a>
+            <div className="footer-col__socials">
+              <a
+                className="footer-col__social"
+                href={INSTAGRAM_ICON_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Instagram"
+              >
+                <InstagramIcon size={22} />
+              </a>
+              <a
+                className="footer-col__social"
+                href={TRIPADVISOR_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="TripAdvisor"
+              >
+                <TripAdvisorIcon size={22} />
+              </a>
+            </div>
 
             <div className="footer-col__soma">
               <span className="footer-col__soma-label">
