@@ -1,9 +1,11 @@
 // Ícono de TripAdvisor inline (lucide-react no incluye íconos de marca).
+// El logo es más ancho que alto: `size` fija la altura (para igualar al de
+// Instagram) y el ancho se calcula proporcionalmente.
 export default function TripAdvisorIcon({ size = 20 }: { size?: number }) {
   return (
     <svg
-      width={size}
-      height={(size * 86) / 132}
+      width={(size * 132) / 86}
+      height={size}
       viewBox="0 0 132 86"
       fill="none"
       aria-hidden="true"
