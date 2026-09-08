@@ -2711,9 +2711,16 @@ a.brand-detail__info-value:hover {
   color: var(--color-oscuro);
 }
 
+.footer-col__socials {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-top: 12px;
+}
+
 .footer-col__social {
   display: inline-flex;
-  margin-top: 12px;
+  align-items: center;
   color: var(--color-beige);
   transition: color 0.2s ease;
 }
