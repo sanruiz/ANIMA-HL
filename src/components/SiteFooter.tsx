@@ -149,7 +149,7 @@ export default function SiteFooter() {
                 rel="noopener noreferrer"
                 aria-label="TripAdvisor"
               >
-                <TripAdvisorIcon size={22} />
+                <TripAdvisorIcon size={20} />
               </a>
             </div>
 
