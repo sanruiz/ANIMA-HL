@@ -139,6 +139,7 @@ export default function SiteFooter() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Instagram"
+                title="Instagram"
               >
                 <InstagramIcon size={22} />
               </a>
@@ -148,6 +149,7 @@ export default function SiteFooter() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="TripAdvisor"
+                title="TripAdvisor"
               >
                 <TripAdvisorIcon size={20} />
               </a>
