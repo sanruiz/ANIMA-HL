@@ -2714,12 +2714,13 @@ a.brand-detail__info-value:hover {
 .footer-col__socials {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 24px;
   margin-top: 12px;
 }
 
 .footer-col__social {
   display: inline-flex;
+  align-items: center;
   color: var(--color-beige);
   transition: color 0.2s ease;
 }
