@@ -8,6 +8,8 @@ const MAPS_URL =
   "https://www.google.com/maps/dir//Anima+village,+Tourist+Corridor,+23455+Cabo+San+Lucas,+B.C.S.,+Mexico/@22.919928,-109.8330288,17z";
 const INSTAGRAM_ICON_URL = "https://www.instagram.com/animavillagecabo";
 const SOMA_URL = "https://soma.group/";
+const TRIPADVISOR_URL =
+  "https://www.tripadvisor.com.mx/UserReviewEdit-g152515-d34067799-Anima_Village-Cabo_San_Lucas_Los_Cabos_Baja_California.html";
 
 // "What We Offer": brands y news→/blog ya existen en headless; arte
 // y gastronomy son placeholders hasta migrar; programming→/agenda existe.
@@ -129,6 +131,14 @@ export default function SiteFooter() {
             <Link href="/regulations" className="footer-col__link">
               {t("guidelines")}
             </Link>
+            <a
+              className="footer-col__link"
+              href={TRIPADVISOR_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {t("tripadvisor")}
+            </a>
             <a
               className="footer-col__social"
               href={INSTAGRAM_ICON_URL}
