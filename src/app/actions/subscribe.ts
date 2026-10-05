@@ -47,9 +47,12 @@ export async function subscribe(
     return { status: "error", code: "server" };
   }
 
+  // CONSENT = true deja constancia en Doppler de que el usuario aceptó el aviso de
+  // privacidad (ya validado arriba). Sin esto el contacto queda con CONSENT = false
+  // y se excluye de campañas que filtran por consentimiento.
   const payload: { email: string; fields: Array<{ name: string; value: string }> } = {
     email,
-    fields: [],
+    fields: [{ name: "CONSENT", value: "true" }],
   };
 
   const firstname = formData.get("firstname");

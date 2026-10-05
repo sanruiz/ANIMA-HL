@@ -189,7 +189,22 @@ describe("subscribe (Server Action)", () => {
     expect(headers.Authorization).toBe("token test-key-123");
     expect(headers["X-Doppler-Subscriber-Origin"]).toBe("Formulario");
     const body = JSON.parse(init.body);
-    expect(body).toEqual({ email: "ok@user.com", fields: [] });
+    expect(body).toEqual({
+      email: "ok@user.com",
+      fields: [{ name: "CONSENT", value: "true" }],
+    });
+  });
+
+  it("envía CONSENT = true a Doppler cuando el usuario acepta el aviso", async () => {
+    let capturedBody = "";
+    globalThis.fetch = vi.fn(async (_url, init) => {
+      capturedBody = (init?.body as string) ?? "";
+      return new Response("{}", { status: 200 });
+    });
+
+    await subscribe(INITIAL_STATE, formData({ email: "ok@user.com", consent: "on" }));
+
+    expect(JSON.parse(capturedBody).fields).toContainEqual({ name: "CONSENT", value: "true" });
   });
 
   it("incluye FIRSTNAME en fields cuando viene el campo firstname", async () => {
@@ -205,7 +220,10 @@ describe("subscribe (Server Action)", () => {
     );
 
     const body = JSON.parse(capturedBody);
-    expect(body.fields).toEqual([{ name: "FIRSTNAME", value: "Santiago" }]);
+    expect(body.fields).toEqual([
+      { name: "CONSENT", value: "true" },
+      { name: "FIRSTNAME", value: "Santiago" },
+    ]);
   });
 
   it("firstname con sólo espacios NO se agrega al payload", async () => {
@@ -220,6 +238,6 @@ describe("subscribe (Server Action)", () => {
       formData({ email: "ok@user.com", consent: "on", firstname: "   " })
     );
 
-    expect(JSON.parse(capturedBody).fields).toEqual([]);
+    expect(JSON.parse(capturedBody).fields).toEqual([{ name: "CONSENT", value: "true" }]);
   });
 });
