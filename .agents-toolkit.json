@@ -1,12 +1,8 @@
 {
   "stack": "all",
-  "tracker": "all",
-  "jira": {
-    "projectKey": "PROJECT",
-    "baseUrl": "https://your-org.atlassian.net"
-  },
+  "tracker": "github",
   "git": {
-    "defaultBranch": "dev",
+    "defaultBranch": "master",
     "branchPrefix": {
       "feature": "feature/",
       "bugfix": "bugfix/",
@@ -14,7 +10,7 @@
     }
   },
   "pr": {
-    "targetBranch": "dev",
+    "targetBranch": "master",
     "template": "default"
   }
 }
