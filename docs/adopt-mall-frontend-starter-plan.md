@@ -253,7 +253,7 @@ comparar (`date('Y-m-d', strtotime($reference))`) o comparar en `Ymd` de los
 dos lados. `update_expired_deals()` usa `meta_query` con `type => DATE`, que
 MySQL sí castea bien desde `Ymd` — ese no está afectado.
 
-## 5. Decisiones que necesito de ti
+## 5. Decisiones
 
 ### D1 — Eventos pasados
 
@@ -270,19 +270,26 @@ está roto, y que la clasificación real la hace la fecha en el frontend.
 En los tres casos conviene reportar el bug del cron (§4) al repo del plugin: es
 independiente de esta migración y hoy afecta a los dos malls.
 
-### D2 — Convención de componentes
+### D2 — Convención de componentes ✅ DECIDIDA (2026-10-05)
 
-- El `CLAUDE.md` de ANIMA exige `kebab-folder/index.tsx`.
-- El core (y Antara) usan plano: `kebab-case.tsx`.
-- ANIMA hoy tiene **31 archivos `PascalCase.tsx`** que ya violan su propia
-  regla, más 11 carpetas kebab que sí la cumplen.
+**ANIMA adopta la convención del core.** `CLAUDE.md` y
+`.github/instructions/react-components.instructions.md` ya están actualizados.
 
-Hay que elegir una y actualizar `CLAUDE.md`. **Recomiendo la del core** (plano
-kebab) para que "misma arquitectura" sea literal. **No propongo refactorizar
-los 31 archivos en esta migración** — es ruido que oculta los cambios de core.
-Tarea aparte.
+| | ANIMA (antes) | Core (ahora) |
+|---|---|---|
+| Archivo | `PascalCase.tsx` plano / `kebab/index.tsx` | `kebab-case.tsx` plano en carpeta de dominio |
+| Export | `export default function` | `export function` (nombrado) |
+| Barrel `index.ts` | documentado, **nunca implementado** | no existe; import por ruta directa |
+| Props | `interface <Name>Props` aparte | tipadas inline; `export type` si se comparten |
+| Componentes por archivo | uno | varios si se usan juntos (`page-state.tsx`) |
 
----
+Estado real medido: 31 archivos `PascalCase.tsx` + 11 carpetas `kebab/index.tsx`,
+**todos** con `export default`, y **cero** barrels — o sea, la regla vieja del
+barrel nunca se cumplió.
+
+**Todo componente nuevo sigue ya la convención del core.** La conversión de los
+42 existentes va como fase propia (Fase 7), después de la migración del core:
+mezclarla con el swap de core haría ilegible el diff.
 
 ## 6. Clasificación completa de archivos
 
@@ -320,7 +327,7 @@ src/app/sitemap.ts, robots.ts, [locale]/layout.tsx y (site)/layout.tsx
     el shell; son por mall, no core
 src/lib/brand-taxonomy.ts                        src/app/actions/subscribe-state.ts
 src/app/[locale]/(site)/{arte,about,map,gastronomy,agenda}/*
-globals.css (3093 líneas BEM de Webflow)         31+11 componentes de marca
+globals.css (3093 líneas BEM de Webflow)         42 componentes de marca → src/components/anima/
 GA4 (@next/third-parties), Vercel Analytics, lottie-react, iconos de app
 ```
 
@@ -341,7 +348,8 @@ funcionar.
 | **3** | Portar de `antara`: `event-calendar`, `brands.ts`, `server-utils`, `breadcrumbs`, tests. | `feat: port core modules from antara` |
 | **4** | Adaptar las extensiones de ANIMA (`proxy.ts` como wrapper, `agenda/` sobre `events.ts`). | `refactor: rebuild ANIMA extensions on core` |
 | **5** | Capa de tokens shadcn en `globals.css` **sin tocar** el BEM existente. | `feat: add shadcn token layer` |
-| **6** | Docs: actualizar `CLAUDE.md` (D2), `README`, corregir las referencias a `soma-malls-content-types` en `.env.example` y `HOME-EVENTS-LISTING-LOGIC.md` (§4), borrar este plan. | `docs: document shared core` |
+| **6** | Docs: `README`, corregir las referencias a `soma-malls-content-types` en `.env.example` y `HOME-EVENTS-LISTING-LOGIC.md` (§4), borrar este plan. (`CLAUDE.md` ya quedó hecho con D2.) | `docs: document shared core` |
+| **7** | Convertir los 42 componentes a la convención del core (D2): de `PascalCase.tsx` / `kebab/index.tsx` a `kebab-case.tsx` plano bajo `src/components/anima/`, con named export. Mecánico, sin cambios de comportamiento. | `refactor: convert components to core convention` |
 
 Verificación en cada fase: `npm run typecheck && npm run lint && npm test && npm run build`.
 

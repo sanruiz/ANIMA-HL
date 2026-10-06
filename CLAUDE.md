@@ -81,7 +81,7 @@ This project follows **Domain-Driven Design** principles.
 **Quick Rules**:
 - ✅ Create domain folders that match business concepts
 - ✅ Keep domain-specific utilities inside domain folders
-- ✅ Place tests in `__tests__/` subfolders within each domain
+- ✅ Colocate tests next to the file they cover (`entity-card.test.tsx`)
 - ❌ Don't create generic folders like "helpers", "services", "utils" at root level
 
 ## Key Conventions
@@ -99,59 +99,86 @@ This project follows **Domain-Driven Design** principles.
 
 ### Component Structure & Naming
 
-**CRITICAL: All components must follow these strict conventions:**
+**These are the shared core's conventions (`sanruiz-mall-frontend-starter`).**
+ANIMA adopts them so its architecture matches Antara's and the core can be
+extracted as a package.
+
+> ⚠️ **Precedence.** Two skills vendored from `@silverassist/agents-toolkit` —
+> `component-architecture` and `domain-driven-design` — still teach the
+> opposite (`<folder>/index.tsx`, `export default`, barrel `index.ts`). They
+> are package-managed and hash-tracked in `agents-toolkit-lock.json`, so they
+> are not edited here: **for this repo's components, this section wins** over
+> those skills. The fix belongs upstream in the toolkit.
+
+> **Status:** existing components do NOT comply yet (31 flat `PascalCase.tsx`
+> files, 11 `kebab/index.tsx` folders, all using `export default`). Conversion
+> is planned separately — see `docs/adopt-mall-frontend-starter-plan.md`.
+> **New components follow the rules below.**
 
 #### 1. Folder & File Naming
 
-- **Folder names**: MUST use kebab-case (e.g., `user-profile/`, `checkout-wizard/`)
-- **File structure**: Every component MUST be in its own folder with an `index.tsx` file
-- **❌ NEVER**: Use camelCase or PascalCase for folder names
-- **❌ NEVER**: Create standalone component files like `Component.tsx` at root level
+- **One flat file per component**, named in kebab-case: `entity-card.tsx`
+- Grouped in a domain folder: `ui/` (shadcn primitives), `site/` (the core's
+  generic domain components), or the mall's own domain (`anima/`)
+- **❌ NEVER**: `PascalCase.tsx`, nor a folder per component with `index.tsx`
 
 ```
 ✅ CORRECT:
-src/components/user-profile/index.tsx
-src/components/contact-form/index.tsx
+src/components/ui/button.tsx
+src/components/site/entity-card.tsx
+src/components/anima/brands-directory.tsx
 
 ❌ INCORRECT:
-src/components/UserProfile.tsx
-src/components/userProfile/index.tsx
+src/components/BrandsDirectory.tsx
+src/components/brands-directory/index.tsx
 ```
 
 #### 2. Component Export Pattern
 
-- **Function name**: MUST use PascalCase for the exported function
-- **Export statement**: MUST use `export default function` for components
-- **Barrel file**: Re-export with a named alias from the domain `index.ts`
-- **Single responsibility**: Each file should export ONLY the component function
+- **Function name**: PascalCase
+- **Export statement**: named `export function`, NOT `export default`
+- **No barrel `index.ts`** — import by direct path
+- A file may export **several components** when they are used together
+  (e.g. `page-state.tsx` exports `EmptyState` and `ErrorState`)
 
-```typescript
-// ✅ CORRECT: src/components/user-profile/index.tsx
-interface UserProfileProps {
-  userId: string;
-  className?: string;
+```tsx
+// ✅ CORRECT: src/components/site/entity-card.tsx
+export type EntityCardTag = { name: string; slug: string };
+
+/**
+ * Generic list-item card for any content type. Domain pages map their own
+ * field shape into these props.
+ */
+export function EntityCard({ href, title, tags }: {
+  href: string;
+  title: string | null;
+  tags?: EntityCardTag[];
+}) {
+  // ...
 }
 
-export default function UserProfile({ userId, className }: UserProfileProps) {
-  // Component implementation
-}
-
-// ✅ CORRECT: src/components/index.ts (barrel)
-export { default as UserProfile } from "./user-profile";
+// Usage
+import { EntityCard } from "@/components/site/entity-card";
 ```
 
-#### 3. Props Interface Definition
+#### 3. Props Definition
 
-- **MUST**: Define props interface INSIDE the component file
-- **Interface name**: MUST match component name + "Props" suffix (PascalCase)
-- **Location**: Define interface immediately BEFORE the component function
+- **Simple props**: typed inline in the signature (see the example above)
+- **Shared types** — reused across components or by the pages — are exported
+  with `export type` from the same file
+- Generic components carry JSDoc explaining what they abstract
 
 #### 4. Separation of Concerns
 
-- **Component file**: ONLY the component function and its props interface
-- **Helper functions**: Create separate `helpers.ts` or `utils.ts` in same folder
-- **Types/Interfaces**: Create separate `types.ts` if multiple types are shared
-- **Constants**: Create separate `constants.ts` for component-specific constants
+- **Helpers and hooks**: in `src/lib/` with named exports, not inside the component
+- **Domain types**: in `src/lib/types.ts` (the WPGraphQL contract)
+- **Shared constants**: in `src/lib/`, not duplicated per component
+
+#### 5. Tests
+
+Colocated next to the file they cover, named `<name>.test.ts(x)` — the core's
+layout: `src/lib/wp.test.ts`, `src/components/site/entity-card.test.tsx`. No
+`__tests__/` subfolders.
 
 ---
 
@@ -162,7 +189,7 @@ export { default as UserProfile } from "./user-profile";
 **✅ Correct:** All hooks before conditional returns
 
 ```typescript
-export default function Component({ data }: Props) {
+export function Component({ data }: Props) {
   const [state, setState] = useState(initialState);
   const handleClick = useCallback(() => {}, []);
 

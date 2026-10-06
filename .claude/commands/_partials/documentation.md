@@ -61,7 +61,7 @@ export function formatDate(date: string | Date, locale = 'en-US'): string {
  *   showEmail={true}
  * />
  */
-export default function UserCard({ user, showEmail }: UserCardProps) {
+export function UserCard({ user, showEmail }: { user: User; showEmail?: boolean }) {
   // implementation
 }
 ```

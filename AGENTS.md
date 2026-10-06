@@ -64,16 +64,26 @@
 
 | Rule | Requirement |
 |------|-------------|
-| **Folders** | `kebab-case` only (`user-profile/`, NOT `UserProfile/`) |
-| **Structure** | `component-name/index.tsx` (never standalone `.tsx` files) |
-| **Exports** | `export default function ComponentName` (default export, PascalCase) |
-| **Props** | Interface inside file, before function, named `{Component}Props` |
+| **Files** | Flat `kebab-case.tsx` inside a domain folder (`site/`, `ui/`, `anima/`) |
+| **Structure** | One file per component — NOT `component-name/index.tsx`, NOT `PascalCase.tsx` |
+| **Exports** | `export function ComponentName` (named export, PascalCase) — never `export default` |
+| **Barrels** | None. Import by direct path: `@/components/site/entity-card` |
+| **Props** | Typed inline in the signature; `export type` when shared |
 
 ```
-✅ components/user-card/index.tsx
-❌ components/UserCard.tsx
-❌ components/userCard/index.tsx
+✅ components/site/entity-card.tsx
+✅ components/anima/brands-directory.tsx
+❌ components/BrandsDirectory.tsx
+❌ components/brands-directory/index.tsx
 ```
+
+> These are the shared core's conventions (`sanruiz-mall-frontend-starter`).
+> Existing ANIMA components do not comply yet — conversion is planned in
+> `docs/adopt-mall-frontend-starter-plan.md`. New components follow these.
+>
+> ⚠️ The `component-architecture` and `domain-driven-design` skills (vendored
+> from `@silverassist/agents-toolkit`) still teach the old pattern. For this
+> repo's components, this table wins over those skills.
 
 📄 **Full details:** `.github/instructions/react-components.instructions.md`
 
@@ -90,7 +100,7 @@
 
 ```tsx
 // ✅ CORRECT: Hooks first, then early returns
-export default function Component({ data }: Props) {
+export function Component({ data }: Props) {
   const [state, setState] = useState(initial);
   const handleClick = useCallback(() => {}, []);
   
@@ -119,7 +129,7 @@ export default function Component({ data }: Props) {
 
 | Rule | Requirement |
 |------|-------------|
-| **Location** | `__tests__/` subfolder in each component/domain |
+| **Location** | Colocated: `<name>.test.ts(x)` next to the file it covers |
 | **Naming** | `[component-name].test.tsx` or `[feature].test.ts` |
 | **Coverage** | 100% for reducers, unit tests for actions & utils |
 | **Mocks** | Define mocks BEFORE imports |
