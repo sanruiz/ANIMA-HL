@@ -30,7 +30,3 @@ yarn-error.log*
 # vercel
 .vercel
 
-# agents-toolkit managed — regenerate with: npx @silverassist/agents-toolkit restore
-.agents/skills/
-.github/skills/
-.claude/skills/

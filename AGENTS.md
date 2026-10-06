@@ -48,6 +48,16 @@
 
 ---
 
+## 🧰 Agent tooling
+
+This repo no longer syncs with `@silverassist/agents-toolkit`. **Do not run its
+`restore`/sync here** — it templates `CLAUDE.md`, `AGENTS.md`, the instructions,
+the prompts and the `validate-tsx` hook, and would revert our own conventions.
+Skills are committed under `.agents/skills/` (`.github/skills/*` symlinks into
+it, for Copilot). See `docs/own-agent-tooling-plan.md`.
+
+---
+
 ## ⚙️ Code Conventions (Quick Reference)
 
 | Rule | Standard |

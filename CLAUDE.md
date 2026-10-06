@@ -241,6 +241,30 @@ TYPE-XXX: Brief description
 
 ---
 
+## Agent tooling — this repo no longer syncs with `@silverassist/agents-toolkit`
+
+`.agents/skills/`, `.github/instructions/`, `.github/prompts/`,
+`.claude/commands/` and `.github/hooks/` started as toolkit templates and have
+since diverged — the component convention above is ours, not the toolkit's.
+**Do not run `npx @silverassist/agents-toolkit restore` (or any sync) in this
+repo:** it templates `CLAUDE.md`, `AGENTS.md`, `copilot-instructions.md`, the
+instructions, the prompts and the `validate-tsx` hook, has no managed-block
+markers to merge around local edits, and would revert them.
+
+The vendoring lock is gone and the skills are committed, so what you see here is
+what the agents get. `.agents-toolkit.json` stays — it is now plain repo config
+(base branch, tracker) that ten of the commands read to resolve `BASE_BRANCH`,
+and removing it would silently send PRs at `main` instead of `master`.
+
+Plan for replacing this with our own tooling in the core:
+`docs/own-agent-tooling-plan.md`.
+
+Both Claude Code and Copilot are in use, so anything we add has to land in
+`.claude/` and `.github/` alike. `.github/skills/*` are symlinks into
+`.agents/skills/` — keep that shape when adding a skill.
+
+---
+
 ## Shared Detailed Rules (source of truth for both Claude & Copilot)
 
 The following files under `.github/instructions/` contain detailed coding

@@ -72,9 +72,14 @@ toolkit considera suyos.
 ```
 
 `npx @silverassist/agents-toolkit restore` **no puede reproducir el estado
-vendoreado actual**: la versión fijada fue despublicada. Y como
-`.agents/skills/`, `.github/skills/` y `.claude/skills/` están en `.gitignore`,
-ese contenido **no está en git**: hoy sólo existe en tu disco.
+vendoreado actual**: la versión fijada fue despublicada.
+
+Sobre el `.gitignore`: al ejecutar la Fase A resultó ser menos grave de lo que
+escribí aquí primero. 9 de las 10 skills **ya estaban trackeadas** —
+`.gitignore` no des-trackea lo que ya entró— y `.github/skills/*` son symlinks
+hacia `.agents/skills/`, también trackeados. La única realmente fuera de git era
+`nextjs-caching`, añadida después de que se pusiera la regla. Ya está
+commiteada.
 
 ---
 
@@ -127,12 +132,29 @@ de `.github/hooks/` son de Copilot, y `CLAUDE.md` dice literalmente
 | **c) Carpeta en el core + script de sync** | Lo que decidamos | Medio. Sin registry, sin CLI que mantener. `npm run agents:sync` copia del core al mall. |
 | **d) Git submodule** | Lo que decidamos | Medio-bajo, pero los submodules dan fricción diaria. |
 
-**Recomiendo (c)** si Copilot sigue en uso, y **(a)** si se puede declarar
-Claude Code como único agente. (c) es honesto: el volumen real son ~15 archivos
-de markdown, no hace falta un registry ni un CLI con lógica de merge.
+### ✅ Decidido (2026-10-05): opción (c)
 
-**Necesito que confirmes:** ¿Copilot sigue usándose en estos repos, o se puede
-consolidar en Claude Code?
+**Se siguen usando los dos agentes**, Copilot y Claude Code, según el momento.
+Así que el mecanismo tiene que servir a `.github/` y a `.claude/` por igual —
+(a) queda descartada.
+
+Va **(c): carpeta en el core + script de sync**. Es lo honesto para el volumen
+real (~15 archivos markdown): no hace falta un registry ni un CLI con lógica de
+merge, que es justo lo que estamos dejando atrás.
+
+Sobre la forma concreta hay un cabo suelto que hay que atar en la Fase C. El
+repo ya tiene el patrón "archivos reales en `.agents/skills/`, symlinks desde
+`.github/skills/`", **pero no está verificado que Copilot lea esa carpeta**:
+nada en `copilot-instructions.md`, ni en los prompts, ni en los comandos
+referencia `.github/skills/` ni un `SKILL.md`. Puede ser una convención que
+inventó el toolkit.
+
+Lo que sí está documentado que Copilot descubre es
+`.github/copilot-instructions.md` y `.github/instructions/*.instructions.md`
+con `applyTo`, más `.github/prompts/*.prompt.md`. **Antes de construir el sync
+hay que confirmar la vía real de Copilot** y, si los symlinks no sirven, mover
+ese contenido a `instructions/`. Dato extra en contra de los symlinks: no
+sobreviven un checkout en Windows sin `core.symlinks=true`.
 
 ---
 
@@ -170,13 +192,16 @@ documentar un core que ANIMA todavía no tiene.
 | **Ahora** (independiente del plan de core) | Fases A y B de abajo: cortar el riesgo y limpiar lo muerto |
 | **Después de la Fase 4 del plan de core** | Fase C: escribir el contenido de las skills |
 
-### Fase A — Cortar el riesgo (urgente)
+### Fase A — Cortar el riesgo ✅ HECHA (2026-10-05)
 
-1. Sacar del `.gitignore` las tres líneas de skills y **commitear lo vendoreado
-   tal cual**, para que deje de existir sólo en tu disco.
-2. Borrar `agents-toolkit-lock.json` y `.agents-toolkit.json`.
-3. Nota en `CLAUDE.md` y `AGENTS.md`: este repo ya no se sincroniza con el
-   toolkit; no correr `restore`.
+1. ✅ Quitadas las tres líneas de skills del `.gitignore`; commiteada
+   `nextjs-caching`, que era la única que faltaba.
+2. ✅ Borrado `agents-toolkit-lock.json` (sólo lo leía el CLI).
+   **`.agents-toolkit.json` se conserva** — y aquí hubo que corregir el plan:
+   no es config del toolkit, es config del repo. Diez comandos la leen para
+   resolver `BASE_BRANCH`, y sin ella caen al fallback `'main'` cuando la rama
+   base es `master`. Borrarla habría reintroducido el bug del PR #27.
+3. ✅ Nota en `CLAUDE.md` y `AGENTS.md`: no correr `restore` en este repo.
 
 Con esto, el trabajo de D2 deja de estar a un comando de distancia de perderse.
 
