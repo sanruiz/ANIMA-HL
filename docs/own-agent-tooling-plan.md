@@ -245,11 +245,22 @@ skills y Claude Code ninguna.** Resuelto con `git add -f` sobre
 están versionadas por igual (26 archivos bajo `.claude/`, sólo `.DS_Store`
 queda fuera).
 
-Consecuencia que sigue viva para la Fase C: **todo archivo nuevo en `.claude/`
-necesita `git add -f`**, porque la regla global sigue ahí. Si el sync del core
-escribe en `.claude/`, tiene que forzar el add o el repo debe neutralizar la
-regla con un `!.claude/` en su propio `.gitignore`. Decidirlo antes de
-construirlo.
+**Resuelto del todo con `!.claude/` en el `.gitignore` del repo.** El
+`.gitignore` del repositorio tiene más precedencia que el `core.excludesFile`
+global, y como la negación apunta al directorio, git vuelve a descender en él.
+Verificado: un archivo nuevo bajo `.claude/` ya aparece en `git status` y se
+agrega con un `git add` normal, sin `-f`. `.DS_Store` sigue ignorado por la
+regla propia del repo.
+
+Así que la Fase C no tiene que preocuparse por esto: el sync del core puede
+escribir en `.claude/` y en `.github/` por igual.
+
+Queda una observación, no un problema: `.claude/settings.local.json` está
+trackeado desde `7d64653`, pese a que el gitignore global lo nombra aparte. Son
+sólo permisos de herramientas, sin secretos, y compartirlos con el equipo tiene
+sentido. Si se prefiere que sea personal, hay que sacarlo con
+`git rm --cached` — no basta con una regla, porque lo ya trackeado no se
+des-trackea solo.
 
 ### Fase C — Construir en el core (después de Fase 4 del otro plan)
 
