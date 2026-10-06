@@ -205,12 +205,44 @@ documentar un core que ANIMA todavía no tiene.
 
 Con esto, el trabajo de D2 deja de estar a un comando de distancia de perderse.
 
-### Fase B — Podar
+### Fase B — Podar ✅ HECHA (2026-10-05)
 
-4. Borrar las 5 skills de WordPress, las 5 instructions muertas (1256L) y los 5
-   prompts de WP, en ambas copias (`.claude/commands` y `.github/prompts`).
-5. Quitar las referencias a Jira de los 9 prompts restantes (el tracker es
-   GitHub).
+Borrados, en ambas copias (`.claude/` y `.github/`):
+
+- **5 skills** de WordPress: `create-component`, `plugin-creation`,
+  `quality-checks`, `release-management`, `testing`.
+- **5 instructions** muertas (1256L): `php-standards`, `testing-standards`,
+  `wordpress-plugin-architecture`, `documentation-language`, `github-workflow`.
+  No eran inertes: todas llevaban `applyTo: "**"`, así que `github-workflow`
+  afirmaba `main` como rama base (aquí es `master`) y `documentation-language`
+  imponía inglés (`docs/` está en español).
+- **4 prompts** de WordPress/PHP: `new-wp-component`, `new-wp-plugin`,
+  `prepare-release`, `quality-check`.
+- **4 prompts gemelos de Jira** + el partial `jira-integration.md` (ver abajo).
+- El partial `release-wordpress.md`.
+
+#### Dos correcciones a este plan, encontradas al ejecutarlo
+
+1. **`prepare-github-release` se queda.** El plan lo listaba para borrar, pero
+   **ANIMA sí publica releases** (tags `v1.0.0`, `v1.1.0` y un release en
+   GitHub). Lo que se quitó fue su rama de WordPress, dejándolo sólo en Node.
+2. **No eran "referencias a Jira", eran prompts gemelos.** Cada flujo existe dos
+   veces: `analyze-ticket`↔`analyze-github-issue`, `work-ticket`↔`work-github-issue`,
+   `create-pr`↔`create-github-pr`, `finalize-pr`↔`finalize-github-pr`. Con
+   `tracker: "github"` sobra la mitad de Jira entera, no sólo sus menciones.
+
+#### Hallazgo: `.claude/` está en el `.gitignore` **global**
+
+`~/.gitignore_global:8` ignora `.claude`. Por eso algunos archivos de
+`.claude/commands/_partials/` (`release-node.md`, `release-wordpress.md`)
+existían en disco pero **nunca entraron a git**, y los symlinks de
+`.claude/skills/` tampoco están versionados — hoy el repo sólo trackea
+`.github/skills/`.
+
+Consecuencia para la Fase C: **lo que se deje en `.claude/` no viaja con el
+repo** salvo que se fuerce (`git add -f`) o se neutralice la regla global desde
+el `.gitignore` del repo. Hay que decidirlo antes de construir el sync, junto
+con lo de los symlinks.
 
 ### Fase C — Construir en el core (después de Fase 4 del otro plan)
 

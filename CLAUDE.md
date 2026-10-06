@@ -51,15 +51,17 @@ Custom slash commands are available in `.claude/commands/`:
 
 | Command | Description |
 |---------|-------------|
-| `/analyze-ticket` | Analyze a Jira ticket without making changes |
-| `/create-plan` | Create an implementation plan for a ticket |
-| `/work-ticket` | Start working on a Jira ticket with full workflow setup |
+| `/analyze-github-issue` | Analyze a GitHub issue without making changes |
+| `/create-plan` | Create an implementation plan for an issue |
+| `/work-github-issue` | Start working on a GitHub issue with full workflow setup |
 | `/prepare-pr` | Prepare code for pull request review |
-| `/create-pr` | Create and submit a pull request |
-| `/finalize-pr` | Finalize and merge a pull request |
+| `/create-github-pr` | Create and submit a pull request |
+| `/finalize-github-pr` | Finalize and merge a pull request |
+| `/prepare-github-release` | Bump the version, update the changelog and tag a release |
 | `/review-code` | Review code for quality and issues |
 | `/fix-issues` | Fix identified code issues |
 | `/add-tests` | Add tests for existing code |
+| `/audit-ai-seo` | Audit the site for AI/generative search optimization |
 
 ## Key Technologies & Frameworks
 
@@ -313,9 +315,21 @@ Even within a Webflow-migrated section, split at the boundary of "canvas" vs
   `.brands-directory__intro` (Retail Reimagined heading + lead).
 - Tailwind → filter buttons, grid, brand cards inside `BrandsDirectory`.
 
-### Files under `.github/instructions/` that DO NOT apply to this repo
+### What was removed, and why there is no longer a "does not apply" list
 
 `php-standards`, `wordpress-plugin-architecture`, `testing-standards` (PHPUnit),
-`github-workflow`, and `documentation-language` were seeded from a Silver Assist
-WordPress plugin template. There is no PHP in this repo and those workflows do
-not apply. Ignore them unless the repo grows to include a plugin subtree.
+`github-workflow` and `documentation-language` were seeded from a Silver Assist
+WordPress plugin template and are **deleted** — 1256 lines describing a stack
+this repo does not have. They were not inert: each carried `applyTo: "**"`, so
+`github-workflow` was asserting `main` as the base branch (this repo uses
+`master`) and `documentation-language` an English-only rule (`docs/` is in
+Spanish).
+
+Deleted alongside them: the `create-component`, `plugin-creation`,
+`quality-checks`, `release-management` and `testing` skills (all PHP/WordPress),
+the `new-wp-component`, `new-wp-plugin`, `prepare-release` and `quality-check`
+prompts, and the Jira twins `analyze-ticket`, `work-ticket`, `create-pr` and
+`finalize-pr` — this repo's tracker is GitHub, and each has a `*-github-*`
+counterpart that stays.
+
+Everything listed in the table above is what remains, and all of it applies.

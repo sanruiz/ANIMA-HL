@@ -19,17 +19,12 @@ prompts/
 │   ├── README.md               # Partials documentation
 │   ├── validations.md          # Code quality validation steps
 │   ├── git-operations.md       # Git workflow operations
-│   ├── jira-integration.md     # Jira/Atlassian MCP operations
 │   ├── documentation.md        # Documentation standards
 │   └── pr-template.md          # Pull request templates
 │
 ├── # Workflow Prompts (Main Flow)
-├── analyze-ticket.prompt.md    # 1. Analyze a Jira ticket
 ├── create-plan.prompt.md       # 2. Create implementation plan
-├── work-ticket.prompt.md       # 3. Start working on a ticket
 ├── prepare-pr.prompt.md        # 4. Prepare code for PR
-├── create-pr.prompt.md         # 5. Create a pull request
-├── finalize-pr.prompt.md       # 6. Finalize and merge PR
 │
 ├── # Utility Prompts
 ├── review-code.prompt.md       # Quick code review
@@ -42,7 +37,6 @@ prompts/
 ```
 ┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
 │  1. Analyze     │────▶│  2. Plan        │────▶│  3. Work        │
-│  analyze-ticket │     │  create-plan    │     │  work-ticket    │
 └─────────────────┘     └─────────────────┘     └─────────────────┘
                                                         │
                                                         ▼
@@ -66,9 +60,7 @@ prompts/
 Type `/` in the chat to open the command palette and select the desired command:
 
 ```
-/analyze-ticket
-/work-ticket
-/create-pr
+/create-github-pr
 ```
 
 ### Codex

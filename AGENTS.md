@@ -22,11 +22,13 @@
 |typescript.instructions.md          → Type safety, destructuring, JSDoc
 
 [Prompts]|root:.github/prompts
-|add-tests,analyze-ticket,create-plan,create-pr,finalize-pr,fix-issues,prepare-pr,review-code,work-ticket
+|add-tests,analyze-github-issue,audit-ai-seo,create-github-pr,create-plan,finalize-github-pr,fix-issues,prepare-github-release,prepare-pr,review-code,work-github-issue
 
 [Skills]|root:.github/skills
+|ai-seo-optimization/SKILL.md    → Generative-search and agent-readability audits
 |component-architecture/SKILL.md → Component design patterns
 |domain-driven-design/SKILL.md   → DDD principles and structure
+|nextjs-caching/SKILL.md         → ISR tiers, cache tags, on-demand revalidation
 |testing-patterns/SKILL.md       → Testing strategies and patterns
 ```
 
