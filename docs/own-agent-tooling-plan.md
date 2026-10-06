@@ -239,10 +239,17 @@ existían en disco pero **nunca entraron a git**, y los symlinks de
 `.claude/skills/` tampoco están versionados — hoy el repo sólo trackea
 `.github/skills/`.
 
-Consecuencia para la Fase C: **lo que se deje en `.claude/` no viaja con el
-repo** salvo que se fuerce (`git add -f`) o se neutralice la regla global desde
-el `.gitignore` del repo. Hay que decidirlo antes de construir el sync, junto
-con lo de los symlinks.
+Esto había dejado una asimetría real: **en un clon limpio Copilot tenía las 5
+skills y Claude Code ninguna.** Resuelto con `git add -f` sobre
+`.claude/skills/` y los dos archivos que faltaban, así que las dos copias ya
+están versionadas por igual (26 archivos bajo `.claude/`, sólo `.DS_Store`
+queda fuera).
+
+Consecuencia que sigue viva para la Fase C: **todo archivo nuevo en `.claude/`
+necesita `git add -f`**, porque la regla global sigue ahí. Si el sync del core
+escribe en `.claude/`, tiene que forzar el add o el repo debe neutralizar la
+regla con un `!.claude/` en su propio `.gitignore`. Decidirlo antes de
+construirlo.
 
 ### Fase C — Construir en el core (después de Fase 4 del otro plan)
 
