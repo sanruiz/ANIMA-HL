@@ -526,6 +526,43 @@ Dos puntos que se levantaron y quedaron **aprobados el 2026-10-17**:
   Km 10.3") es la correcta, aunque el enlace de Google diga "Tourist Corridor".
   Se conserva.
 
+### Barrido de cobertura multilang (2026-10-17)
+
+El fallo de `mallSettings` —dato presente pero en un solo segmento de idioma—
+podía estar en más sitios, así que se barrió todo el contenido publicado
+(`brand`, `event`, `page`, `post`, más las taxonomías) resolviendo cada campo
+con `wpm_translate_string()` en los dos idiomas y comparando.
+
+| Resultado | Cantidad |
+|---|---|
+| Campos vacíos en **inglés** con texto en español | **8** → corregidos |
+| Campos vacíos en **español** | 0 |
+| Prosa sin marcadores (español llegando al visitante inglés) | 0 |
+
+Los 8 eran 7 títulos de eventos de agosto de 2026 —todos ya en
+`past-events`, visibles en el archivo— y el título de la página `home`. Se
+les añadió el segmento `[:en]` escribiendo directo a `wp_posts` con `$wpdb`,
+porque pasar por `wp_update_post` dispara `save_post` y WP Multilang aplana
+el valor al idioma actual (el mismo motivo que documenta
+`backend-ssh-access.md`):
+
+| ES | EN |
+|---|---|
+| Derivas de arte y arquitectura | Art and Architecture Drifts |
+| Poesía del desierto | Desert Poetry |
+| Cardones de colores | Cardones in Color |
+| Splash Zone & Bubbles ×3, Sunset Breathwork | igual en ambos — ya estaban en inglés |
+
+Lo que el barrido marca como "sin marcadores" en volumen (356 campos de
+marcas, 225 de eventos) **no es deuda**: son datos no traducibles —`store`,
+`phone`, `days`, `time`, `featured`— y las únicas cadenas largas de ese grupo
+resultaron ser arrays serializados de `gallery`. Y los ~70 "idénticos en ambos
+idiomas" son nombres propios de marcas y eventos, correctos tal cual.
+
+**Conclusión: la cobertura bilingüe del backend está sana.** Si en el futuro
+un campo aparece vacío en un idioma, el primer sospechoso es el segmento
+faltante, no el dato ausente.
+
 ### Fase 5 — la capa shadcn ya existe, hay que reconciliarla, no crearla
 
 Medido el 2026-10-17: `globals.css` ya define los tokens shadcn en dos bloques
