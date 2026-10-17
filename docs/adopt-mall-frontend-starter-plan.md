@@ -36,9 +36,9 @@ Rama: `feature/CORE-001-adopt-mall-frontend-starter`, sin cambios bajo `src/`.
 
 Medido el 2026-10-17 contra `https://backend.animavillage.com/graphql` y por
 SSH (`wp plugin list`, `wp eval`): el backend corre `sanruiz-mall-core`
-**0.6.2**, `mallSettings` ya responde con 9 de 14 campos en los dos idiomas
-(se escribieron ese día — §1 y Fase 0), `menus { nodes }` sigue vacío, y
-`src/lib/` no tiene ninguno de los módulos del core (`menus.ts`,
+**0.6.2**, `mallSettings` ya responde con 9 de 14 campos en los dos idiomas y
+`menus { nodes }` devuelve PRIMARY y FOOTER (todo escrito ese día — §1 y
+Fase 0), y `src/lib/` no tiene ninguno de los módulos del core (`menus.ts`,
 `brands.ts`, `event-calendar.ts`, `server-utils.ts`, `newsletter/`,
 `use-mobile-menu.ts`, `use-scroll-carousel.ts`), ni existe
 `src/components/site/`.
@@ -471,7 +471,7 @@ Lo que quedaba de ese track —la Fase C— es ahora la **Fase 8**.
 
 | Fase | Track | Contenido | Commit |
 |---|---|---|---|
-| **0** | WP | ~~Capturar `mallSettings`~~ ✅ y ~~cerrar D1~~ ✅, los dos el 2026-10-17 (ver abajo). **Queda:** asignar los menús a PRIMARY/FOOTER en wp-admin — `menus { nodes }` sigue vacío. | — (WP) |
+| **0** | WP | ✅ **Completa (2026-10-17)**: `mallSettings` escrito, D1 cerrada y los menús PRIMARY/FOOTER creados y asignados. Detalle abajo. | — (WP) |
 | **1** | Código | Subir `next` y las deps del core a **la versión que el core corra hoy** (el 2026-10-05 era 16.3.8; ANIMA está en 16.2.9 — confirmar antes de fijar número). `typecheck && test && build` verde. | `chore: align deps with mall core` |
 | **2** | Código | Reemplazar los archivos de core por los de `main` + hunks de §2.1. Re-aplicar fix CONSENT. ANIMA aún no usa lo nuevo. | `refactor: adopt mall-frontend-starter core` |
 | **3** | Código | Portar de `antara`: `event-calendar`, `brands.ts`, `server-utils`, `breadcrumbs`, tests. | `feat: port core modules from antara` |
@@ -525,6 +525,46 @@ Dos puntos que se levantaron y quedaron **aprobados el 2026-10-17**:
 - **La dirección** de `mallSettings` ("Cabo Del Sol, Carretera Transpeninsular
   Km 10.3") es la correcta, aunque el enlace de Google diga "Tourist Corridor".
   Se conserva.
+
+### Fase 0 — los menús PRIMARY y FOOTER (2026-10-17)
+
+No había **ningún** menú en WordPress; las ubicaciones `primary` y `footer` sí
+estaban registradas, por el tema activo (`sanruiz-mall-blank-theme`), no por
+el plugin. Ojo con esto al diagnosticar: `wp menu location list --skip-themes`
+las muestra vacías.
+
+Se crearon los dos menús copiando la navegación que el frontend ya tiene
+quemada, para que el swap de la Fase 2 no cambie nada visible:
+
+| PRIMARY (de `SiteHeader`) | FOOTER (de "What We Offer") |
+|---|---|
+| Brands / Marcas → `/brands` | Brands / Marcas → `/brands` |
+| Gastronomy / Gastronomía → `/gastronomy` | Arte Abierto → `https://arteabierto.org/` (`_blank`) |
+| Events / Agenda → `/agenda` | Gastronomy / Gastronomía → `/gastronomy` |
+| Arte Abierto → `/arte` | Programming / Programación → `/agenda` |
+| Map / Mapa → `/map` | News / Noticias → `/blog` |
+| Blog → `/blog` | |
+| About / Nosotros → `/about` | |
+
+**Las etiquetas divergen entre header y footer a propósito**, porque así está
+el sitio hoy: `/agenda` es "Events/Agenda" arriba y "Programming/Programación"
+abajo; `/blog` es "Blog" arriba y "News/Noticias" abajo. Se reprodujo tal
+cual; unificarlo es una decisión de contenido, no de migración.
+
+Dos detalles técnicos que valen para cualquier mall:
+
+- **El título de un ítem de menú se escribe dos veces.**
+  `wp_update_nav_menu_item()` dispara `save_post` y WP Multilang aplana el
+  valor, así que la cadena bilingüe entra después con `$wpdb`.
+- **Las URLs quedan sin prefijo de idioma** (`/brands` en los dos idiomas),
+  así que el `toHref()` que se rescata de `antara` (§2.1) no tiene nada que
+  recortar en estos ítems. Sigue haciendo falta para menús construidos desde
+  wp-admin apuntando a páginas de WP, que sí llevan prefijo.
+
+**Lo que no entró al menú FOOTER:** los enlaces legales (Aviso de Privacidad)
+y los de redes y créditos. Hoy están quemados en `SiteFooter` y ahí se quedan
+hasta la Fase 4, cuando se decida qué parte del footer es core y qué es de
+ANIMA.
 
 ### Barrido de cobertura multilang (2026-10-17)
 
