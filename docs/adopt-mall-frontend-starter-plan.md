@@ -36,8 +36,9 @@ Rama: `feature/CORE-001-adopt-mall-frontend-starter`, sin cambios bajo `src/`.
 
 Medido el 2026-10-17 contra `https://backend.animavillage.com/graphql` y por
 SSH (`wp plugin list`, `wp eval`): el backend corre `sanruiz-mall-core`
-**0.6.2**, `mallSettings` sigue con sus 14 campos en `null`, `menus { nodes }`
-sigue vacío, y `src/lib/` no tiene ninguno de los módulos del core (`menus.ts`,
+**0.6.2**, `mallSettings` ya responde con 9 de 14 campos en los dos idiomas
+(se escribieron ese día — §1 y Fase 0), `menus { nodes }` sigue vacío, y
+`src/lib/` no tiene ninguno de los módulos del core (`menus.ts`,
 `brands.ts`, `event-calendar.ts`, `server-utils.ts`, `newsletter/`,
 `use-mobile-menu.ts`, `use-scroll-carousel.ts`), ni existe
 `src/components/site/`.
@@ -95,6 +96,23 @@ Y corriendo las queries reales del core contra producción:
 capturar y los menús sin asignar a sus ubicaciones son trabajo de wp-admin, no
 de código — pero hay que hacerlo antes de que `SiteNav` y el footer del core
 tengan algo que renderizar (Fase 0).
+
+> **Corrección 2026-10-17 — `mallSettings` no estaba "sin capturar".**
+> Los valores existían: `wp option list --search='options_*'` mostraba
+> `options_mall_name`, `options_tagline` y `options_address` con contenido,
+> y las claves ACF companion (`_options_<campo> = field_sanruiz_mall_<campo>`)
+> estaban todas. Lo que pasaba es que estaban guardados **con un solo
+> segmento de idioma** — `[:en]Ánima Village[:]` — y el español es el idioma
+> por defecto del endpoint, así que WP Multilang devolvía vacío y GraphQL
+> `null`. Consultando `?lang=en` aparecían.
+>
+> Es un modo de fallo que conviene recordar para cualquier campo de este
+> backend: **un `null` en GraphQL puede ser "no hay dato" o "el dato está en
+> el otro idioma"**, y sólo se distinguen leyendo la opción cruda o pidiendo
+> el otro `?lang=`.
+>
+> **Resuelto el mismo día**: los campos se reescribieron bilingües y se
+> llenaron los que faltaban (ver Fase 0).
 
 Lo que **no** hace falta es migrar el plugin de WordPress antes de empezar: el
 contrato de GraphQL ya está servido. La Fase 1 del outline (WP core portable)
@@ -453,7 +471,7 @@ Lo que quedaba de ese track —la Fase C— es ahora la **Fase 8**.
 
 | Fase | Track | Contenido | Commit |
 |---|---|---|---|
-| **0** | WP | wp-admin: capturar `mallSettings`, asignar menús a PRIMARY/FOOTER. ~~Cerrar D1~~ ✅ hecho el 2026-10-17: `eventos-pasados` borrado, quedan `past-events` (51), `community`, `wellness`, `arte-abierto`. | — (WP) |
+| **0** | WP | ~~Capturar `mallSettings`~~ ✅ y ~~cerrar D1~~ ✅, los dos el 2026-10-17 (ver abajo). **Queda:** asignar los menús a PRIMARY/FOOTER en wp-admin — `menus { nodes }` sigue vacío. | — (WP) |
 | **1** | Código | Subir `next` y las deps del core a **la versión que el core corra hoy** (el 2026-10-05 era 16.3.8; ANIMA está en 16.2.9 — confirmar antes de fijar número). `typecheck && test && build` verde. | `chore: align deps with mall core` |
 | **2** | Código | Reemplazar los archivos de core por los de `main` + hunks de §2.1. Re-aplicar fix CONSENT. ANIMA aún no usa lo nuevo. | `refactor: adopt mall-frontend-starter core` |
 | **3** | Código | Portar de `antara`: `event-calendar`, `brands.ts`, `server-utils`, `breadcrumbs`, tests. | `feat: port core modules from antara` |
@@ -473,6 +491,39 @@ antes sería documentar un repo que todavía contradice su propia regla.
 borra: la Fase 8 todavía necesita el anexo.
 
 Verificación en cada fase: `npm run typecheck && npm run lint && npm test && npm run build`.
+
+### Fase 0 — qué quedó escrito en `mallSettings` (2026-10-17)
+
+Escrito por wp-cli vía SSH (`wp option update`, y `wp eval` para la dirección
+multilínea), con respaldo previo de las 16 opciones. Los campos traducibles van
+bilingües; URLs y coordenadas van sin marcadores, que WP Multilang deja pasar
+igual en los dos idiomas:
+
+| Campo | Antes | Ahora |
+|---|---|---|
+| `mallName` | `[:en]Ánima Village[:]` → `null` en ES | Ánima Village (ES/EN) |
+| `tagline` | texto **español** dentro del segmento `[:en]` | EN: *A destination where brands, wellness, art and nature converge* · ES: *Un destino donde marcas, bienestar, arte y naturaleza convergen* |
+| `address` | sólo `[:en]` | Cabo Del Sol / Carretera Transpeninsular Km 10.3 / Cabo San Lucas, B.C.S. / 23455 — `Mexico` en EN, `México` en ES |
+| `openingHours` | vacío | EN: *Monday to Sunday: 11:00 AM – 9:00 PM* · ES: *Lunes a Domingo: 11:00 AM – 9:00 PM* |
+| `website` | vacío | `https://animavillage.com/` |
+| `mapUrl` | vacío | el enlace de direcciones que ya usaba el footer |
+| `latitude` / `longitude` | vacío | `22.921293` / `-109.83783` |
+| `instagramUrl` | vacío | `https://www.instagram.com/animavillagecabo` |
+
+**Quedan vacíos a propósito: `email`, `phone`, `facebookUrl`, `tiktokUrl`,
+`youtubeUrl`.** No hay fuente: el sitio en vivo sólo enlaza Instagram, y el
+`gmajul@animavillage.com` de `subscribe.ts` es el destinatario de las
+notificaciones del newsletter, no un contacto público — publicarlo en
+`mallSettings` sería inventar un dato.
+
+Dos cosas para revisar con el cliente:
+
+- **La traducción inglesa del tagline la redacté yo** a partir del español que
+  ya estaba. Si hay una versión oficial, se cambia con un `wp option update`.
+- **La dirección no coincide con el enlace del mapa**: `mallSettings` dice
+  "Cabo Del Sol, Carretera Transpeninsular Km 10.3" y el enlace de Google dice
+  "Tourist Corridor". Es el mismo lugar; conservé la de wp-admin, que la
+  capturó una persona.
 
 ### Fase 5 — la capa shadcn ya existe, hay que reconciliarla, no crearla
 
