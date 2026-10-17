@@ -32,7 +32,7 @@ Rama: `feature/CORE-001-adopt-mall-frontend-starter`, sin cambios bajo `src/`.
 | **D2** — convención de componentes | ✅ decidida y escrita en `CLAUDE.md`, `AGENTS.md` y `react-components.instructions.md` (`df09977`) |
 | **Track instrucciones, fases A y B** | ✅ hechas (`62f8652`, `4f8e01c`, `0a65c6a`, `83b77cd`) |
 | **Fases 0 a 9** (§7) | ❌ ninguna iniciada — salvo A y B del anexo, ya absorbidas (fila anterior) |
-| **D1** — eventos pasados | ✅ **cerrada**: el bug del cron se arregló upstream, y el término `eventos-pasados` quedó borrado el 2026-10-17 (§3D). ANIMA ya usa el slug del core |
+| **D1** — eventos pasados | ✅ **cerrada del lado de WordPress**: el bug del cron se arregló upstream y el término `eventos-pasados` quedó borrado el 2026-10-17 (§3D). El frontend adopta el slug en la Fase 2, no antes |
 
 Medido el 2026-10-17 contra `https://backend.animavillage.com/graphql` y por
 SSH (`wp plugin list`, `wp eval`): el backend corre `sanruiz-mall-core`
@@ -245,6 +245,14 @@ escribirla está roto (§4).
 > `wellness` (21) y `arte-abierto` (3), confirmado por wp-cli y por GraphQL.
 > Los 6 borradores perdieron su única etiqueta, que es lo esperado: no se
 > publican y la clasificación la hace la fecha.
+>
+> **El frontend no se toca todavía, a propósito** (decisión 2026-10-17).
+> `src/lib/events.ts:4` sigue declarando
+> `PAST_EVENT_TAG_SLUG = "eventos-pasados"`, un slug que ya no existe en el
+> backend. No es un descuido ni un bug a corregir suelto: `isPastEvent()` es
+> un OR y `isPastByDate()` clasifica bien los 51 eventos, así que la
+> constante es inerte. Se corrige sola en la **Fase 2**, cuando el
+> `events.ts` del core reemplace al de ANIMA.
 
 ### 🟢 E. `localePrefix` — sin riesgo al tomar `main`
 
