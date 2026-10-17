@@ -24,6 +24,23 @@ cd <WORDPRESS_SSH_WP_PATH>   # ver .env.local
 wp post meta get <ID> <campo>
 ```
 
+## Sin abrir sesión: `scripts/wp-ssh.py`
+
+Para un comando suelto —y para que los agentes puedan correrlo sin que las
+credenciales pasen por la línea de comandos— hay un wrapper que lee las
+variables de `.env.local`, nunca las imprime, y deja el `cd` ya hecho:
+
+```bash
+python3 -I scripts/wp-ssh.py "wp term list event_tag --allow-root --skip-themes"
+```
+
+**Cuidado con `--skip-plugins`.** `wp-cli` es más seguro con esa bandera, pero
+los tipos de contenido del mall (`event`, `brand`, `deal`, `job_offer`) y sus
+taxonomías los registra `sanruiz-mall-core`. Con `--skip-plugins`, `wp term
+list event_tag` responde *"Taxonomy event_tag doesn't exist"* y `get_field()`
+de ACF devuelve `null`: cualquier comando que toque contenido del mall tiene
+que correr con los plugins cargados.
+
 ## Por qué no basta con REST/GraphQL para campos multilang
 
 El sitio usa **WP Multilang**, que guarda ambos idiomas en un solo valor de

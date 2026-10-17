@@ -32,7 +32,7 @@ Rama: `feature/CORE-001-adopt-mall-frontend-starter`, sin cambios bajo `src/`.
 | **D2** — convención de componentes | ✅ decidida y escrita en `CLAUDE.md`, `AGENTS.md` y `react-components.instructions.md` (`df09977`) |
 | **Track instrucciones, fases A y B** | ✅ hechas (`62f8652`, `4f8e01c`, `0a65c6a`, `83b77cd`) |
 | **Fases 0 a 9** (§7) | ❌ ninguna iniciada — salvo A y B del anexo, ya absorbidas (fila anterior) |
-| **D1** — eventos pasados | ✅ resuelta por el camino: el bug del cron se arregló upstream y el dato ya está bien (§3D). Queda un borrado de término en la Fase 0 |
+| **D1** — eventos pasados | ✅ **cerrada**: el bug del cron se arregló upstream, y el término `eventos-pasados` quedó borrado el 2026-10-17 (§3D). ANIMA ya usa el slug del core |
 
 Medido el 2026-10-17 contra `https://backend.animavillage.com/graphql` y por
 SSH (`wp plugin list`, `wp eval`): el backend corre `sanruiz-mall-core`
@@ -239,6 +239,12 @@ escribirla está roto (§4).
 >
 > Consecuencia para **D1**: la opción (a) se reduce a **borrar el término
 > `eventos-pasados`**. No hay que re-etiquetar nada ni reportar el bug.
+>
+> **Ejecutado el 2026-10-17** (`wp term delete event_tag 2`): el término ya no
+> existe. `event_tag` queda en `past-events` (51), `community` (31),
+> `wellness` (21) y `arte-abierto` (3), confirmado por wp-cli y por GraphQL.
+> Los 6 borradores perdieron su única etiqueta, que es lo esperado: no se
+> publican y la clasificación la hace la fecha.
 
 ### 🟢 E. `localePrefix` — sin riesgo al tomar `main`
 
@@ -354,7 +360,7 @@ está roto, y que la clasificación real la hace la fecha en el frontend.
 
 | Opción | Qué implica |
 |---|---|
-| **a) Migrar el dato en WP** ✅ **elegida** | ~~Re-etiquetar los 47 eventos~~ — lo hizo el cron. Queda sólo borrar el término `eventos-pasados`. El core queda intacto y ANIMA = Antara. |
+| **a) Migrar el dato en WP** ✅ **elegida y ejecutada (2026-10-17)** | ~~Re-etiquetar los 47 eventos~~ — lo hizo el cron. ~~Borrar el término `eventos-pasados`~~ — hecho. El core queda intacto y ANIMA = Antara. |
 | b) Hacer el slug configurable | `PAST_EVENT_TAG_SLUG` sale de env. No se toca el dato, pero el core gana una opción que existe sólo por deuda histórica de ANIMA. |
 | c) No hacer nada por ahora | Defendible: §3D mide impacto cero hoy. Deja la deuda viva. |
 
@@ -439,7 +445,7 @@ Lo que quedaba de ese track —la Fase C— es ahora la **Fase 8**.
 
 | Fase | Track | Contenido | Commit |
 |---|---|---|---|
-| **0** | WP | wp-admin: capturar `mallSettings`, asignar menús a PRIMARY/FOOTER. Cerrar D1: borrar el término `eventos-pasados` (`wp term delete event_tag 2`). | — (WP) |
+| **0** | WP | wp-admin: capturar `mallSettings`, asignar menús a PRIMARY/FOOTER. ~~Cerrar D1~~ ✅ hecho el 2026-10-17: `eventos-pasados` borrado, quedan `past-events` (51), `community`, `wellness`, `arte-abierto`. | — (WP) |
 | **1** | Código | Subir `next` y las deps del core a **la versión que el core corra hoy** (el 2026-10-05 era 16.3.8; ANIMA está en 16.2.9 — confirmar antes de fijar número). `typecheck && test && build` verde. | `chore: align deps with mall core` |
 | **2** | Código | Reemplazar los archivos de core por los de `main` + hunks de §2.1. Re-aplicar fix CONSENT. ANIMA aún no usa lo nuevo. | `refactor: adopt mall-frontend-starter core` |
 | **3** | Código | Portar de `antara`: `event-calendar`, `brands.ts`, `server-utils`, `breadcrumbs`, tests. | `feat: port core modules from antara` |
