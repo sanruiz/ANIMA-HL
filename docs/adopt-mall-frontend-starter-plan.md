@@ -3,6 +3,45 @@
 Plan de migración para que ANIMA y Antara compartan el mismo core de Next.js,
 como paso previo a empaquetarlo (`@sanruiz/mall-frontend-core`).
 
+## Dos tracks, una sola migración
+
+La migración tiene dos caras y **se hacen juntas, en la misma rama**
+(`feature/CORE-001-adopt-mall-frontend-starter`), con una sola tabla de fases
+(§7):
+
+| Track | Qué mueve | Dónde está el detalle |
+|---|---|---|
+| **Código** | `src/lib`, `src/i18n`, `src/components` → core | Este documento |
+| **Instrucciones** | skills, instructions y prompts de agentes → core | [`own-agent-tooling-plan.md`](./own-agent-tooling-plan.md) (anexo) |
+
+> **Decisión 2026-10-17:** no se separan en dos ramas. Las skills del track de
+> instrucciones documentan el core que el track de código construye —
+> `mall-core-architecture` no se puede escribir antes de que el core exista
+> aquí. Separarlas obligaría a una de las dos a esperar a que la otra haga
+> merge. El anexo conserva su análisis; su secuencia la manda §7.
+
+---
+
+## Estado (2026-10-17)
+
+Rama: `feature/CORE-001-adopt-mall-frontend-starter`, sin cambios bajo `src/`.
+
+| | Estado |
+|---|---|
+| Documentación de los dos planes | ✅ `f41e861`, `8394767` |
+| **D2** — convención de componentes | ✅ decidida y escrita en `CLAUDE.md`, `AGENTS.md` y `react-components.instructions.md` (`df09977`) |
+| **Track instrucciones, fases A y B** | ✅ hechas (`62f8652`, `4f8e01c`, `0a65c6a`, `83b77cd`) |
+| **Fases 0 a 9** (§7) | ❌ ninguna iniciada — salvo A y B del anexo, ya absorbidas (fila anterior) |
+| **D1** — eventos pasados | ✅ resuelta por el camino: el bug del cron se arregló upstream y el dato ya está bien (§3D). Queda un borrado de término en la Fase 0 |
+
+Medido el 2026-10-17 contra `https://backend.animavillage.com/graphql` y por
+SSH (`wp plugin list`, `wp eval`): el backend corre `sanruiz-mall-core`
+**0.6.2**, `mallSettings` sigue con sus 14 campos en `null`, `menus { nodes }`
+sigue vacío, y `src/lib/` no tiene ninguno de los módulos del core (`menus.ts`,
+`brands.ts`, `event-calendar.ts`, `server-utils.ts`, `newsletter/`,
+`use-mobile-menu.ts`, `use-scroll-carousel.ts`), ni existe
+`src/components/site/`.
+
 ---
 
 ## Veredicto
@@ -176,6 +215,31 @@ pasado dejaría de respetarse. Pequeño, pero conviene cerrarlo (D1).
 Y hay una razón de fondo por la que la etiqueta está vacía: el cron que debería
 escribirla está roto (§4).
 
+> **Actualización 2026-10-17 — la etiqueta ya no está vacía, y el riesgo se cerró solo.**
+>
+> El bug del cron (§4) **se arregló upstream en `sanruiz-mall-core` 0.6.1**
+> (2026-10-12); el backend de ANIMA corre hoy **0.6.2**. Verificado por SSH:
+> el código ahora compara `current_time('Ymd')` contra un `normalize_date()`
+> de la fecha ACF, y el CHANGELOG describe exactamente el fallo de §4.
+>
+> Resultado de que el cron volviera a funcionar, medido con `wp eval` el
+> 2026-10-17 (`hoy = 20261017`):
+>
+> | Conjunto | Eventos | Qué son |
+> |---|---|---|
+> | Con ambas etiquetas | 47 | el histórico de siempre |
+> | Sólo `past-events` | 4 | publicados, fechas 2026-10-02 a 10-16 — los que etiquetó el cron ya arreglado |
+> | Sólo `eventos-pasados` | 6 | **todos en `draft`** — invisibles para el frontend |
+> | Publicados sin `past-events` | 4 | fechas 2026-10-18 a 10-29, todos futuros ✅ |
+>
+> **Ni un solo evento futuro quedó marcado como pasado**, y nada publicado
+> depende en exclusiva de `eventos-pasados`. El `PAST_EVENT_TAG_SLUG =
+> "past-events"` del core ya encuentra el dato correcto en ANIMA sin tocar
+> nada.
+>
+> Consecuencia para **D1**: la opción (a) se reduce a **borrar el término
+> `eventos-pasados`**. No hay que re-etiquetar nada ni reportar el bug.
+
 ### 🟢 E. `localePrefix` — sin riesgo al tomar `main`
 
 Era el riesgo grande (reescribir todas las URLs de un sitio en producción) y
@@ -198,12 +262,29 @@ wpgraphql-acf                active     3.0.0
 wp-multilang / -pro          active     2.4.33 / 1.21
 ```
 
+> **Re-verificado el 2026-10-17:** `sanruiz-mall-core` **0.6.2** y
+> `wp-multilang` 2.4.34; el resto igual. Las dos versiones nuevas del plugin
+> (0.6.1 y 0.6.2) son sólo correcciones —capacidades del rol editorial y el
+> cron de eventos pasados—, ninguna toca el contrato de GraphQL, así que no
+> afectan a esta migración más allá de lo dicho abajo.
+
 **ANIMA ya está migrada del lado de WordPress.** `soma-malls-content-types` ya
 no existe aquí — lo que queda desactualizado son nuestros propios documentos:
 `.env.example` y `docs/HOME-EVENTS-LISTING-LOGIC.md` todavía lo nombran. Hay
 que corregirlos (Fase 6).
 
 ### 🔴 Bug en `sanruiz-mall-core` 0.6.0 — el cron no etiqueta los eventos del año en curso
+
+> **2026-10-17 — ARREGLADO upstream, esto queda como registro.** El fix salió
+> en **0.6.1** (2026-10-12) y el backend de ANIMA corre **0.6.2**. El
+> CHANGELOG del plugin describe el mismo fallo que se analiza abajo —
+> incluido el efecto del 1 de enero— y el código ya normaliza a `Ymd` los dos
+> operandos. **No hay nada que reportar.**
+>
+> **Tampoco queda nada para Antara:** su copia local (`backend-antara`) ya
+> está en **0.6.1** —verificado el 2026-10-17 en el encabezado del plugin—,
+> que es justo la versión que trae el fix. Lo de abajo describe el 0.5.0 que
+> corría entonces.
 
 Esto explica por qué `past-events` tiene 0 eventos aunque el cron
 `sanruiz_mall_core_update_content` corre **cada hora** (verificado con
@@ -261,14 +342,25 @@ MySQL sí castea bien desde `Ymd` — ese no está afectado.
 dato **no se revierte solo**. Pero también confirma que el cron que lo escribiría
 está roto, y que la clasificación real la hace la fecha en el frontend.
 
+> **Resuelta de hecho el 2026-10-17 → va la opción (a).** El cron arreglado
+> (0.6.2) ya dejó `past-events` como la etiqueta real y correcta: 51
+> eventos, ningún futuro marcado, y lo que sólo tiene `eventos-pasados` son
+> 6 borradores (§3D). La opción (b) pierde su razón de ser —el core no
+> necesita un slug configurable para una deuda que ya no existe— y (c) sería
+> dejar viva una etiqueta huérfana.
+>
+> **Queda un solo paso, en la Fase 0:** borrar el término `eventos-pasados`
+> (`wp term delete event_tag 2`). No hay que re-etiquetar nada.
+
 | Opción | Qué implica |
 |---|---|
-| **a) Migrar el dato en WP** (recomendada) | Re-etiquetar los 47 eventos a `past-events` por wp-cli vía SSH y borrar `eventos-pasados`. El core queda intacto y ANIMA = Antara. Escribir multilang requiere wp-cli por SSH, no REST/GraphQL. |
+| **a) Migrar el dato en WP** ✅ **elegida** | ~~Re-etiquetar los 47 eventos~~ — lo hizo el cron. Queda sólo borrar el término `eventos-pasados`. El core queda intacto y ANIMA = Antara. |
 | b) Hacer el slug configurable | `PAST_EVENT_TAG_SLUG` sale de env. No se toca el dato, pero el core gana una opción que existe sólo por deuda histórica de ANIMA. |
 | c) No hacer nada por ahora | Defendible: §3D mide impacto cero hoy. Deja la deuda viva. |
 
-En los tres casos conviene reportar el bug del cron (§4) al repo del plugin: es
-independiente de esta migración y hoy afecta a los dos malls.
+~~En los tres casos conviene reportar el bug del cron (§4) al repo del
+plugin.~~ **Ya está arreglado** en 0.6.1, y los dos malls corren una versión
+que lo incluye — ANIMA 0.6.2, Antara 0.6.1 (§4). Nada que hacer.
 
 ### D2 — Convención de componentes ✅ DECIDIDA (2026-10-05)
 
@@ -340,18 +432,62 @@ funcionar.
 
 ## 7. Fases
 
-| Fase | Contenido | Commit |
-|---|---|---|
-| **0** | wp-admin: capturar `mallSettings`, asignar menús a PRIMARY/FOOTER. Resolver D1. Reportar el bug del cron (§4). | — (WP) |
-| **1** | Subir `next` 16.2.9 → 16.3.8 + deps del core. `typecheck && test && build` verde. | `chore: align deps with mall core` |
-| **2** | Reemplazar los archivos de core por los de `main` + hunks de §2.1. Re-aplicar fix CONSENT. ANIMA aún no usa lo nuevo. | `refactor: adopt mall-frontend-starter core` |
-| **3** | Portar de `antara`: `event-calendar`, `brands.ts`, `server-utils`, `breadcrumbs`, tests. | `feat: port core modules from antara` |
-| **4** | Adaptar las extensiones de ANIMA (`proxy.ts` como wrapper, `agenda/` sobre `events.ts`). | `refactor: rebuild ANIMA extensions on core` |
-| **5** | Capa de tokens shadcn en `globals.css` **sin tocar** el BEM existente. | `feat: add shadcn token layer` |
-| **6** | Docs: `README`, corregir las referencias a `soma-malls-content-types` en `.env.example` y `HOME-EVENTS-LISTING-LOGIC.md` (§4), borrar este plan. (`CLAUDE.md` ya quedó hecho con D2.) | `docs: document shared core` |
-| **7** | Convertir los 42 componentes a la convención del core (D2): de `PascalCase.tsx` / `kebab/index.tsx` a `kebab-case.tsx` plano bajo `src/components/anima/`, con named export. Mecánico, sin cambios de comportamiento. | `refactor: convert components to core convention` |
+Una sola secuencia para los dos tracks. Las fases **A** y **B** del anexo ya
+están hechas (`62f8652`, `4f8e01c`, `0a65c6a`, `83b77cd`): cortaron el riesgo de
+que `restore` pisara el trabajo de D2 y podaron el tooling de WordPress/Jira.
+Lo que quedaba de ese track —la Fase C— es ahora la **Fase 8**.
+
+| Fase | Track | Contenido | Commit |
+|---|---|---|---|
+| **0** | WP | wp-admin: capturar `mallSettings`, asignar menús a PRIMARY/FOOTER. Cerrar D1: borrar el término `eventos-pasados` (`wp term delete event_tag 2`). | — (WP) |
+| **1** | Código | Subir `next` y las deps del core a **la versión que el core corra hoy** (el 2026-10-05 era 16.3.8; ANIMA está en 16.2.9 — confirmar antes de fijar número). `typecheck && test && build` verde. | `chore: align deps with mall core` |
+| **2** | Código | Reemplazar los archivos de core por los de `main` + hunks de §2.1. Re-aplicar fix CONSENT. ANIMA aún no usa lo nuevo. | `refactor: adopt mall-frontend-starter core` |
+| **3** | Código | Portar de `antara`: `event-calendar`, `brands.ts`, `server-utils`, `breadcrumbs`, tests. | `feat: port core modules from antara` |
+| **4** | Código | Adaptar las extensiones de ANIMA (`proxy.ts` como wrapper, `agenda/` sobre `events.ts`). | `refactor: rebuild ANIMA extensions on core` |
+| **5** | Código | **Reconciliar** la capa de tokens shadcn que ANIMA ya tiene (ver abajo) con la que esperan los `components/ui/*` del core, **sin tocar** el BEM existente. | `refactor: reconcile shadcn token layer` |
+| **6** | Docs | `README` del core compartido + corregir las referencias a `soma-malls-content-types` (ver abajo). (`CLAUDE.md` ya quedó hecho con D2.) | `docs: document shared core` |
+| **7** | Código | Convertir los 42 componentes a la convención del core (D2): de `PascalCase.tsx` / `kebab/index.tsx` a `kebab-case.tsx` plano bajo `src/components/anima/`, con named export. Mecánico, sin cambios de comportamiento. | `refactor: convert components to core convention` |
+| **8** | Instrucciones | Fase C del anexo: montar la carpeta de agentes en el core (D3 opción c), escribir las 6 skills de su §6 contra el core ya estabilizado, portar `stack-context` y los partials, conectar ANIMA y Antara al sync. | `feat: own the agent tooling in the core` |
+| **9** | Docs | Cierre: borrar **los dos** planes (éste y el anexo). | `docs: close the core migration` |
+
+**Por qué la Fase 8 va después de la 7, y no después de la 4** (el anexo decía
+"después de la Fase 4"): `mall-core-architecture` documenta la convención de
+D2, y la Fase 7 es justo la que la aplica a 42 archivos. Escribir la skill
+antes sería documentar un repo que todavía contradice su propia regla.
+
+**Y por eso borrar los planes se mueve a la Fase 9.** La Fase 6 ya no los
+borra: la Fase 8 todavía necesita el anexo.
 
 Verificación en cada fase: `npm run typecheck && npm run lint && npm test && npm run build`.
+
+### Fase 5 — la capa shadcn ya existe, hay que reconciliarla, no crearla
+
+Medido el 2026-10-17: `globals.css` ya define los tokens shadcn en dos bloques
+—claro en las líneas 97-114 y oscuro en las 316-333, mapeados sobre las
+variables de marca (`--background: var(--color-claro)`,
+`--primary: var(--color-gold)`…)— y `src/components/ui/` ya tiene `badge`,
+`button` y `card`. Nada de eso vino de esta migración; es trabajo previo en
+`master`.
+
+Así que la fase es un diff, no una construcción: **qué tokens referencian los
+`components/ui/*` del core que ANIMA no define** (candidatos típicos: `--card`,
+`--popover`, `--muted`, `--accent`, `--border`, `--input`, `--destructive` y
+sus `-foreground`), y qué primitivas trae el core además de las tres que ya
+están. Un `ui/*` del core que lea un token inexistente no rompe el build:
+falla en silencio, en color. El inventario se hace al llegar a la fase, contra
+el core real.
+
+### Fase 6 — dónde está realmente `soma-malls-content-types`
+
+La lista original nombraba `.env.example`, que no lo menciona. Los archivos que
+sí lo hacen son cuatro:
+
+| Archivo | Qué hacer |
+|---|---|
+| `src/lib/queries.ts` | se resuelve solo: es un archivo de core, lo reemplaza la Fase 2 |
+| `src/lib/types.ts` | ídem |
+| `README.md` | corregir aquí |
+| `docs/HOME-EVENTS-LISTING-LOGIC.md` | corregir aquí |
 
 ---
 
@@ -365,3 +501,9 @@ la deuda que hay que pagar antes de extraer `@sanruiz/mall-frontend-core`.
 La señal de que el core está listo para empaquetarse es la de §2: ningún
 archivo de core menciona un mall concreto, y cada mall lo extiende sólo por
 composición (como el `proxy.ts` de ANIMA) y configuración (`mallSettings`).
+
+El track de instrucciones apunta al mismo lugar: la Fase 8 deja las skills en
+el core, junto al código que describen, y la misma prueba les aplica — una
+skill que nombre a ANIMA o a Antara no es del core. Si los dos tracks llegan,
+`@sanruiz/mall-frontend-core` se empaqueta con su propia documentación de
+agentes dentro.

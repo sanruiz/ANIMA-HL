@@ -3,9 +3,15 @@
 Plan para que ANIMA deje de consumir el toolkit y las instrucciones de agentes
 vivan en `sanruiz-mall-frontend-starter`, junto al core de código.
 
-> Relacionado: `docs/adopt-mall-frontend-starter-plan.md`. Ese plan mueve el
-> **código** al core; éste mueve las **instrucciones**. Comparten el destino y
-> la secuencia.
+> **Anexo de [`adopt-mall-frontend-starter-plan.md`](./adopt-mall-frontend-starter-plan.md).**
+> Aquel plan mueve el **código** al core; éste mueve las **instrucciones**.
+> Son dos tracks de una misma migración, en una sola rama.
+>
+> **La secuencia la manda la tabla de fases de §7 de aquel documento**
+> (decisión 2026-10-17): las fases A y B de abajo ya están hechas, y la Fase C
+> es allí la **Fase 8**, después de la 7. Este documento se conserva por su
+> análisis —el inventario del toolkit, la decisión D3 y lo aprendido al
+> ejecutar A y B—, no por su secuencia.
 
 ---
 
@@ -183,14 +189,18 @@ instructions + 5 prompts) y las referencias a Jira (el tracker es GitHub).
 
 ## 7. Secuenciación — importa
 
-Las skills enseñan convenciones, y las convenciones **se estabilizan recién en
-la Fase 4** del plan de core. Escribir `mall-core-architecture` ahora sería
-documentar un core que ANIMA todavía no tiene.
+Las skills enseñan convenciones, y las convenciones no se estabilizan hasta
+que el core está montado **y aplicado**. Escribir `mall-core-architecture`
+antes sería documentar un core que ANIMA todavía no tiene.
 
 | Cuándo | Qué |
 |---|---|
-| **Ahora** (independiente del plan de core) | Fases A y B de abajo: cortar el riesgo y limpiar lo muerto |
-| **Después de la Fase 4 del plan de core** | Fase C: escribir el contenido de las skills |
+| **Ahora** (independiente del plan de core) | Fases A y B de abajo: cortar el riesgo y limpiar lo muerto — ✅ hechas |
+| **Fase 8 de la tabla unificada** | Fase C: escribir el contenido de las skills |
+
+> **Corrección 2026-10-17:** aquí decía "después de la Fase 4". Va después de
+> la **Fase 7**, que es la que convierte los 42 componentes a la convención de
+> D2 — justo lo que `mall-core-architecture` tiene que enseñar.
 
 ### Fase A — Cortar el riesgo ✅ HECHA (2026-10-05)
 
@@ -262,7 +272,7 @@ sentido. Si se prefiere que sea personal, hay que sacarlo con
 `git rm --cached` — no basta con una regla, porque lo ya trackeado no se
 des-trackea solo.
 
-### Fase C — Construir en el core (después de Fase 4 del otro plan)
+### Fase C — Construir en el core (= **Fase 8** de la tabla unificada)
 
 6. Crear la estructura en `sanruiz-mall-frontend-starter` según D3.
 7. Escribir las 6 skills de §6 contra el core ya estabilizado.
