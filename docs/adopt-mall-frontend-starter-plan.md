@@ -516,14 +516,15 @@ igual en los dos idiomas:
 notificaciones del newsletter, no un contacto público — publicarlo en
 `mallSettings` sería inventar un dato.
 
-Dos cosas para revisar con el cliente:
+Dos puntos que se levantaron y quedaron **aprobados el 2026-10-17**:
 
-- **La traducción inglesa del tagline la redacté yo** a partir del español que
-  ya estaba. Si hay una versión oficial, se cambia con un `wp option update`.
-- **La dirección no coincide con el enlace del mapa**: `mallSettings` dice
-  "Cabo Del Sol, Carretera Transpeninsular Km 10.3" y el enlace de Google dice
-  "Tourist Corridor". Es el mismo lugar; conservé la de wp-admin, que la
-  capturó una persona.
+- **La traducción inglesa del tagline la redactamos aquí** a partir del español
+  que ya estaba, y se confirmó como válida. Mismo criterio para el resto del
+  contenido bilingüe: redactar la traducción faltante es bienvenido, no hay que
+  esperar una versión oficial.
+- **La dirección** de `mallSettings` ("Cabo Del Sol, Carretera Transpeninsular
+  Km 10.3") es la correcta, aunque el enlace de Google diga "Tourist Corridor".
+  Se conserva.
 
 ### Fase 5 — la capa shadcn ya existe, hay que reconciliarla, no crearla
 
