@@ -472,7 +472,7 @@ Lo que quedaba de ese track —la Fase C— es ahora la **Fase 8**.
 | Fase | Track | Contenido | Commit |
 |---|---|---|---|
 | **0** | WP | ✅ **Completa (2026-10-17)**: `mallSettings` escrito, D1 cerrada y los menús PRIMARY/FOOTER creados y asignados. Detalle abajo. | — (WP) |
-| **1** | Código | Subir `next` y las deps del core a **la versión que el core corra hoy** (el 2026-10-05 era 16.3.8; ANIMA está en 16.2.9 — confirmar antes de fijar número). `typecheck && test && build` verde. | `chore: align deps with mall core` |
+| **1** | Código | Refrescar el lockfile dentro de los rangos que ya existen y añadir 3 dependencias del core. **No es un bump de versiones** — ver abajo. `typecheck && lint && test && build` verde. | `chore: align deps with mall core` |
 | **2** | Código | Reemplazar los archivos de core por los de `main` + hunks de §2.1. Re-aplicar fix CONSENT. ANIMA aún no usa lo nuevo. | `refactor: adopt mall-frontend-starter core` |
 | **3** | Código | Portar de `antara`: `event-calendar`, `brands.ts`, `server-utils`, `breadcrumbs`, tests. | `feat: port core modules from antara` |
 | **4** | Código | Adaptar las extensiones de ANIMA (`proxy.ts` como wrapper, `agenda/` sobre `events.ts`). | `refactor: rebuild ANIMA extensions on core` |
@@ -525,6 +525,42 @@ Dos puntos que se levantaron y quedaron **aprobados el 2026-10-17**:
 - **La dirección** de `mallSettings` ("Cabo Del Sol, Carretera Transpeninsular
   Km 10.3") es la correcta, aunque el enlace de Google diga "Tourist Corridor".
   Se conserva.
+
+### Fase 1 — medida contra el core real (2026-10-18)
+
+Comparado contra `/Users/santiagoramirez/Projects/sanruiz-mall-frontend-starter`,
+rama `main` en `175e098a` — **idéntica a `origin/main`** (último fetch
+2026-10-16) y sin commits desde el 2026-10-04. Es decir: el core no se movió
+desde que se escribió este plan, así que los hunks de §2.1 y el veredicto de
+§2.2 siguen vigentes.
+
+**La fase era más chica de lo que decía.** El `16.3.8` que figuraba aquí no
+existe: los dos `package.json` declaran **el mismo rango** `next: ^16.2.9`, y
+lo que difiere es sólo lo resuelto en el lockfile.
+
+| | ANIMA | Core `main` |
+|---|---|---|
+| `next` | 16.2.9 | **16.3.3** |
+| `next-intl` | 4.13.0 | 4.14.1 |
+| `react` | 19.2.7 | 19.2.8 |
+| `tailwindcss` | 4.3.1 | 4.3.3 |
+
+Así que la Fase 1 es un `npm update` dentro de los rangos existentes, no una
+edición de manifiesto. **Cero conflictos de rango** entre los dos repos.
+
+Lo único que sí hay que añadir son tres dependencias:
+`@radix-ui/react-separator`, `@radix-ui/react-slot` y `server-only`.
+
+ANIMA conserva las suyas, que el core no tiene y no debe tener:
+`@next/third-parties`, `@vercel/analytics`, `lottie-react`, `shadcn`,
+`tw-animate-css`.
+
+> **Corrección a `CLAUDE.md`:** dice "Jest & React Testing Library" (línea 72),
+> pero ANIMA corre **vitest** desde hace tiempo — `"test": "vitest run"`, sin
+> `jest.config` ni dependencia de jest. El core usa el mismo runner y la misma
+> versión (`^4.1.9`), así que los tests que se portan en la Fase 3
+> (`menus.test.ts`, `seo.test.ts`) entran sin adaptación. Hay que arreglar esa
+> línea.
 
 ### Fase 0 — los menús PRIMARY y FOOTER (2026-10-17)
 
