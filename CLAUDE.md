@@ -65,11 +65,13 @@ Custom slash commands are available in `.claude/commands/`:
 
 ## Key Technologies & Frameworks
 
-- **Next.js 15.x** with App Router for modern React development
+- **Next.js 16.x** with App Router for modern React development
 - **React 19** for latest React features and optimizations
 - **TypeScript** for comprehensive type safety
 - **Tailwind CSS v4** with custom CSS variables and shadcn/ui design system
-- **Jest & React Testing Library** for comprehensive testing
+- **Vitest & React Testing Library** for comprehensive testing (`npm test`
+  runs `vitest run`; there is no Jest in this repo, despite what older notes
+  said — the shared core uses the same runner and version)
 
 ## Domain-Driven Design (DDD) Principles
 
