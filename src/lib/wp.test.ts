@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { fetchGraphQL } from "./wp";
 
 // ENDPOINT se evalúa al cargar el módulo, así que usamos el valor por defecto del código.
-const DEFAULT_ENDPOINT = "https://anima-headless.local/graphql";
+const DEFAULT_ENDPOINT = "https://mall-headless.local/graphql";
 const originalFetch = globalThis.fetch;
 const QUERY = "{ posts { nodes { id } } }";
 
@@ -151,7 +151,7 @@ describe("fetchGraphQL()", () => {
     mockFetch({});
 
     await expect(fetchGraphQL({ query: QUERY })).rejects.toThrow(
-      "WPGraphQL no devolvió datos."
+      "WPGraphQL returned no data."
     );
   });
 

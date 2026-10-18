@@ -1,6 +1,6 @@
 import { routing } from "@/i18n/routing";
 
-const DEFAULT_SITE_URL = "https://www.animavillage.com";
+const DEFAULT_SITE_URL = "https://your-mall.example.com";
 
 /**
  * Returns the canonical public site origin used by metadata, sitemap, and JSON-LD.

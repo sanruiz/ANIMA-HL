@@ -57,11 +57,11 @@ describe("resolveTags", () => {
   });
 
   it("ignores unknown content types", () => {
-    expect(resolveTags({ type: "deal", slug: "x" })).toEqual([]);
+    expect(resolveTags({ type: "widget", slug: "x" })).toEqual([]);
   });
 
   it("keeps valid tags when the content type is unknown", () => {
-    expect(resolveTags({ type: "deal", tags: ["wp:brands"] })).toEqual([
+    expect(resolveTags({ type: "widget", tags: ["wp:brands"] })).toEqual([
       "wp:brands",
     ]);
   });
