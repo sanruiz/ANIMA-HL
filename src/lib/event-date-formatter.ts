@@ -73,7 +73,7 @@ export function parseEventDate(value: string | null | undefined): ParsedDate | n
 }
 
 /**
- * Formats an event date or date range using the locale-specific copy required by the agenda.
+ * Formats an event date or date range using locale-specific copy.
  */
 export function formatEventDateRange({
   startDate,

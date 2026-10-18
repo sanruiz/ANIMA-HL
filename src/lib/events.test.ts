@@ -1,5 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { getPastEvents, getUpcomingEvents, isPastEvent } from "@/lib/events";
+import {
+  PAST_EVENT_TAG_SLUG,
+  getPastEvents,
+  getUpcomingEvents,
+  isPastEvent,
+} from "@/lib/events";
 import type { EventNode } from "@/lib/types";
 
 function createEvent({
@@ -46,7 +51,7 @@ describe("getUpcomingEvents()", () => {
         id: "past-tagged",
         title: "Past tagged",
         startDate: "20250712",
-        tagSlugs: ["eventos-pasados"],
+        tagSlugs: [PAST_EVENT_TAG_SLUG],
       }),
       createEvent({
         id: "future",
@@ -134,7 +139,7 @@ describe("isPastEvent()", () => {
       id: "past-tagged",
       title: "Past tagged",
       startDate: "20250712",
-      tagSlugs: ["eventos-pasados"],
+      tagSlugs: [PAST_EVENT_TAG_SLUG],
     });
 
     expect(isPastEvent(event, today)).toBe(true);
@@ -171,7 +176,7 @@ describe("getPastEvents()", () => {
         id: "past-tagged",
         title: "Past tagged",
         startDate: "20250712",
-        tagSlugs: ["eventos-pasados"],
+        tagSlugs: [PAST_EVENT_TAG_SLUG],
       }),
       createEvent({
         id: "future",
