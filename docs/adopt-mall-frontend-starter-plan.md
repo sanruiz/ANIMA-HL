@@ -472,7 +472,7 @@ Lo que quedaba de ese track —la Fase C— es ahora la **Fase 8**.
 | Fase | Track | Contenido | Commit |
 |---|---|---|---|
 | **0** | WP | ✅ **Completa (2026-10-17)**: `mallSettings` escrito, D1 cerrada y los menús PRIMARY/FOOTER creados y asignados. Detalle abajo. | — (WP) |
-| **1** | Código | Refrescar el lockfile dentro de los rangos que ya existen y añadir 3 dependencias del core. **No es un bump de versiones** — ver abajo. `typecheck && lint && test && build` verde. | `chore: align deps with mall core` |
+| **1** | Código | ✅ **Hecha (2026-10-18)** — `35f8be8`. Lockfile refrescado dentro de los rangos existentes + las 3 dependencias que faltaban. Las cuatro verificaciones en verde. | `chore: align deps with mall core` |
 | **2** | Código | Reemplazar los archivos de core por los de `main` + hunks de §2.1. Re-aplicar fix CONSENT. ANIMA aún no usa lo nuevo. | `refactor: adopt mall-frontend-starter core` |
 | **3** | Código | Portar de `antara`: `event-calendar`, `brands.ts`, `server-utils`, `breadcrumbs`, tests. | `feat: port core modules from antara` |
 | **4** | Código | Adaptar las extensiones de ANIMA (`proxy.ts` como wrapper, `agenda/` sobre `events.ts`). | `refactor: rebuild ANIMA extensions on core` |
@@ -555,12 +555,33 @@ ANIMA conserva las suyas, que el core no tiene y no debe tener:
 `@next/third-parties`, `@vercel/analytics`, `lottie-react`, `shadcn`,
 `tw-animate-css`.
 
-> **Corrección a `CLAUDE.md`:** dice "Jest & React Testing Library" (línea 72),
-> pero ANIMA corre **vitest** desde hace tiempo — `"test": "vitest run"`, sin
-> `jest.config` ni dependencia de jest. El core usa el mismo runner y la misma
-> versión (`^4.1.9`), así que los tests que se portan en la Fase 3
-> (`menus.test.ts`, `seo.test.ts`) entran sin adaptación. Hay que arreglar esa
-> línea.
+> **Corrección a `CLAUDE.md`** ✅ hecha en `48050fc`: decía "Jest & React
+> Testing Library" y "Next.js 15.x". ANIMA corre **vitest** desde hace tiempo
+> —`"test": "vitest run"`, sin `jest.config` ni dependencia de jest— y Next
+> 16. El core usa el mismo runner y la misma versión (`^4.1.9`), así que los
+> tests que se portan en la Fase 3 (`menus.test.ts`, `seo.test.ts`) entran sin
+> adaptación.
+
+#### Ejecutada el 2026-10-18 (`35f8be8`)
+
+Resueltas tras el `npm update`, todas dentro de los rangos ya declarados:
+`next` 16.2.9 → **16.4.2**, `next-intl` 4.13.0 → 4.14.9, `react` 19.2.7 →
+19.3.1, `tailwindcss` 4.3.1 → 4.3.3.
+
+**ANIMA queda por delante del lockfile del core** (16.3.3 / 19.2.8), y es el
+lado correcto donde estar: `npm audit` pasó de **29 avisos (2 críticos, 19
+altos)** a **9**, y entre los que se cerraron están `next`, `vitest`, `sharp`
+y `undici`. Los 9 que quedan son de tooling —`braces` → `micromatch` →
+`fast-glob`, por `eslint-config-next` y el CLI de `shadcn`— sin nada en la
+ruta de ejecución.
+
+> **Para el core:** su lockfile sigue en `next` 16.3.3, que arrastra el aviso
+> que ANIMA acaba de cerrar. Conviene correrle el mismo `npm update` cuando se
+> toque el starter; sus rangos ya lo permiten.
+
+Las cuatro verificaciones pasaron: typecheck limpio, lint igual que antes (el
+warning preexistente de `AboutClosing`), 161 tests, y build de producción
+verde en las 30 páginas estáticas.
 
 ### Fase 0 — los menús PRIMARY y FOOTER (2026-10-17)
 
