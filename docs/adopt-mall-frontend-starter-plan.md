@@ -566,6 +566,10 @@ Lo del sitemap era el riesgo real de la Fase 2: `seo.ts` es core y su fallback
 es el dominio genérico, así que un entorno sin la variable habría publicado
 `example.com` en silencio. Preview la tiene y resuelve bien.
 
+**Revisado por Santiago el 2026-10-19: el preview se ve igual que producción.**
+Ése era el criterio de aceptación de toda la migración — siete fases que
+cambiaron el núcleo del frontend sin que el sitio cambie.
+
 Nota: la home no emite `canonical` ni `og:url` — se comparó contra local y es
 igual en los dos, así que es comportamiento previo, no una regresión de esta
 migración. Queda como posible mejora de SEO, fuera de alcance aquí.
