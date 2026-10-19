@@ -498,7 +498,7 @@ Lo que quedaba de ese track —la Fase C— es ahora la **Fase 8**.
 | **1** | Código | ✅ **Hecha (2026-10-18)** — `35f8be8`. Lockfile refrescado dentro de los rangos existentes + las 3 dependencias que faltaban. Las cuatro verificaciones en verde. | `chore: align deps with mall core` |
 | **2** | Código | ✅ **Hecha (2026-10-18)** en seis commits: `d570b01`, `55770d1`, `e2fdad5`, `7ce85c2`, `10d7b75`, `a333bf3`. Correcciones a §6 arriba. | `refactor: adopt mall-frontend-starter core` |
 | **3** | Código | ✅ **Hecha (2026-10-19)** — `48e0e66`. 191 tests (desde 161). Dos archivos traían Antara dentro; ver abajo. | `feat: port core modules from antara` |
-| **4** | Código | Adaptar las extensiones de ANIMA (`proxy.ts` como wrapper, `agenda/` sobre `events.ts`). | `refactor: rebuild ANIMA extensions on core` |
+| **4** | Código | ✅ **Hecha (2026-10-19)** — `92a0b61`. La nav sale de WordPress; `proxy.ts` no necesitó cambios. Ver abajo. | `refactor: rebuild ANIMA extensions on core` |
 | **5** | Código | **Reconciliar** la capa de tokens shadcn que ANIMA ya tiene (ver abajo) con la que esperan los `components/ui/*` del core, **sin tocar** el BEM existente. | `refactor: reconcile shadcn token layer` |
 | **6** | Docs | `README` del core compartido + corregir las referencias a `soma-malls-content-types` (ver abajo). (`CLAUDE.md` ya quedó hecho con D2.) | `docs: document shared core` |
 | **7** | Código | Convertir los 42 componentes a la convención del core (D2): de `PascalCase.tsx` / `kebab/index.tsx` a `kebab-case.tsx` plano bajo `src/components/anima/`, con named export. Mecánico, sin cambios de comportamiento. | `refactor: convert components to core convention` |
@@ -548,6 +548,46 @@ Dos puntos que se levantaron y quedaron **aprobados el 2026-10-17**:
 - **La dirección** de `mallSettings` ("Cabo Del Sol, Carretera Transpeninsular
   Km 10.3") es la correcta, aunque el enlace de Google diga "Tourist Corridor".
   Se conserva.
+
+### Fase 4 — la prueba de fuego, y un `.ics` duplicado (2026-10-19)
+
+**✅ `proxy.ts` no necesitó ni una línea.** El del core es
+`createMiddleware(routing)` más un matcher, y el de ANIMA ya componía
+exactamente eso alrededor del coming-soon; los matchers son idénticos byte a
+byte. El corte está bien hecho: ANIMA extiende por composición, no por fork.
+Es la señal que §6 pedía para saber que el paquete va a funcionar.
+
+**La navegación ya sale de WordPress.** El layout pide `getMenus(locale)` y se
+lo pasa a `SiteHeader`, que **conserva su lista quemada como fallback**: si WP
+no responde o alguien desasigna el menú en wp-admin, la nav degrada a la
+anterior en vez de quedarse vacía. Verificado contra la app corriendo, en los
+dos idiomas:
+
+| | ES | EN |
+|---|---|---|
+| Etiquetas | Marcas, Agenda, Nosotros… | Brands, Events, About… |
+| `href` | `/es/brands` | `/en/brands` |
+
+Sin doble prefijo — `toHref` quita el que mete WP Multilang y el `<Link>`
+locale-aware pone el suyo. Esto es exactamente el riesgo de §3B, y confirma
+por qué `menus.ts` tenía que venir de `antara`.
+
+**🟠 ANIMA ya generaba su propio `.ics`, inline en `event-detail`.** El plan no
+lo sabía, y la Fase 3 añadió un segundo generador sin querer. Se eliminaron
+~75 líneas y el componente ahora enlaza a la ruta del core.
+
+No era sólo duplicación: **la versión inline emitía horas flotantes** —
+`DTSTART` sin `Z` ni `TZID`—, que RFC 5545 interpreta en la zona del
+visitante. Un evento de las 18:00 en Cabo aparecía a las 18:00 en el
+calendario de alguien en Madrid. Son **dos bugs de zona horaria distintos** en
+el mismo dominio: el del starter desplazaba una hora (§Fase 3), el de ANIMA
+dejaba la hora a merced del lector. Verificado extremo a extremo: ese evento
+ahora exporta `20261030T010000Z`, correcto para UTC-7.
+
+**Lo que no entró:** `agenda/` ya estaba sobre `events.ts` desde la Fase 2, y
+`components/site/*` sigue sin consumidores — `entity-card` y compañía son para
+listados que ANIMA pinta con su propio marcado de Webflow. Se quedan portados
+pero sin usar.
 
 ### Fase 3 — lo que `antara` traía dentro (2026-10-19)
 
