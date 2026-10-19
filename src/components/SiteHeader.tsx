@@ -4,14 +4,15 @@ import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/navigation";
+import type { NavMenuItem } from "@/lib/menus";
 import LocaleSwitcher from "./LocaleSwitcher";
 import InstagramIcon from "./InstagramIcon";
 import AnimaLogo from "./AnimaLogo";
 
-// Nav del sitio Webflow replicado. Las páginas aún no migradas al headless
-// (arte, gastronomy) apuntan a rutas internas placeholder y darán 404
-// hasta que se migren; about, brands, map y blog ya existen.
-const NAV_ITEMS = [
+// Fallback de navegación. La nav real sale de WordPress (menú PRIMARY) y
+// llega por props; esta lista sólo se usa si WP no devuelve nada — backend
+// caído, menú desasignado en wp-admin — para que el header nunca quede vacío.
+const FALLBACK_NAV_ITEMS = [
   { key: "elevatedBrands", href: "/brands" },
   { key: "gastronomy", href: "/gastronomy" },
   { key: "agenda", href: "/agenda" },
@@ -26,9 +27,32 @@ const ABOUT_IMAGE = "/about/menu-background.avif";
 
 const INSTAGRAM_URL = "https://www.instagram.com/animavillagecabo/";
 
-export default function SiteHeader({ locale }: { locale: string }) {
+export default function SiteHeader({
+  locale,
+  menu = [],
+}: {
+  locale: string;
+  menu?: NavMenuItem[];
+}) {
   const t = useTranslations("nav");
   const pathname = usePathname();
+  // WordPress manda cuando tiene algo que decir; si no, la lista local
+  // traducida con next-intl. Se normalizan a la misma forma para que el JSX
+  // no tenga que distinguirlas.
+  const navItems =
+    menu.length > 0
+      ? menu.map((item) => ({
+          key: item.id,
+          href: item.href,
+          label: item.label,
+          target: item.target,
+        }))
+      : FALLBACK_NAV_ITEMS.map((item) => ({
+          key: item.key,
+          href: item.href,
+          label: t(item.key),
+          target: null,
+        }));
   // Páginas cuya primera sección es un media full-bleed oscuro: el header
   // flota encima en transparente con texto claro (home, about, brands, agenda).
   const onHero =
@@ -134,15 +158,17 @@ export default function SiteHeader({ locale }: { locale: string }) {
             </button>
 
             <nav className="nav-list" aria-label={t("menu")}>
-              {NAV_ITEMS.map((item) => (
+              {navItems.map((item) => (
                 <Link
                   key={item.key}
                   href={item.href}
                   className="nav-link"
                   tabIndex={open ? 0 : -1}
+                  target={item.target ?? undefined}
+                  rel={item.target === "_blank" ? "noopener noreferrer" : undefined}
                   onClick={() => setOpen(false)}
                 >
-                  {t(item.key)}
+                  {item.label}
                 </Link>
               ))}
             </nav>

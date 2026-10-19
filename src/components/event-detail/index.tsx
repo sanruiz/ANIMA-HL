@@ -16,82 +16,6 @@ interface EventDetailProps {
   locale: string;
 }
 
-type CalendarLink = {
-  href: string;
-  filename: string;
-} | null;
-
-function escapeCalendarText(value: string): string {
-  return value
-    .replace(/\\/g, "\\\\")
-    .replace(/\n/g, "\\n")
-    .replace(/,/g, "\\,")
-    .replace(/;/g, "\\;");
-}
-
-function formatCalendarDate(value: Date): string {
-  const year = value.getUTCFullYear();
-  const month = String(value.getUTCMonth() + 1).padStart(2, "0");
-  const day = String(value.getUTCDate()).padStart(2, "0");
-
-  return `${year}${month}${day}`;
-}
-
-function formatCalendarDateTime(date: Date, time: string): string {
-  const [hour = "00", minute = "00"] = time.split(":");
-  return `${formatCalendarDate(date)}T${hour.padStart(2, "0")}${minute}00`;
-}
-
-function addUtcDays(date: Date, days: number): Date {
-  const nextDate = new Date(date);
-  nextDate.setUTCDate(nextDate.getUTCDate() + days);
-
-  return nextDate;
-}
-
-function getCalendarLink(event: EventSingle): CalendarLink {
-  const fields = event.eventFields;
-  const start = parseEventDate(fields?.startDate ?? event.date);
-
-  if (!start) return null;
-
-  const end = parseEventDate(fields?.endDate) ?? start;
-  const title = event.title ?? "Ánima Village event";
-  const description = stripHtml(event.content) || stripHtml(event.excerpt);
-  const location = fields?.place ?? "Ánima Village";
-  const slug = event.slug ?? event.id;
-  const fileSlug = slug.replace(/[^a-zA-Z0-9-]+/g, "-").toLowerCase();
-  const startTime = fields?.startTime?.trim();
-  const endTime = fields?.endTime?.trim();
-  const hasStartTime = Boolean(startTime);
-  const endDate = hasStartTime ? end.date : addUtcDays(end.date, 1);
-  const dtStart = hasStartTime
-    ? `DTSTART:${formatCalendarDateTime(start.date, startTime ?? "00:00")}`
-    : `DTSTART;VALUE=DATE:${formatCalendarDate(start.date)}`;
-  const dtEnd =
-    hasStartTime && endTime
-      ? `DTEND:${formatCalendarDateTime(end.date, endTime)}`
-      : `DTEND;VALUE=DATE:${formatCalendarDate(endDate)}`;
-  const calendar = [
-    "BEGIN:VCALENDAR",
-    "VERSION:2.0",
-    "PRODID:-//Anima Village//Events//ES",
-    "BEGIN:VEVENT",
-    `UID:${event.id}@animavillage.com`,
-    dtStart,
-    dtEnd,
-    `SUMMARY:${escapeCalendarText(title)}`,
-    `DESCRIPTION:${escapeCalendarText(description)}`,
-    `LOCATION:${escapeCalendarText(location)}`,
-    "END:VEVENT",
-    "END:VCALENDAR",
-  ].join("\r\n");
-
-  return {
-    href: `data:text/calendar;charset=utf-8,${encodeURIComponent(calendar)}`,
-    filename: `${fileSlug || "event"}.ics`,
-  };
-}
 
 // Event detail template aligned with brand detail: content left, image right.
 export default function EventDetail({ event, locale }: EventDetailProps) {
@@ -107,7 +31,14 @@ export default function EventDetail({ event, locale }: EventDetailProps) {
   });
   const parsedStartDate = parseEventDate(fields?.startDate ?? event.date);
   const dateTime = parsedStartDate?.date.toISOString().slice(0, 10);
-  const calendarLink = isPastEvent(event) ? null : getCalendarLink(event);
+  // The .ics is built server-side by /api/events/[slug]/calendar, which uses
+  // the shared core's event-calendar module. Doing it here produced floating
+  // DTSTART values — no Z, no TZID — so the event landed at the stated clock
+  // time in whatever zone the visitor's calendar used.
+  const calendarHref =
+    isPastEvent(event) || !event.slug
+      ? null
+      : `/api/events/${encodeURIComponent(event.slug)}/calendar?locale=${locale}`;
   const mediaWidth = image?.mediaDetails?.width ?? 0;
   const mediaHeight = image?.mediaDetails?.height ?? 0;
   const hasMediaDimensions = mediaWidth > 0 && mediaHeight > 0;
@@ -155,10 +86,10 @@ export default function EventDetail({ event, locale }: EventDetailProps) {
                 </div>
               ) : null}
 
-              {calendarLink ? (
+              {calendarHref ? (
                 <a
-                  href={calendarLink.href}
-                  download={calendarLink.filename}
+                  href={calendarHref}
+                  download
                   className="event-detail__calendar"
                 >
                   <CalendarPlus size={18} strokeWidth={1.8} aria-hidden />
