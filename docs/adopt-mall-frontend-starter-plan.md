@@ -497,7 +497,7 @@ Lo que quedaba de ese track —la Fase C— es ahora la **Fase 8**.
 | **0** | WP | ✅ **Completa (2026-10-17)**: `mallSettings` escrito, D1 cerrada y los menús PRIMARY/FOOTER creados y asignados. Detalle abajo. | — (WP) |
 | **1** | Código | ✅ **Hecha (2026-10-18)** — `35f8be8`. Lockfile refrescado dentro de los rangos existentes + las 3 dependencias que faltaban. Las cuatro verificaciones en verde. | `chore: align deps with mall core` |
 | **2** | Código | ✅ **Hecha (2026-10-18)** en seis commits: `d570b01`, `55770d1`, `e2fdad5`, `7ce85c2`, `10d7b75`, `a333bf3`. Correcciones a §6 arriba. | `refactor: adopt mall-frontend-starter core` |
-| **3** | Código | Portar de `antara`: `event-calendar`, `brands.ts`, `server-utils`, `breadcrumbs`, tests. | `feat: port core modules from antara` |
+| **3** | Código | ✅ **Hecha (2026-10-19)** — `48e0e66`. 191 tests (desde 161). Dos archivos traían Antara dentro; ver abajo. | `feat: port core modules from antara` |
 | **4** | Código | Adaptar las extensiones de ANIMA (`proxy.ts` como wrapper, `agenda/` sobre `events.ts`). | `refactor: rebuild ANIMA extensions on core` |
 | **5** | Código | **Reconciliar** la capa de tokens shadcn que ANIMA ya tiene (ver abajo) con la que esperan los `components/ui/*` del core, **sin tocar** el BEM existente. | `refactor: reconcile shadcn token layer` |
 | **6** | Docs | `README` del core compartido + corregir las referencias a `soma-malls-content-types` (ver abajo). (`CLAUDE.md` ya quedó hecho con D2.) | `docs: document shared core` |
@@ -548,6 +548,47 @@ Dos puntos que se levantaron y quedaron **aprobados el 2026-10-17**:
 - **La dirección** de `mallSettings` ("Cabo Del Sol, Carretera Transpeninsular
   Km 10.3") es la correcta, aunque el enlace de Google diga "Tourist Corridor".
   Se conserva.
+
+### Fase 3 — lo que `antara` traía dentro (2026-10-19)
+
+Ninguno de los archivos existía ya en ANIMA, así que no hubo riesgo de pisar
+nada. Pero **dos violaban la regla de §2** — un archivo de core con el nombre
+de un mall dentro:
+
+**🔴 `event-calendar.ts` y la zona horaria.** Tenía quemados el nombre, la
+dirección y `America/Mexico_City`. Lo último no es cosmético: **Baja
+California Sur usa horario de montaña y no observa DST desde 2022**, así que
+Cabo San Lucas va una hora detrás de Ciudad de México. Copiado tal cual, cada
+`.ics` de ANIMA habría puesto el evento **una hora tarde** en el calendario
+del visitante — y se habría importado sin error. Verificado: 19:00 en
+Mazatlán → `02:00Z`; con la zona de CDMX, `01:00Z`.
+
+El módulo ahora recibe un `CalendarMall { name, address, timeZone }` y los
+valores de ANIMA viven en `src/lib/mall.ts`. **Su casa definitiva es
+`mallSettings`**, que ya tiene nombre y dirección; están en código porque la
+ruta `.ics` responde de forma síncrona y un segundo viaje a GraphQL por
+descarga no aporta nada mientras estos valores no cambien.
+
+`antara` **sí tiene** `event-calendar.test.ts`, que este plan no listaba. Se
+portó con todas las esperas en UTC recalculadas para `America/Mazatlan`,
+incluido el caso de 2022, cuando el DST todavía existía.
+
+**🟠 `seo.test.ts` no era portable.** Afirma un sitio de un solo idioma, con
+`localePrefix: "as-needed"` y el dominio de Antara: las tres cosas son falsas
+en ANIMA. Se escribió uno nuevo contra la realidad de ANIMA — dos idiomas,
+prefijo siempre.
+
+Al escribirlo apareció una divergencia que §2.1 no registraba: **el
+`getSiteUrl()` de `main` conserva la ruta** del valor configurado, mientras el
+de `antara` la reduce al origen. Hoy es inocuo, porque `getLocalizedUrl()`
+resuelve rutas absolutas contra esa base y la descarta, pero un
+`getSiteUrl().href` directo la arrastraría. Queda fijado en un test.
+
+**`brands.ts` trajo la paginación que la Fase 2 difirió.** Los hunks
+`after`/`pageInfo` de `BRANDS_QUERY` y `BrandsResponse` entran ahora, junto al
+consumidor que los justifica. Era lo previsto al dejarlos fuera.
+
+La ruta `.ics` apunta a `/agenda`, no al `/events` del starter.
 
 ### Fase 1 — medida contra el core real (2026-10-18)
 
@@ -731,6 +772,10 @@ composición (como el `proxy.ts` de ANIMA) y configuración (`mallSettings`).
    ANIMA; sin él, los contactos de Antara quedan con `CONSENT = false`.
 2. **Los `components/ui/*` de ANIMA.** Están una generación de shadcn por
    delante de los del core. El starter debería adoptarlos, no al revés.
+3. **El `event-calendar.ts` parametrizado** (Fase 3). En `antara` lleva el
+   nombre, la dirección y la zona horaria de Antara quemados; con
+   `CalendarMall` deja de ser un archivo que nombra un mall y pasa la prueba
+   de §2. Antara seguiría igual pasando sus propios valores.
 
 El track de instrucciones apunta al mismo lugar: la Fase 8 deja las skills en
 el core, junto al código que describen, y la misma prueba les aplica — una
