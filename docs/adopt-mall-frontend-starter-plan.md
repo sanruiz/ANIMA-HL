@@ -431,6 +431,29 @@ src/app/api/revalidate/route.ts   src/app/assets/[...path]/route.ts
 src/components/ui/*           src/components/site/*
 ```
 
+> **Correcciones medidas al ejecutar la Fase 2 (2026-10-18)**
+>
+> Tres entradas de esta lista estaban mal, una de ellas al revés:
+>
+> | Entrada | Lo que resultó |
+> |---|---|
+> | `src/components/ui/*` | **Al revés.** Los de ANIMA son la generación nueva de shadcn (`data-slot`, paquete unificado `radix-ui`, sin `forwardRef`); los del core, la anterior. Tomarlos sería un downgrade. **Se quedan los de ANIMA.** De rebote, las dos dependencias radix que instaló la Fase 1 sobraban y se quitaron (`10d7b75`). |
+> | `src/components/site/*` | **Se difiere a la Fase 4.** Nada en ANIMA los importa hasta que `SiteHeader` se conecte a los menús; traerlos ahora es código muerto. |
+> | `src/lib/events.ts` | D1 ya está resuelta: el slug pasó a `past-events` en `d570b01`. |
+>
+> Y un cambio de comportamiento que conviene registrar: `subscribe.ts` deja de
+> mandar `FIRSTNAME` a Doppler. No es una pérdida — el formulario no tiene ese
+> input, así que esa rama nunca se ejecutaba.
+>
+> **Regla aprendida, aplicable a la Fase 3:** antes de cualquier
+> `git show main:X > ANIMA/X`, comprobar con `git ls-files` si ANIMA ya tiene
+> ese archivo, y si es un test, comparar la cantidad de casos. Cuatro veces en
+> esta fase el archivo del core habría reemplazado a uno de ANIMA con más
+> cobertura — `wp.test.ts` (16 casos contra 3), `revalidation.test.ts` (13
+> contra 9), `events.test.ts` (13 contra 6) y `subscribe.test.ts` (16 contra
+> 5, incluido el test que protege el fix de CONSENT). La última se detectó
+> sólo porque el total de tests bajó de 161 a 159.
+
 **Excepción: `src/components/site/site-nav.tsx` no es core.** Trae una lista de
 rutas quemada (`/brands`, `/events`, `/deals`, `/jobs`, `/blog`) que es el nav
 de ejemplo del starter. ANIMA conserva su `SiteHeader`; y una vez cargados los
@@ -473,7 +496,7 @@ Lo que quedaba de ese track —la Fase C— es ahora la **Fase 8**.
 |---|---|---|---|
 | **0** | WP | ✅ **Completa (2026-10-17)**: `mallSettings` escrito, D1 cerrada y los menús PRIMARY/FOOTER creados y asignados. Detalle abajo. | — (WP) |
 | **1** | Código | ✅ **Hecha (2026-10-18)** — `35f8be8`. Lockfile refrescado dentro de los rangos existentes + las 3 dependencias que faltaban. Las cuatro verificaciones en verde. | `chore: align deps with mall core` |
-| **2** | Código | Reemplazar los archivos de core por los de `main` + hunks de §2.1. Re-aplicar fix CONSENT. ANIMA aún no usa lo nuevo. | `refactor: adopt mall-frontend-starter core` |
+| **2** | Código | ✅ **Hecha (2026-10-18)** en seis commits: `d570b01`, `55770d1`, `e2fdad5`, `7ce85c2`, `10d7b75`, `a333bf3`. Correcciones a §6 arriba. | `refactor: adopt mall-frontend-starter core` |
 | **3** | Código | Portar de `antara`: `event-calendar`, `brands.ts`, `server-utils`, `breadcrumbs`, tests. | `feat: port core modules from antara` |
 | **4** | Código | Adaptar las extensiones de ANIMA (`proxy.ts` como wrapper, `agenda/` sobre `events.ts`). | `refactor: rebuild ANIMA extensions on core` |
 | **5** | Código | **Reconciliar** la capa de tokens shadcn que ANIMA ya tiene (ver abajo) con la que esperan los `components/ui/*` del core, **sin tocar** el BEM existente. | `refactor: reconcile shadcn token layer` |
@@ -701,6 +724,13 @@ la deuda que hay que pagar antes de extraer `@sanruiz/mall-frontend-core`.
 La señal de que el core está listo para empaquetarse es la de §2: ningún
 archivo de core menciona un mall concreto, y cada mall lo extiende sólo por
 composición (como el `proxy.ts` de ANIMA) y configuración (`mallSettings`).
+
+**Dos cosas que deben subir al starter** (descubiertas en la Fase 2):
+
+1. **El fix de CONSENT en `lib/newsletter/doppler.ts`.** Hoy sólo lo tiene
+   ANIMA; sin él, los contactos de Antara quedan con `CONSENT = false`.
+2. **Los `components/ui/*` de ANIMA.** Están una generación de shadcn por
+   delante de los del core. El starter debería adoptarlos, no al revés.
 
 El track de instrucciones apunta al mismo lugar: la Fase 8 deja las skills en
 el core, junto al código que describen, y la misma prueba les aplica — una
