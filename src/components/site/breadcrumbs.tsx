@@ -1,5 +1,14 @@
 import { Link } from "@/i18n/navigation";
 
+/**
+ * Colors come from the semantic tokens every mall defines, not from a
+ * palette: the antara branch styled this with `text-refugio` / `text-origen`,
+ * which exist in no other mall and fail silently — Tailwind drops the unknown
+ * class and the text simply inherits. Antara itself defines
+ * `--foreground: var(--origen)` and `--background: var(--refugio)`, so the
+ * mapping is one to one.
+ */
+
 type BreadcrumbsProps = {
   locale: string;
   section: { label: string; href: string };
@@ -17,7 +26,7 @@ export function Breadcrumbs({
   return (
     <nav
       aria-label={locale === "en" ? "Breadcrumb" : "Ruta de navegación"}
-      className={`mb-8 text-[10px] uppercase tracking-[0.22em] md:mb-14 ${variant === "dark" ? "text-refugio" : "text-origen"}`}
+      className={`mb-8 text-[10px] uppercase tracking-[0.22em] md:mb-14 ${variant === "dark" ? "text-background" : "text-foreground"}`}
     >
       <ol className="flex flex-wrap items-center gap-x-3 gap-y-1">
         <li>
