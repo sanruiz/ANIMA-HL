@@ -501,7 +501,7 @@ Lo que quedaba de ese track —la Fase C— es ahora la **Fase 8**.
 | **4** | Código | ✅ **Hecha (2026-10-19)** — `92a0b61`. La nav sale de WordPress; `proxy.ts` no necesitó cambios. Ver abajo. | `refactor: rebuild ANIMA extensions on core` |
 | **5** | Código | ✅ **Hecha (2026-10-19)** — `e27cec8`. Auditoría de tokens: dos huecos reales, uno de ellos heredado de `antara`. | `refactor: reconcile shadcn token layer` |
 | **6** | Docs | ✅ **Hecha (2026-10-19)** — `e2585a7`. README con la sección "Core compartido" y tabla de variables; corregidas las referencias obsoletas. | `docs: document shared core` |
-| **7** | Código | Convertir los 42 componentes a la convención del core (D2): de `PascalCase.tsx` / `kebab/index.tsx` a `kebab-case.tsx` plano bajo `src/components/anima/`, con named export. Mecánico, sin cambios de comportamiento. | `refactor: convert components to core convention` |
+| **7** | Código | ✅ **Hecha (2026-10-19)** — `430083d`. 42 renombrados con `git mv`, 99/99 líneas, sólo imports y exports. | `refactor: convert components to core convention` |
 | **8** | Instrucciones | Fase C del anexo: montar la carpeta de agentes en el core (D3 opción c), escribir las 6 skills de su §6 contra el core ya estabilizado, portar `stack-context` y los partials, conectar ANIMA y Antara al sync. | `feat: own the agent tooling in the core` |
 | **9** | Docs | Cierre: borrar **los dos** planes (éste y el anexo). | `docs: close the core migration` |
 
@@ -548,6 +548,32 @@ Dos puntos que se levantaron y quedaron **aprobados el 2026-10-17**:
 - **La dirección** de `mallSettings` ("Cabo Del Sol, Carretera Transpeninsular
   Km 10.3") es la correcta, aunque el enlace de Google diga "Tourist Corridor".
   Se conserva.
+
+### Fase 7 — la conversión de componentes (2026-10-19)
+
+Cerró **D2**. Los 40 componentes pasan a `kebab-case.tsx` plano bajo
+`src/components/anima/` con export nombrado: 31 `PascalCase.tsx` y 10
+`kebab/index.tsx`, más los dos tests, que pierden el subdirectorio
+`__tests__` y quedan junto a lo que prueban.
+
+Hecho con `git mv`, así que el historial sigue a cada archivo: git reporta
+**42 renombrados y 99 inserciones / 99 borrados**, simétrico — una línea de
+export por componente y una de import por consumidor. Filtrar el diff por
+cualquier cosa que no sea un `import` o un `export` no devuelve nada; ésa es
+la comprobación de que no cambió comportamiento.
+
+Lo único que necesitó más que reescribir rutas: los dos tests traen su sujeto
+por `await import()` dinámico para controlar los mocks, así que
+desestructuraban `{ default: X }` y ahora desestructuran `{ X }`.
+
+`src/components` queda con tres carpetas y nada suelto: `anima/` para este
+mall, `site/` y `ui/` del core.
+
+> **El fallback de la Fase 4 se probó solo.** Durante uno de los builds, el
+> backend devolvió un 500 al pedir los menús. El build terminó igual, con las
+> 30 páginas, porque `getMenus` capturó el error y el header cayó a su lista
+> local. Fue transitorio —la query responde 200— pero confirma que la nav
+> depende de una llamada de red y que degradar valía la pena.
 
 ### Fase 5 — la auditoría encontró un token de Antara infiltrado (2026-10-19)
 
