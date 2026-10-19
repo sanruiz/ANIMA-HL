@@ -1,34 +1,51 @@
 /**
- * Utilidades para imágenes servidas por WordPress vía Next Image.
+ * Utilities for images served by WordPress via next/image.
  *
- * Motivación: Next Image Optimizer bloquea URLs que resuelven a IPs privadas
- * (protección anti-SSRF), lo que rompe cualquier página que consuma media del
- * WP de desarrollo en LocalWP (anima-headless.local → 127.0.0.1). En producción
- * el WP vive en un dominio público y el optimizer funciona normalmente,
- * convirtiendo PNGs de 1–2 MB a AVIF/WebP de ~50 KB en el tamaño exacto del
- * viewport. Este helper decide cuándo saltarse el optimizer para no romper el
- * flujo de dev, sin sacrificar la optimización en prod.
+ * Motivation: Next Image Optimizer blocks URLs that resolve to private IPs
+ * (anti-SSRF protection), which breaks any page consuming media from a local
+ * WordPress dev install (e.g. mall-headless.local → 127.0.0.1). In production
+ * WordPress lives on a public domain and the optimizer works normally. This
+ * helper decides when to bypass the optimizer so dev isn't broken, without
+ * giving up optimization in prod.
  *
- * Se usa en el `unoptimized` prop del `<Image>` de Next y aplica a cualquier
- * sección que renderice imágenes del WP (brands, agenda, noticias, etc.).
+ * Used in the `unoptimized` prop of next/image's <Image> for any section
+ * that renders WordPress media.
  */
 
 type WpImageEnv = {
   NODE_ENV?: string;
 };
 
+/** Serve local WordPress uploads through Next so LAN clients need no local DNS. */
+export function getWpImageSrc(url: string): string {
+  try {
+    const parsed = new URL(url);
+    if (
+      parsed.hostname.endsWith(".local") &&
+      /^https?:$/.test(parsed.protocol) &&
+      parsed.pathname.startsWith("/wp-content/uploads/")
+    ) {
+      return `/assets/${parsed.pathname.slice("/wp-content/".length)}${parsed.search}${parsed.hash}`;
+    }
+  } catch {
+    // Relative image paths already use the frontend origin.
+  }
+  return url;
+}
+
 /**
- * Devuelve true cuando la URL de imagen apunta al WP de desarrollo local
- * (hostname termina en `.local`) y estamos en dev. En cualquier otro caso
- * (prod, dominio público) devuelve false para dejar que el optimizer trabaje.
+ * Returns true when the image URL points at a local dev WordPress (hostname
+ * ends in `.local`) and we're in dev. Anywhere else (prod, public domain)
+ * returns false so the optimizer can do its job.
  *
- * Es tolerante a errores: URLs mal formadas → false (dejar que Next decida).
+ * Tolerant of malformed URLs: returns false and lets Next decide.
  *
- * IMPORTANTE — SSR: leemos `process.env.NODE_ENV` DIRECTAMENTE (no vía objeto
- * destructurado) porque webpack/turbopack solo inlinea la variable cuando ve
- * la referencia exacta al bindings; con `process.env` a secas el objeto llega
- * vacío al bundle cliente y el server/client divergen, disparando un
- * "hydration mismatch". El parámetro `env` opcional existe solo para tests.
+ * IMPORTANT — SSR: we read `process.env.NODE_ENV` directly (not via a
+ * destructured object) because webpack/turbopack only inlines the variable
+ * when it sees the exact binding reference; with a bare `process.env` the
+ * object arrives empty on the client bundle and server/client diverge,
+ * triggering a hydration mismatch. The optional `env` parameter exists only
+ * for tests.
  */
 export function shouldBypassImageOptimizer(
   url: string | null | undefined,
