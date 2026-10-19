@@ -549,6 +549,27 @@ Dos puntos que se levantaron y quedaron **aprobados el 2026-10-17**:
   Km 10.3") es la correcta, aunque el enlace de Google diga "Tourist Corridor".
   Se conserva.
 
+### Verificación en Vercel — entorno Preview (2026-10-19)
+
+Antes de tocar producción, se desplegó la rama a **Preview** (`target:
+preview`, nunca `--prod`) y se comprobó lo que sólo un despliegue real puede
+decir:
+
+| Qué | Resultado |
+|---|---|
+| Nav desde WordPress, ES/EN | ✅ Marcas/Brands, Agenda/Events… |
+| `NEXT_PUBLIC_SITE_URL` | ✅ el sitemap emite `www.animavillage.com`; **cero** apariciones de `your-mall.example.com` |
+| `.ics` del core | ✅ `DTSTART:20261030T010000Z`, correcto para UTC-7 |
+| Rutas (agenda, brands, about, blog, map, detalle de evento y de marca) | ✅ 200 |
+
+Lo del sitemap era el riesgo real de la Fase 2: `seo.ts` es core y su fallback
+es el dominio genérico, así que un entorno sin la variable habría publicado
+`example.com` en silencio. Preview la tiene y resuelve bien.
+
+Nota: la home no emite `canonical` ni `og:url` — se comparó contra local y es
+igual en los dos, así que es comportamiento previo, no una regresión de esta
+migración. Queda como posible mejora de SEO, fuera de alcance aquí.
+
 ### Fase 7 — la conversión de componentes (2026-10-19)
 
 Cerró **D2**. Los 40 componentes pasan a `kebab-case.tsx` plano bajo
