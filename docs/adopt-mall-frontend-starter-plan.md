@@ -499,8 +499,8 @@ Lo que quedaba de ese track —la Fase C— es ahora la **Fase 8**.
 | **2** | Código | ✅ **Hecha (2026-10-18)** en seis commits: `d570b01`, `55770d1`, `e2fdad5`, `7ce85c2`, `10d7b75`, `a333bf3`. Correcciones a §6 arriba. | `refactor: adopt mall-frontend-starter core` |
 | **3** | Código | ✅ **Hecha (2026-10-19)** — `48e0e66`. 191 tests (desde 161). Dos archivos traían Antara dentro; ver abajo. | `feat: port core modules from antara` |
 | **4** | Código | ✅ **Hecha (2026-10-19)** — `92a0b61`. La nav sale de WordPress; `proxy.ts` no necesitó cambios. Ver abajo. | `refactor: rebuild ANIMA extensions on core` |
-| **5** | Código | **Reconciliar** la capa de tokens shadcn que ANIMA ya tiene (ver abajo) con la que esperan los `components/ui/*` del core, **sin tocar** el BEM existente. | `refactor: reconcile shadcn token layer` |
-| **6** | Docs | `README` del core compartido + corregir las referencias a `soma-malls-content-types` (ver abajo). (`CLAUDE.md` ya quedó hecho con D2.) | `docs: document shared core` |
+| **5** | Código | ✅ **Hecha (2026-10-19)** — `e27cec8`. Auditoría de tokens: dos huecos reales, uno de ellos heredado de `antara`. | `refactor: reconcile shadcn token layer` |
+| **6** | Docs | ✅ **Hecha (2026-10-19)** — `e2585a7`. README con la sección "Core compartido" y tabla de variables; corregidas las referencias obsoletas. | `docs: document shared core` |
 | **7** | Código | Convertir los 42 componentes a la convención del core (D2): de `PascalCase.tsx` / `kebab/index.tsx` a `kebab-case.tsx` plano bajo `src/components/anima/`, con named export. Mecánico, sin cambios de comportamiento. | `refactor: convert components to core convention` |
 | **8** | Instrucciones | Fase C del anexo: montar la carpeta de agentes en el core (D3 opción c), escribir las 6 skills de su §6 contra el core ya estabilizado, portar `stack-context` y los partials, conectar ANIMA y Antara al sync. | `feat: own the agent tooling in the core` |
 | **9** | Docs | Cierre: borrar **los dos** planes (éste y el anexo). | `docs: close the core migration` |
@@ -548,6 +548,35 @@ Dos puntos que se levantaron y quedaron **aprobados el 2026-10-17**:
 - **La dirección** de `mallSettings` ("Cabo Del Sol, Carretera Transpeninsular
   Km 10.3") es la correcta, aunque el enlace de Google diga "Tourist Corridor".
   Se conserva.
+
+### Fase 5 — la auditoría encontró un token de Antara infiltrado (2026-10-19)
+
+La capa de tokens ya estaba completa (52 entradas `--color-*`, claro y oscuro,
+con sidebar y escala de radios), así que la fase fue la auditoría que debió
+ser: barrer **todas** las clases de color semánticas de `src/` contra lo que
+expone `@theme`. Dos huecos:
+
+**🟠 `breadcrumbs.tsx` traía la paleta de Antara.** Portado en la Fase 3, se
+estilaba con `text-refugio` y `text-origen`, que no existen en ningún otro
+mall. **Pasó el filtro de §2 porque los nombres van dentro de un string de
+`className`, no en un import** — nada los marcó. El fallo es silencioso:
+Tailwind descarta la clase desconocida y el texto hereda el color de alrededor.
+Ahora usa `text-background` / `text-foreground`, que todo mall define y que
+Antara mapea exactamente a esas dos variables.
+
+**🟡 `--destructive-foreground`** era el único token del set de shadcn sin
+definir. Hoy no lo usa nadie —los `ui/*` de ANIMA tintan el fondo en vez de
+invertir el texto— pero cualquier componente añadido con el CLI de shadcn sí, y
+fallaría igual de callado.
+
+**No se portó `separator.tsx`:** es de la generación vieja y arrastra
+`@radix-ui/react-separator`, la dependencia que quitamos en `10d7b75`, para un
+componente que nadie usa.
+
+> **Lección para el resto de fases:** la regla de §2 se verificó hasta ahora
+> leyendo imports y nombres de archivo. Un token de diseño dentro de un string
+> se escapa. Vale la pena un `grep` de la paleta del otro mall antes de dar por
+> portado cualquier `.tsx`.
 
 ### Fase 4 — la prueba de fuego, y un `.ics` duplicado (2026-10-19)
 
