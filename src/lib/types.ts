@@ -110,7 +110,12 @@ export type BrandSingle = BrandNode & {
   modified: string | null;
 };
 
-export type BrandsResponse = { brands: { nodes: BrandNode[] } };
+export type BrandsResponse = {
+  brands: {
+    nodes: BrandNode[];
+    pageInfo: { hasNextPage: boolean; endCursor: string | null };
+  };
+};
 export type BrandBySlugResponse = { brand: BrandSingle | null };
 
 export type BrandSlugNode = { id: string; slug: string | null; modified: string | null };

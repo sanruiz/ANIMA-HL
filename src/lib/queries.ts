@@ -104,8 +104,16 @@ export const EVENT_SLUGS_QUERY = /* GraphQL */ `
 `;
 
 export const BRANDS_QUERY = /* GraphQL */ `
-  query Brands($first: Int = 100) {
-    brands(first: $first, where: { orderby: { field: TITLE, order: ASC } }) {
+  query Brands($first: Int = 100, $after: String) {
+    brands(
+      first: $first
+      after: $after
+      where: { orderby: { field: TITLE, order: ASC } }
+    ) {
+      pageInfo {
+        hasNextPage
+        endCursor
+      }
       nodes {
         id
         title
