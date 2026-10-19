@@ -1,0 +1,182 @@
+import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
+import { NewsletterForm } from "./newsletter-form";
+import { InstagramIcon } from "./instagram-icon";
+import { SomaLogo } from "./soma-logo";
+import { TripAdvisorIcon } from "./trip-advisor-icon";
+
+const MAPS_URL =
+  "https://www.google.com/maps/dir//Anima+village,+Tourist+Corridor,+23455+Cabo+San+Lucas,+B.C.S.,+Mexico/@22.919928,-109.8330288,17z";
+const INSTAGRAM_ICON_URL = "https://www.instagram.com/animavillagecabo";
+const SOMA_URL = "https://soma.group/";
+const TRIPADVISOR_URL =
+  "https://www.tripadvisor.com.mx/UserReviewEdit-g152515-d34067799-Anima_Village-Cabo_San_Lucas_Los_Cabos_Baja_California.html";
+
+// "What We Offer": brands y news→/blog ya existen en headless; arte
+// y gastronomy son placeholders hasta migrar; programming→/agenda existe.
+const OFFER_LINKS = [
+  { key: "offerBrands", href: "/brands" },
+  {
+    key: "offerArte",
+    href: "https://arteabierto.org/",
+    target: "_blank",
+    rel: "noopener noreferrer",
+  },
+  { key: "offerGastronomy", href: "/gastronomy" },
+  { key: "offerProgramming", href: "/agenda" },
+  { key: "offerNews", href: "/blog" },
+] as const;
+
+// Replicado de Webflow: dos zonas apiladas — newsletter (bg oscuro con SVG
+// watermark) arriba, info columns (bg verde) abajo, y créditos al final.
+export function SiteFooter() {
+  const t = useTranslations("footer");
+
+  return (
+    <footer className="site-footer">
+      {/* === Zona 1: Newsletter sobre fondo oscuro con SVG decorativo === */}
+      <div className="footer-news-section">
+        <div className="footer-news-section__inner pb-12">
+          {/* Tres variantes del SVG por breakpoint (igual que Webflow). */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/footer-mark.svg"
+            alt=""
+            aria-hidden
+            className="footer-news-section__mark footer-news-section__mark--desktop"
+          />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/footer-mark-tablet.svg"
+            alt=""
+            aria-hidden
+            className="footer-news-section__mark footer-news-section__mark--tablet"
+          />
+          {/* Móvil: marco SIN emblema (estirable con object-fit: fill sin distorsión). */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/footer-mark-mobile-frame.svg"
+            alt=""
+            aria-hidden
+            className="footer-news-section__mark footer-news-section__mark--mobile"
+          />
+          <div className="footer-news-section__content">
+            {/* Emblema aparte, solo visible en móvil (en desktop/tablet va dentro del marco). */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/footer-emblem.svg"
+              alt=""
+              aria-hidden
+              className="footer-news-section__emblem"
+            />
+            <h2 className="footer-news-section__title">
+              {t("newsletterTitle")}
+            </h2>
+            <p className="footer-news-section__lead">{t("newsletterLead")}</p>
+            <NewsletterForm />
+          </div>
+        </div>
+      </div>
+
+      {/* === Zona 2: Info columns sobre fondo verde === */}
+      <div className="footer-info-section">
+        <div className="footer-info-section__grid">
+          {/* Col 1: Horario y dirección */}
+          <div className="footer-col">
+            <h3 className="footer-col__title">{t("hoursTitle")}</h3>
+            <p className="footer-col__text">
+              {/* accept br tag for line break in the address */}
+              {t.rich("hours", { br: () => <br /> })}
+              <br />
+              <br />
+              Cabo Del Sol
+              <br />
+              Carretera Transpeninsular
+              <br />
+              Km 10.3
+              <br />
+              Cabo San Lucas, B.C.S.
+              <br />
+              23455, Mexico
+            </p>
+          </div>
+
+          {/* Col 2: What We Offer */}
+          <div className="footer-col">
+            {OFFER_LINKS.map((l) => (
+              <Link
+                key={l.key}
+                {...("target" in l && { target: l.target })}
+                {...("rel" in l && { rel: l.rel })}
+                href={l.href}
+                className="footer-col__link"
+              >
+                {t(l.key)}
+              </Link>
+            ))}
+          </div>
+
+          {/* Col 3: Links externos + Instagram + SOMA */}
+          <div className="footer-col">
+            <a
+              className="footer-col__link"
+              href={MAPS_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {t("findUs")}
+            </a>
+            <Link href="/privacy-notice" className="footer-col__link">
+              {t("legalPrivacy")}
+            </Link>
+            <Link href="/regulations" className="footer-col__link">
+              {t("guidelines")}
+            </Link>
+            <div className="footer-col__socials">
+              <a
+                className="footer-col__social"
+                href={INSTAGRAM_ICON_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Instagram"
+                title="Instagram"
+              >
+                <InstagramIcon size={22} />
+              </a>
+              <a
+                className="footer-col__social"
+                href={TRIPADVISOR_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="TripAdvisor"
+                title="TripAdvisor"
+              >
+                <TripAdvisorIcon size={20} />
+              </a>
+            </div>
+
+            <div className="footer-col__soma">
+              <span className="footer-col__soma-label">
+                {t("destinationBy")}
+              </span>
+              <a
+                href={SOMA_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="SOMA Group"
+                className="footer-col__soma-logo"
+              >
+                <SomaLogo height={28} />
+              </a>
+            </div>
+          </div>
+        </div>
+
+        {/* Créditos centrados con border-top, replicando .footer-info.credits */}
+        <div className="footer-credits">
+          <p>{t("credits")}</p>
+        </div>
+      </div>
+    </footer>
+  );
+}

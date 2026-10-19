@@ -1,8 +1,8 @@
 import { setRequestLocale } from "next-intl/server";
-import VideoHero from "@/components/VideoHero";
-import OurSoul from "@/components/OurSoul";
-import OfferBanner from "@/components/OfferBanner";
-import DailyRituals from "@/components/DailyRituals";
+import { VideoHero } from "@/components/anima/video-hero";
+import { OurSoul } from "@/components/anima/our-soul";
+import { OfferBanner } from "@/components/anima/offer-banner";
+import { DailyRituals } from "@/components/anima/daily-rituals";
 
 export default async function HomePage({
   params,

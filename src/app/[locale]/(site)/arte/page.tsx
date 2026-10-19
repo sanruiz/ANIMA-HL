@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import ArteAbout from "@/components/ArteAbout";
-import ArteHero from "@/components/ArteHero";
-import ArteSections from "@/components/arte-sections";
+import { ArteAbout } from "@/components/anima/arte-about";
+import { ArteHero } from "@/components/anima/arte-hero";
+import { ArteSections } from "@/components/anima/arte-sections";
 
 export async function generateMetadata({
   params,

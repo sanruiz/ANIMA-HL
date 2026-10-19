@@ -1,5 +1,5 @@
-import SiteFooter from "@/components/SiteFooter";
-import SiteHeader from "@/components/SiteHeader";
+import { SiteFooter } from "@/components/anima/site-footer";
+import { SiteHeader } from "@/components/anima/site-header";
 import { getMenus } from "@/lib/menus";
 
 // Layout del sitio "normal" (header + footer globales). Las páginas fuera de

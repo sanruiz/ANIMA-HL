@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import MapFindUs from "@/components/MapFindUs";
-import MapIntro from "@/components/map-intro";
+import { MapFindUs } from "@/components/anima/map-find-us";
+import { MapIntro } from "@/components/anima/map-intro";
 
 export async function generateMetadata({
   params,
