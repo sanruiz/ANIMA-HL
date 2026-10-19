@@ -105,6 +105,36 @@ Dos cosas que ANIMA tiene **por delante** del starter y deberían subir: el
 campo `CONSENT` en `lib/newsletter/doppler.ts` y los `components/ui/*`, que son
 una generación de shadcn más nueva.
 
+### Hacia `@sanruiz/mall-frontend-core`
+
+El destino es separar ANIMA, Antara y el core en tres repos, y publicar el
+core como paquete npm para que una corrección se replique sola. Medido sobre
+este repo, el core se parte en dos mitades muy desiguales:
+
+| | Volumen | Cómo viaja |
+|---|---|---|
+| **Módulos importables** (`lib/*`) | ~1.880 líneas | Entran tal cual en el paquete. Se consumen con un `import`. |
+| **Archivos de convención** | ~316 líneas | **No pueden vivir en el paquete.** Next.js los resuelve por su ruta en disco: `proxy.ts`, `i18n/{routing,request,navigation}.ts` y los `app/**/route.ts`. |
+
+O sea que ~85% empaqueta limpio. Los de convención se quedan en cada mall
+como archivos delgados que reexportan lo del paquete — lo que hoy son 85
+líneas en `app/api/revalidate/route.ts` pasaría a ser una:
+
+```ts
+export { POST } from "@sanruiz/mall-frontend-core/revalidate";
+```
+
+La excepción es `proxy.ts`, que en ANIMA no reexporta sino que **envuelve**
+el middleware del core para añadirle el coming-soon. Ese patrón es el que hay
+que preservar: el paquete expone la pieza, el mall la compone.
+
+**La señal de que el core está listo para empaquetarse** es la regla de
+arriba: ningún archivo suyo menciona un mall. Vale la pena un `grep` de
+nombres, dominios, paletas y zonas horarias antes de publicar — durante la
+migración esa regla cazó tres infracciones, y una (`America/Mexico_City`
+quemado en el generador de `.ics`) habría desplazado una hora cada evento de
+cualquier mall fuera de esa zona.
+
 ## Decisiones técnicas
 
 **Cliente GraphQL: `fetch` nativo (no graphql-request ni Apollo).**
