@@ -2093,7 +2093,7 @@ a.brand-detail__info-value:hover {
    MAP — sección "Find us" (migrado de Webflow: /map)
    ============================================================ */
 
-/* Canvas: plano maestro y embed de Google Maps sobre fondo claro. */
+/* Mapa interactivo y embed de Google Maps sobre fondo claro. */
 .map-find {
   width: 100%;
   background: var(--color-claro);
@@ -2104,15 +2104,16 @@ a.brand-detail__info-value:hover {
   padding: 0 0 100px;
 }
 
-/* Plano maestro: imagen vertical centrada, ancho contenido. */
+/* Mapa interactivo: ancho contenido y alto definido para el iframe. */
 .map-find__plan {
   width: 95%;
   max-width: var(--width-content);
 }
 
-.map-find__plan-img {
+.map-find__plan-frame {
   width: 100%;
-  height: auto;
+  height: 600px;
+  border: 0;
   display: block;
 }
 
