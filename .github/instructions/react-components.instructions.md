@@ -5,7 +5,7 @@ applyTo: "**/components/**/*.tsx"
 
 These are the shared core's conventions (`sanruiz-mall-frontend-starter`), which
 ANIMA adopts so its architecture matches Antara's. See `CLAUDE.md`
-(§ Component Structure & Naming) and `docs/adopt-mall-frontend-starter-plan.md`.
+(§ Component Structure & Naming) and the README's "Core compartido" section.
 
 > **Status:** ANIMA's existing components do not comply yet (`PascalCase.tsx`
 > files and `kebab/index.tsx` folders, all using `export default`). Conversion

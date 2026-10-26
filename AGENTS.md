@@ -56,7 +56,8 @@ This repo no longer syncs with `@silverassist/agents-toolkit`. **Do not run its
 `restore`/sync here** — it templates `CLAUDE.md`, `AGENTS.md`, the instructions,
 the prompts and the `validate-tsx` hook, and would revert our own conventions.
 Skills are committed under `.agents/skills/` (`.github/skills/*` symlinks into
-it, for Copilot). See `docs/own-agent-tooling-plan.md`.
+it, for Copilot). The shared core keeps its own working rules in its repo;
+nothing syncs between the two.
 
 ---
 
@@ -90,8 +91,8 @@ it, for Copilot). See `docs/own-agent-tooling-plan.md`.
 ```
 
 > These are the shared core's conventions (`sanruiz-mall-frontend-starter`).
-> Existing ANIMA components do not comply yet — conversion is planned in
-> `docs/adopt-mall-frontend-starter-plan.md`. New components follow these.
+> Every ANIMA component complies: the 40 that predated the convention were
+> converted in one mechanical pass (`430083d`).
 >
 > ⚠️ The `component-architecture` and `domain-driven-design` skills (vendored
 > from `@silverassist/agents-toolkit`) still teach the old pattern. For this

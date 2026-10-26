@@ -84,8 +84,8 @@ messages/                # traducciones de la UI (es.json, en.json)
 ## Core compartido
 
 Este repo comparte su núcleo con [`sanruiz-mall-frontend-starter`](https://github.com/sanruiz/sanruiz-mall-frontend-starter),
-el código común a todos los malls de la plataforma. La migración está
-documentada en [docs/adopt-mall-frontend-starter-plan.md](docs/adopt-mall-frontend-starter-plan.md).
+el código común a todos los malls de la plataforma. Las reglas para trabajar
+sobre el core viven en el `CLAUDE.md` de ese repo.
 
 **La regla que separa las dos mitades:** si un archivo menciona el nombre, el
 dominio, la paleta o la zona horaria de un mall concreto, no es core. Antes de

@@ -114,10 +114,9 @@ extracted as a package.
 > are not edited here: **for this repo's components, this section wins** over
 > those skills. The fix belongs upstream in the toolkit.
 
-> **Status:** existing components do NOT comply yet (31 flat `PascalCase.tsx`
-> files, 11 `kebab/index.tsx` folders, all using `export default`). Conversion
-> is planned separately — see `docs/adopt-mall-frontend-starter-plan.md`.
-> **New components follow the rules below.**
+> **Status:** every component complies. The 40 that predated the convention
+> were converted in one mechanical pass (`430083d`) — flat `kebab-case.tsx`
+> under `src/components/anima/`, named exports, tests colocated.
 
 #### 1. Folder & File Naming
 
@@ -260,8 +259,9 @@ what the agents get. `.agents-toolkit.json` stays — it is now plain repo confi
 (base branch, tracker) that ten of the commands read to resolve `BASE_BRANCH`,
 and removing it would silently send PRs at `main` instead of `master`.
 
-Plan for replacing this with our own tooling in the core:
-`docs/own-agent-tooling-plan.md`.
+This tooling is now independent of the shared core. Skills live in the core
+repo and serve whoever develops it — they are not distributed to the malls, so
+there is nothing here to sync.
 
 Both Claude Code and Copilot are in use, so anything we add has to land in
 `.claude/` and `.github/` alike. `.github/skills/*` are symlinks into
