@@ -15,6 +15,31 @@ vivan en `sanruiz-mall-frontend-starter`, junto al core de código.
 
 ---
 
+> ## ⚠️ Decisión 2026-10-26 — §5 y §6 quedan superados
+>
+> **Las skills no se distribuyen a los malls.** Son conocimiento para
+> desarrollar el core, así que viven en el repo del core y no salen de ahí —
+> ni en el paquete npm que vendrá (serían payload inútil para quien sólo lo
+> consume), ni por un script de sync.
+>
+> Consecuencias:
+>
+> - **D3 (§5) muere.** No hace falta mecanismo de distribución: nada viaja.
+>   Tampoco hay que resolver el cabo suelto de si Copilot lee
+>   `.github/skills/`.
+> - **Las seis skills de §6 se reducen a una cosa**, que ya está hecha: el
+>   `CLAUDE.md` del starter (`5886938`). Un repo con 101 tests no necesita
+>   seis carpetas `SKILL.md`; necesita un documento que explique la regla del
+>   core, qué contratos no se pueden romper y cómo se verifica.
+> - **El tooling de ANIMA se queda como está.** Las fases A y B lo dejaron
+>   funcionando y ahora es independiente del core. El conocimiento de
+>   WordPress que §6 quería empaquetar (`wp-multilang`, `events-and-dates`,
+>   `wp-graphql-contract`) ya vive donde se usa:
+>   `docs/backend-ssh-access.md`, `docs/HOME-EVENTS-LISTING-LOGIC.md` y
+>   `.github/instructions/`.
+>
+> Lo que sigue abajo se conserva como registro del análisis, no como plan.
+
 ## Veredicto
 
 **Sí, y hay más razones de las que se ven a primera vista.** No es sólo que dos

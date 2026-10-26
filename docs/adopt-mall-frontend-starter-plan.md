@@ -502,7 +502,7 @@ Lo que quedaba de ese track —la Fase C— es ahora la **Fase 8**.
 | **5** | Código | ✅ **Hecha (2026-10-19)** — `e27cec8`. Auditoría de tokens: dos huecos reales, uno de ellos heredado de `antara`. | `refactor: reconcile shadcn token layer` |
 | **6** | Docs | ✅ **Hecha (2026-10-19)** — `e2585a7`. README con la sección "Core compartido" y tabla de variables; corregidas las referencias obsoletas. | `docs: document shared core` |
 | **7** | Código | ✅ **Hecha (2026-10-19)** — `430083d`. 42 renombrados con `git mv`, 99/99 líneas, sólo imports y exports. | `refactor: convert components to core convention` |
-| **8** | Instrucciones | Fase C del anexo: montar la carpeta de agentes en el core (D3 opción c), escribir las 6 skills de su §6 contra el core ya estabilizado, portar `stack-context` y los partials, conectar ANIMA y Antara al sync. | `feat: own the agent tooling in the core` |
+| **8** | Instrucciones | ✅ **Hecha (2026-10-26)** — starter `5886938`. Redefinida: las skills no se distribuyen, son para desarrollar el core. D3 y las 6 skills quedan superados; ver la nota al inicio del anexo. | `docs: give the core its own working rules` |
 | **9** | Docs | Cierre: borrar **los dos** planes (éste y el anexo). | `docs: close the core migration` |
 
 **Por qué la Fase 8 va después de la 7, y no después de la 4** (el anexo decía
