@@ -1,23 +1,24 @@
 /**
- * Cliente GraphQL para WPGraphQL usando fetch nativo.
+ * WPGraphQL client using native fetch.
  *
- * ¿Por qué fetch y no graphql-request o Apollo?
- * - En App Router con Server Components, fetch nativo soporta la cache/ISR de
- *   Next.js directamente (opción `next.revalidate`). Cero dependencias extra.
- * - graphql-request sería azúcar sintáctico; Apollo añade un cache de cliente
- *   que aquí no necesitamos. Si algún día lo quieres, solo cambia este archivo.
+ * Why fetch and not graphql-request or Apollo? In App Router with Server
+ * Components, native fetch supports Next.js's cache/ISR directly (the
+ * `next.revalidate` option) — zero extra dependencies. graphql-request would
+ * be syntactic sugar; Apollo adds a client-side cache we don't need here. If
+ * you ever want either, this is the only file to change.
  *
- * Bilingüe (WP Multilang): el idioma se pasa como ?lang=es|en en la URL del
- * endpoint. Cada query recibe el `locale` y pedimos el contenido en ese idioma.
+ * Bilingual (WP Multilang): the locale is passed as ?lang=es|en on the
+ * endpoint URL. Every query receives `locale` and asks for content in that
+ * language.
  */
 
 const ENDPOINT =
-  process.env.WORDPRESS_API_URL ?? "https://anima-headless.local/graphql";
+  process.env.WORDPRESS_API_URL ?? "https://mall-headless.local/graphql";
 
 type FetchArgs = {
   query: string;
   variables?: Record<string, unknown>;
-  /** Idioma para WP Multilang (?lang=). */
+  /** Language for WP Multilang (?lang=). */
   locale?: string;
   /** ISR revalidation in seconds. 0 = no cache. */
   revalidate?: number;
@@ -45,7 +46,7 @@ export async function fetchGraphQL<T>({
   });
 
   if (!res.ok) {
-    throw new Error(`WPGraphQL respondió ${res.status} ${res.statusText}`);
+    throw new Error(`WPGraphQL responded ${res.status} ${res.statusText}`);
   }
 
   const json = (await res.json()) as {
@@ -58,7 +59,7 @@ export async function fetchGraphQL<T>({
   }
 
   if (!json.data) {
-    throw new Error("WPGraphQL no devolvió datos.");
+    throw new Error("WPGraphQL returned no data.");
   }
 
   return json.data;

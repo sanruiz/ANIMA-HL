@@ -1,0 +1,25 @@
+import Image from "next/image";
+import { useTranslations } from "next-intl";
+
+export function AgendaHero() {
+  const t = useTranslations("agenda");
+
+  return (
+    <section className="agenda-hero" aria-labelledby="agenda-hero-heading">
+      <Image
+        src="/events/events-2026.avif"
+        alt={t("heroImageAlt")}
+        fill
+        priority
+        sizes="100vw"
+        className="agenda-hero__img"
+      />
+      <div className="agenda-hero__overlay" aria-hidden />
+      <div className="agenda-hero__inner">
+        <h1 id="agenda-hero-heading" className="agenda-hero__heading">
+          {t("heroHeading")}
+        </h1>
+      </div>
+    </section>
+  );
+}

@@ -10,16 +10,22 @@ WordPress (CMS)  →  WPGraphQL  →  Next.js (este repo)  →  Vercel/CDN  → 
    ↑ plugins: ACF Pro, WPGraphQL, WPGraphQL for ACF, WP Multilang
 ```
 
-El contenido (eventos = CPT `event`, marcas = CPT `brand`) vive en WordPress y se
-edita ahí. Este repo solo lee datos y renderiza.
+El contenido (eventos = CPT `event`, marcas = CPT `brand`), los ajustes del mall
+(`mallSettings`) y los menús de navegación viven en WordPress y se editan ahí.
+Este repo solo lee datos y renderiza.
+
+**Parte del código de `src/` es compartido** con otros malls — ver
+[Core compartido](#core-compartido).
 
 ## Requisitos
 
 - Node.js 20+ (tienes 22).
 - Un WordPress corriendo con estos plugins activos:
   - **WPGraphQL** (expone el endpoint `/graphql`).
-  - **soma-malls-content-types** (registra los CPT `event`, `brand`, `deal` y ya
-    los marca con `show_in_graphql`).
+  - **sanruiz-mall-core** (registra los CPT `event`, `brand`, `deal` y
+    `job_offer` ya marcados con `show_in_graphql`, la página de opciones
+    `mallSettings`, las ubicaciones de menú y el cron de eventos pasados).
+    Sustituyó a `soma-malls-content-types`; producción corre la 0.6.2.
   - **Advanced Custom Fields Pro** + **WPGraphQL for ACF** (para que los campos
     custom aparezcan en el schema — falta verificar `show_in_graphql` por field group).
   - **WP Multilang** (idiomas; el frontend pide contenido con `?lang=es|en`).
@@ -64,15 +70,70 @@ navegador; deberías ver el IDE de GraphiQL o una respuesta JSON.
 
 ```
 src/
-  app/[locale]/        # rutas por idioma (layout, home, agenda, marcas)
-  components/          # SiteHeader, LocaleSwitcher
-  i18n/                # config de next-intl (routing, request, navigation)
-  lib/
-    wp.ts              # cliente GraphQL (fetch nativo + ISR + ?lang=)
-    queries.ts         # queries de events y brands
-    types.ts           # tipos de los CPT
-messages/              # traducciones de la UI (es.json, en.json)
+  app/[locale]/(site)/   # rutas públicas: home, about, agenda, arte, blog,
+                         # brands, gastronomy, map, y (wp-pages) para páginas
+                         # servidas por URI desde WordPress
+  app/api/               # revalidate (ISR on-demand) y el .ics de eventos
+  app/assets/            # proxy de media de WordPress
+  components/            # componentes de marca de ANIMA + ui/ (shadcn)
+  i18n/                  # config de next-intl (routing, request, navigation)
+  lib/                   # core compartido + extensiones de ANIMA (ver abajo)
+messages/                # traducciones de la UI (es.json, en.json)
 ```
+
+## Core compartido
+
+Este repo comparte su núcleo con [`sanruiz-mall-frontend-starter`](https://github.com/sanruiz/sanruiz-mall-frontend-starter),
+el código común a todos los malls de la plataforma. Las reglas para trabajar
+sobre el core viven en el `CLAUDE.md` de ese repo.
+
+**La regla que separa las dos mitades:** si un archivo menciona el nombre, el
+dominio, la paleta o la zona horaria de un mall concreto, no es core. Antes de
+editar algo bajo `lib/` o `i18n/`, mira de qué lado está:
+
+| Core — cambios van también al starter | De ANIMA — se quedan aquí |
+|---|---|
+| `lib/wp.ts`, `queries.ts`, `types.ts` | `lib/mall.ts` (identidad: nombre, dirección, zona horaria) |
+| `lib/cache-tags.ts`, `revalidation.ts` | `lib/coming-soon.ts`, `redirects.ts` |
+| `lib/events.ts`, `event-date-formatter.ts` | `lib/brand-taxonomy.ts` |
+| `lib/event-calendar.ts`, `menus.ts`, `seo.ts` | `proxy.ts` (envuelve el del core) |
+| `lib/utils.ts`, `wp-image.ts`, `i18n-tags.ts` | `app/[locale]/**` (rutas propias) |
+| `lib/newsletter/*`, `lib/brands.ts` | `globals.css` (BEM de Webflow + tokens) |
+| `i18n/*`, `app/api/revalidate`, `app/assets` | `components/` salvo `ui/` y `site/` |
+
+Dos cosas que ANIMA tiene **por delante** del starter y deberían subir: el
+campo `CONSENT` en `lib/newsletter/doppler.ts` y los `components/ui/*`, que son
+una generación de shadcn más nueva.
+
+### Hacia `@sanruiz/mall-frontend-core`
+
+El destino es separar ANIMA, Antara y el core en tres repos, y publicar el
+core como paquete npm para que una corrección se replique sola. Medido sobre
+este repo, el core se parte en dos mitades muy desiguales:
+
+| | Volumen | Cómo viaja |
+|---|---|---|
+| **Módulos importables** (`lib/*`) | ~1.880 líneas | Entran tal cual en el paquete. Se consumen con un `import`. |
+| **Archivos de convención** | ~316 líneas | **No pueden vivir en el paquete.** Next.js los resuelve por su ruta en disco: `proxy.ts`, `i18n/{routing,request,navigation}.ts` y los `app/**/route.ts`. |
+
+O sea que ~85% empaqueta limpio. Los de convención se quedan en cada mall
+como archivos delgados que reexportan lo del paquete — lo que hoy son 85
+líneas en `app/api/revalidate/route.ts` pasaría a ser una:
+
+```ts
+export { POST } from "@sanruiz/mall-frontend-core/revalidate";
+```
+
+La excepción es `proxy.ts`, que en ANIMA no reexporta sino que **envuelve**
+el middleware del core para añadirle el coming-soon. Ese patrón es el que hay
+que preservar: el paquete expone la pieza, el mall la compone.
+
+**La señal de que el core está listo para empaquetarse** es la regla de
+arriba: ningún archivo suyo menciona un mall. Vale la pena un `grep` de
+nombres, dominios, paletas y zonas horarias antes de publicar — durante la
+migración esa regla cazó tres infracciones, y una (`America/Mexico_City`
+quemado en el generador de `.ics`) habría desplazado una hora cada evento de
+cualquier mall fuera de esa zona.
 
 ## Decisiones técnicas
 
@@ -87,13 +148,15 @@ no aplica.
 - Contenido (WordPress): WP Multilang; se pide con `?lang=es|en` en el endpoint.
 - Interfaz (este repo): next-intl con `messages/*.json` y rutas `/es` `/en`.
 
-## Pendientes (próximos pasos)
+## Variables de entorno
 
-1. Confirmar la URL del endpoint en `.env.local`.
-2. Verificar que cada field group de ACF tenga `show_in_graphql=true` y añadir esos
-   campos a `src/lib/queries.ts`.
-3. Habilitar `event` y `brand` para traducción en WP Multilang.
-4. Páginas de detalle (`/agenda/[slug]`, `/marcas/[slug]`).
-5. SEO: metadata por idioma, `hreflang`, sitemap.
-6. Formulario newsletter → reusar el proxy Doppler existente en Vercel.
-7. Deploy a Vercel.
+Las que importan, con su modo de fallo si faltan (`.env.example` tiene la
+lista completa):
+
+| Variable | Si falta |
+|---|---|
+| `WORDPRESS_API_URL` | No renderiza nada: no hay de dónde leer contenido. |
+| `NEXT_PUBLIC_SITE_URL` | **Silencioso.** `lib/seo.ts` es core, así que su fallback es `your-mall.example.com`: los canonical, el Open Graph y el sitemap apuntarían ahí en vez de fallar. Obligatoria en todo entorno desplegado. |
+| `DOPPLER_API_KEY`, `DOPPLER_ACCOUNT`, `DOPPLER_LIST_ID` | El formulario de newsletter devuelve error; no hay valores por defecto a propósito, para que la lista de un mall no reciba los contactos de otro. |
+| `REVALIDATE_SECRET` | `/api/revalidate` responde 401 a todo (falla cerrado). |
+| `COMING_SOON`, `PREVIEW_TOKEN` | Sin modo coming-soon; el sitio queda público. |

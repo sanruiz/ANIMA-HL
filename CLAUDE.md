@@ -51,23 +51,27 @@ Custom slash commands are available in `.claude/commands/`:
 
 | Command | Description |
 |---------|-------------|
-| `/analyze-ticket` | Analyze a Jira ticket without making changes |
-| `/create-plan` | Create an implementation plan for a ticket |
-| `/work-ticket` | Start working on a Jira ticket with full workflow setup |
+| `/analyze-github-issue` | Analyze a GitHub issue without making changes |
+| `/create-plan` | Create an implementation plan for an issue |
+| `/work-github-issue` | Start working on a GitHub issue with full workflow setup |
 | `/prepare-pr` | Prepare code for pull request review |
-| `/create-pr` | Create and submit a pull request |
-| `/finalize-pr` | Finalize and merge a pull request |
+| `/create-github-pr` | Create and submit a pull request |
+| `/finalize-github-pr` | Finalize and merge a pull request |
+| `/prepare-github-release` | Bump the version, update the changelog and tag a release |
 | `/review-code` | Review code for quality and issues |
 | `/fix-issues` | Fix identified code issues |
 | `/add-tests` | Add tests for existing code |
+| `/audit-ai-seo` | Audit the site for AI/generative search optimization |
 
 ## Key Technologies & Frameworks
 
-- **Next.js 15.x** with App Router for modern React development
+- **Next.js 16.x** with App Router for modern React development
 - **React 19** for latest React features and optimizations
 - **TypeScript** for comprehensive type safety
 - **Tailwind CSS v4** with custom CSS variables and shadcn/ui design system
-- **Jest & React Testing Library** for comprehensive testing
+- **Vitest & React Testing Library** for comprehensive testing (`npm test`
+  runs `vitest run`; there is no Jest in this repo, despite what older notes
+  said — the shared core uses the same runner and version)
 
 ## Domain-Driven Design (DDD) Principles
 
@@ -81,7 +85,7 @@ This project follows **Domain-Driven Design** principles.
 **Quick Rules**:
 - ✅ Create domain folders that match business concepts
 - ✅ Keep domain-specific utilities inside domain folders
-- ✅ Place tests in `__tests__/` subfolders within each domain
+- ✅ Colocate tests next to the file they cover (`entity-card.test.tsx`)
 - ❌ Don't create generic folders like "helpers", "services", "utils" at root level
 
 ## Key Conventions
@@ -99,59 +103,85 @@ This project follows **Domain-Driven Design** principles.
 
 ### Component Structure & Naming
 
-**CRITICAL: All components must follow these strict conventions:**
+**These are the shared core's conventions (`sanruiz-mall-frontend-starter`).**
+ANIMA adopts them so its architecture matches Antara's and the core can be
+extracted as a package.
+
+> ⚠️ **Precedence.** Two skills vendored from `@silverassist/agents-toolkit` —
+> `component-architecture` and `domain-driven-design` — still teach the
+> opposite (`<folder>/index.tsx`, `export default`, barrel `index.ts`). They
+> are package-managed and hash-tracked in `agents-toolkit-lock.json`, so they
+> are not edited here: **for this repo's components, this section wins** over
+> those skills. The fix belongs upstream in the toolkit.
+
+> **Status:** every component complies. The 40 that predated the convention
+> were converted in one mechanical pass (`430083d`) — flat `kebab-case.tsx`
+> under `src/components/anima/`, named exports, tests colocated.
 
 #### 1. Folder & File Naming
 
-- **Folder names**: MUST use kebab-case (e.g., `user-profile/`, `checkout-wizard/`)
-- **File structure**: Every component MUST be in its own folder with an `index.tsx` file
-- **❌ NEVER**: Use camelCase or PascalCase for folder names
-- **❌ NEVER**: Create standalone component files like `Component.tsx` at root level
+- **One flat file per component**, named in kebab-case: `entity-card.tsx`
+- Grouped in a domain folder: `ui/` (shadcn primitives), `site/` (the core's
+  generic domain components), or the mall's own domain (`anima/`)
+- **❌ NEVER**: `PascalCase.tsx`, nor a folder per component with `index.tsx`
 
 ```
 ✅ CORRECT:
-src/components/user-profile/index.tsx
-src/components/contact-form/index.tsx
+src/components/ui/button.tsx
+src/components/site/entity-card.tsx
+src/components/anima/brands-directory.tsx
 
 ❌ INCORRECT:
-src/components/UserProfile.tsx
-src/components/userProfile/index.tsx
+src/components/BrandsDirectory.tsx
+src/components/brands-directory/index.tsx
 ```
 
 #### 2. Component Export Pattern
 
-- **Function name**: MUST use PascalCase for the exported function
-- **Export statement**: MUST use `export default function` for components
-- **Barrel file**: Re-export with a named alias from the domain `index.ts`
-- **Single responsibility**: Each file should export ONLY the component function
+- **Function name**: PascalCase
+- **Export statement**: named `export function`, NOT `export default`
+- **No barrel `index.ts`** — import by direct path
+- A file may export **several components** when they are used together
+  (e.g. `page-state.tsx` exports `EmptyState` and `ErrorState`)
 
-```typescript
-// ✅ CORRECT: src/components/user-profile/index.tsx
-interface UserProfileProps {
-  userId: string;
-  className?: string;
+```tsx
+// ✅ CORRECT: src/components/site/entity-card.tsx
+export type EntityCardTag = { name: string; slug: string };
+
+/**
+ * Generic list-item card for any content type. Domain pages map their own
+ * field shape into these props.
+ */
+export function EntityCard({ href, title, tags }: {
+  href: string;
+  title: string | null;
+  tags?: EntityCardTag[];
+}) {
+  // ...
 }
 
-export default function UserProfile({ userId, className }: UserProfileProps) {
-  // Component implementation
-}
-
-// ✅ CORRECT: src/components/index.ts (barrel)
-export { default as UserProfile } from "./user-profile";
+// Usage
+import { EntityCard } from "@/components/site/entity-card";
 ```
 
-#### 3. Props Interface Definition
+#### 3. Props Definition
 
-- **MUST**: Define props interface INSIDE the component file
-- **Interface name**: MUST match component name + "Props" suffix (PascalCase)
-- **Location**: Define interface immediately BEFORE the component function
+- **Simple props**: typed inline in the signature (see the example above)
+- **Shared types** — reused across components or by the pages — are exported
+  with `export type` from the same file
+- Generic components carry JSDoc explaining what they abstract
 
 #### 4. Separation of Concerns
 
-- **Component file**: ONLY the component function and its props interface
-- **Helper functions**: Create separate `helpers.ts` or `utils.ts` in same folder
-- **Types/Interfaces**: Create separate `types.ts` if multiple types are shared
-- **Constants**: Create separate `constants.ts` for component-specific constants
+- **Helpers and hooks**: in `src/lib/` with named exports, not inside the component
+- **Domain types**: in `src/lib/types.ts` (the WPGraphQL contract)
+- **Shared constants**: in `src/lib/`, not duplicated per component
+
+#### 5. Tests
+
+Colocated next to the file they cover, named `<name>.test.ts(x)` — the core's
+layout: `src/lib/wp.test.ts`, `src/components/site/entity-card.test.tsx`. No
+`__tests__/` subfolders.
 
 ---
 
@@ -162,7 +192,7 @@ export { default as UserProfile } from "./user-profile";
 **✅ Correct:** All hooks before conditional returns
 
 ```typescript
-export default function Component({ data }: Props) {
+export function Component({ data }: Props) {
   const [state, setState] = useState(initialState);
   const handleClick = useCallback(() => {}, []);
 
@@ -214,6 +244,31 @@ TYPE-XXX: Brief description
 
 ---
 
+## Agent tooling — this repo no longer syncs with `@silverassist/agents-toolkit`
+
+`.agents/skills/`, `.github/instructions/`, `.github/prompts/`,
+`.claude/commands/` and `.github/hooks/` started as toolkit templates and have
+since diverged — the component convention above is ours, not the toolkit's.
+**Do not run `npx @silverassist/agents-toolkit restore` (or any sync) in this
+repo:** it templates `CLAUDE.md`, `AGENTS.md`, `copilot-instructions.md`, the
+instructions, the prompts and the `validate-tsx` hook, has no managed-block
+markers to merge around local edits, and would revert them.
+
+The vendoring lock is gone and the skills are committed, so what you see here is
+what the agents get. `.agents-toolkit.json` stays — it is now plain repo config
+(base branch, tracker) that ten of the commands read to resolve `BASE_BRANCH`,
+and removing it would silently send PRs at `main` instead of `master`.
+
+This tooling is now independent of the shared core. Skills live in the core
+repo and serve whoever develops it — they are not distributed to the malls, so
+there is nothing here to sync.
+
+Both Claude Code and Copilot are in use, so anything we add has to land in
+`.claude/` and `.github/` alike. `.github/skills/*` are symlinks into
+`.agents/skills/` — keep that shape when adding a skill.
+
+---
+
 ## Shared Detailed Rules (source of truth for both Claude & Copilot)
 
 The following files under `.github/instructions/` contain detailed coding
@@ -262,9 +317,21 @@ Even within a Webflow-migrated section, split at the boundary of "canvas" vs
   `.brands-directory__intro` (Retail Reimagined heading + lead).
 - Tailwind → filter buttons, grid, brand cards inside `BrandsDirectory`.
 
-### Files under `.github/instructions/` that DO NOT apply to this repo
+### What was removed, and why there is no longer a "does not apply" list
 
 `php-standards`, `wordpress-plugin-architecture`, `testing-standards` (PHPUnit),
-`github-workflow`, and `documentation-language` were seeded from a Silver Assist
-WordPress plugin template. There is no PHP in this repo and those workflows do
-not apply. Ignore them unless the repo grows to include a plugin subtree.
+`github-workflow` and `documentation-language` were seeded from a Silver Assist
+WordPress plugin template and are **deleted** — 1256 lines describing a stack
+this repo does not have. They were not inert: each carried `applyTo: "**"`, so
+`github-workflow` was asserting `main` as the base branch (this repo uses
+`master`) and `documentation-language` an English-only rule (`docs/` is in
+Spanish).
+
+Deleted alongside them: the `create-component`, `plugin-creation`,
+`quality-checks`, `release-management` and `testing` skills (all PHP/WordPress),
+the `new-wp-component`, `new-wp-plugin`, `prepare-release` and `quality-check`
+prompts, and the Jira twins `analyze-ticket`, `work-ticket`, `create-pr` and
+`finalize-pr` — this repo's tracker is GitHub, and each has a `*-github-*`
+counterpart that stays.
+
+Everything listed in the table above is what remains, and all of it applies.

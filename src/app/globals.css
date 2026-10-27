@@ -23,6 +23,7 @@
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
@@ -109,6 +110,11 @@
       --accent: var(--color-gold);
       --accent-foreground: var(--color-brown);
       --destructive: #9f3f36;
+      /* Texto sobre un fondo destructive sólido. Los ui/* de ANIMA usan
+         `text-destructive` sobre fondo tintado y no lo necesitan, pero
+         cualquier componente que se añada con el CLI de shadcn sí: sin el
+         token la clase se descarta en silencio y el texto queda ilegible. */
+      --destructive-foreground: var(--color-claro);
       --border: color-mix(in srgb, var(--color-brown) 38%, transparent);
       --input: color-mix(in srgb, var(--color-brown) 30%, transparent);
       --ring: var(--color-gold);
@@ -328,6 +334,7 @@ body {
   --accent: var(--color-rose);
   --accent-foreground: var(--color-brown);
   --destructive: #ca6f64;
+  --destructive-foreground: var(--color-brown);
   --border: color-mix(in srgb, var(--color-warm-gray) 24%, transparent);
   --input: color-mix(in srgb, var(--color-warm-gray) 22%, transparent);
   --ring: var(--color-gold);

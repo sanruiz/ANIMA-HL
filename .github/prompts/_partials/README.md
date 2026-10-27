@@ -8,7 +8,6 @@ This directory contains reusable prompt fragments that can be referenced in main
 |---------|-------------|----------|
 | `validations.md` | Code quality validation steps | Pre-PR checks, CI validation |
 | `git-operations.md` | Git workflow operations | Branch management, commits |
-| `jira-integration.md` | Jira/Atlassian MCP operations | Ticket reading, updates |
 | `documentation.md` | Documentation standards | JSDoc, README, planning docs |
 | `pr-template.md` | Pull request templates | PR creation, review |
 

@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import BrandsDirectory from "@/components/BrandsDirectory";
-import BrandsHero from "@/components/BrandsHero";
-import FeaturedBrandsCarousel from "@/components/featured-brands-carousel";
+import { BrandsDirectory } from "@/components/anima/brands-directory";
+import { BrandsHero } from "@/components/anima/brands-hero";
+import { FeaturedBrandsCarousel } from "@/components/anima/featured-brands-carousel";
 import { filterBrandsByExcludedTags } from "@/lib/brand-taxonomy";
 import { collectionTag } from "@/lib/cache-tags";
 import { BRANDS_QUERY } from "@/lib/queries";

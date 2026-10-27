@@ -1,8 +1,8 @@
-import { clsx, type ClassValue } from "clsx"
-import { twMerge } from "tailwind-merge"
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
+  return twMerge(clsx(inputs));
 }
 
 export function stripHtml(html: string | null): string {
@@ -106,9 +106,9 @@ export function formatMonthYear(
 }
 
 /**
- * Joins a brand's ACF `days` and `time` fields into the single "Hours" line
- * shown on the Webflow brand template (e.g. "Monday to Sunday: 11:00 AM –
- * 8:00 PM"). Empty unless both fields are present.
+ * Joins a brand's ACF `days` and `time` fields into a single "Hours" line
+ * (e.g. "Monday to Sunday: 11:00 AM – 8:00 PM"). Empty unless both fields
+ * are present.
  */
 export function formatBrandHours(
   days: string | null | undefined,
@@ -116,4 +116,24 @@ export function formatBrandHours(
 ): string {
   if (!days || !time) return "";
   return `${days}: ${time}`;
+}
+
+const PET_FRIENDLY_TRUTHY = new Set(["si", "sí", "yes", "true", "1"]);
+
+/**
+ * Whether a brand admits pets.
+ *
+ * Needs normalizing because ACF exposes `petfriendly` as a select array
+ * (`["si"]` / `["no"]`), and an array is always truthy — so testing the raw
+ * field marks *every* brand as pet friendly, including the ones answering
+ * "no". Older installs expose the same field as a plain string, boolean or
+ * number, hence the other branches.
+ */
+export function isPetFriendly(value: unknown): boolean {
+  if (Array.isArray(value)) return value.some(isPetFriendly);
+  if (typeof value === "boolean") return value;
+  if (typeof value === "number") return value === 1;
+  if (typeof value === "string")
+    return PET_FRIENDLY_TRUTHY.has(value.trim().toLowerCase());
+  return false;
 }

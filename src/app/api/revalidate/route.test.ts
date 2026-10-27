@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { ALL_TAGS } from "@/lib/cache-tags";
 
 const revalidateTag = vi.fn();
 
@@ -71,7 +72,7 @@ describe("POST /api/revalidate", () => {
   });
 
   it("returns 400 when the payload has nothing actionable", async () => {
-    const response = await POST(request({ type: "deal" }, SECRET));
+    const response = await POST(request({ type: "widget" }, SECRET));
 
     expect(response.status).toBe(400);
     expect(revalidateTag).not.toHaveBeenCalled();
@@ -88,6 +89,6 @@ describe("POST /api/revalidate", () => {
     const response = await POST(request({ all: true }, SECRET));
 
     expect(response.status).toBe(200);
-    expect(revalidateTag).toHaveBeenCalledTimes(5);
+    expect(revalidateTag).toHaveBeenCalledTimes(ALL_TAGS.length);
   });
 });

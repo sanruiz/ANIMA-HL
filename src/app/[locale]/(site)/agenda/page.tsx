@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import AgendaEventsList from "@/components/agenda-events-list";
-import AgendaHero from "@/components/agenda-hero";
-import JsonLd from "@/components/JsonLd";
+import { AgendaEventsList } from "@/components/anima/agenda-events-list";
+import { AgendaHero } from "@/components/anima/agenda-hero";
+import { JsonLd } from "@/components/anima/json-ld";
 import { getPastEvents, getUpcomingEvents } from "@/lib/events";
 import { collectionTag } from "@/lib/cache-tags";
 import { EVENTS_QUERY } from "@/lib/queries";

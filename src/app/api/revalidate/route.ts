@@ -1,5 +1,5 @@
 /**
- * On-demand cache invalidation, called by the SOMA Malls Content Types plugin
+ * On-demand cache invalidation, called by the sanruiz-mall-core plugin
  * whenever content changes in WordPress.
  *
  * Pages fetch with a one hour `revalidate` as a safety net; this endpoint is

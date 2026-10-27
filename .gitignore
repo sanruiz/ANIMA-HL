@@ -30,7 +30,12 @@ yarn-error.log*
 # vercel
 .vercel
 
-# agents-toolkit managed — regenerate with: npx @silverassist/agents-toolkit restore
-.agents/skills/
-.github/skills/
-.claude/skills/
+
+# Claude Code's config is part of this repo: the commands and skills under
+# .claude/ are the Claude-side twin of .github/prompts and .github/skills, and
+# a clone without them leaves Claude Code with no tooling while Copilot has all
+# of it. A global `.claude` rule (~/.gitignore_global) was hiding the whole
+# tree, so it is re-included here — the repo's own .gitignore outranks the
+# global one, and negating the directory lets git descend into it again.
+# .DS_Store is still caught by the rule above.
+!.claude/

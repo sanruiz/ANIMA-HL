@@ -5,14 +5,15 @@ applyTo: "**/*.test.{ts,tsx}"
 
 ## Test File Location
 
-Place tests in `__tests__/` folders next to the code:
+Colocate the test next to the file it covers, named `<name>.test.ts(x)` — the
+shared core's layout. No `__tests__/` subfolders.
 
 ```
-components/
-└── button/
-    ├── index.tsx
-    └── __tests__/
-        └── button.test.tsx
+src/lib/wp.ts
+src/lib/wp.test.ts
+
+src/components/site/entity-card.tsx
+src/components/site/entity-card.test.tsx
 ```
 
 ## Test Structure
@@ -22,7 +23,7 @@ Use `describe` and `it` blocks:
 ```typescript
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { Button } from '../index';
+import { Button } from '@/components/ui/button';
 
 describe('Button', () => {
   const defaultProps = {

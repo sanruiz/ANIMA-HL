@@ -1,12 +1,12 @@
 /**
- * WP Multilang guarda algunas traducciones inline como "[:en]Hello[:es]Hola[:]".
+ * WP Multilang stores some translations inline as "[:en]Hello[:es]Hola[:]".
  *
- * Para títulos y contenido de posts, WP Multilang ya resuelve estas etiquetas en
- * GraphQL según el ?lang. PERO para los NOMBRES DE TÉRMINOS de taxonomía el filtro
- * NO se aplica vía WPGraphQL, así que llegan crudos. Esta función extrae el idioma
- * correcto en el frontend.
+ * For post titles and content, WP Multilang already resolves these tags in
+ * GraphQL based on ?lang. BUT for taxonomy TERM NAMES the filter does NOT
+ * apply via WPGraphQL, so they arrive raw. This function extracts the
+ * correct language on the frontend.
  *
- * Es segura para textos sin etiquetas: si no hay "[:", devuelve el valor tal cual.
+ * Safe for text without tags: if there's no "[:", the value is returned as-is.
  */
 export function localizeTags(
   value: string | null | undefined,

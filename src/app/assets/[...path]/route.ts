@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { ASSETS_TAG } from "@/lib/cache-tags";
 
-const DEFAULT_WORDPRESS_ORIGIN = "https://anima-headless.local";
+const DEFAULT_WORDPRESS_ORIGIN = "https://mall-headless.local";
 const ASSET_CACHE_CONTROL =
   "public, max-age=31536000, s-maxage=31536000, stale-while-revalidate=2592000";
 const ALLOWED_FIRST_SEGMENTS = new Set(["plugins", "themes", "uploads"]);

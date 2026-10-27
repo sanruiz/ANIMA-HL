@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import ArteDetail from "@/components/arte-detail";
-import JsonLd from "@/components/JsonLd";
+import { ArteDetail } from "@/components/anima/arte-detail";
+import { JsonLd } from "@/components/anima/json-ld";
 import { getLanguageAlternates, getLocalizedUrl } from "@/lib/seo";
 
 const SLUG = "coleccion";

@@ -22,11 +22,13 @@
 |typescript.instructions.md          → Type safety, destructuring, JSDoc
 
 [Prompts]|root:.github/prompts
-|add-tests,analyze-ticket,create-plan,create-pr,finalize-pr,fix-issues,prepare-pr,review-code,work-ticket
+|add-tests,analyze-github-issue,audit-ai-seo,create-github-pr,create-plan,finalize-github-pr,fix-issues,prepare-github-release,prepare-pr,review-code,work-github-issue
 
 [Skills]|root:.github/skills
+|ai-seo-optimization/SKILL.md    → Generative-search and agent-readability audits
 |component-architecture/SKILL.md → Component design patterns
 |domain-driven-design/SKILL.md   → DDD principles and structure
+|nextjs-caching/SKILL.md         → ISR tiers, cache tags, on-demand revalidation
 |testing-patterns/SKILL.md       → Testing strategies and patterns
 ```
 
@@ -48,6 +50,17 @@
 
 ---
 
+## 🧰 Agent tooling
+
+This repo no longer syncs with `@silverassist/agents-toolkit`. **Do not run its
+`restore`/sync here** — it templates `CLAUDE.md`, `AGENTS.md`, the instructions,
+the prompts and the `validate-tsx` hook, and would revert our own conventions.
+Skills are committed under `.agents/skills/` (`.github/skills/*` symlinks into
+it, for Copilot). The shared core keeps its own working rules in its repo;
+nothing syncs between the two.
+
+---
+
 ## ⚙️ Code Conventions (Quick Reference)
 
 | Rule | Standard |
@@ -64,16 +77,26 @@
 
 | Rule | Requirement |
 |------|-------------|
-| **Folders** | `kebab-case` only (`user-profile/`, NOT `UserProfile/`) |
-| **Structure** | `component-name/index.tsx` (never standalone `.tsx` files) |
-| **Exports** | `export default function ComponentName` (default export, PascalCase) |
-| **Props** | Interface inside file, before function, named `{Component}Props` |
+| **Files** | Flat `kebab-case.tsx` inside a domain folder (`site/`, `ui/`, `anima/`) |
+| **Structure** | One file per component — NOT `component-name/index.tsx`, NOT `PascalCase.tsx` |
+| **Exports** | `export function ComponentName` (named export, PascalCase) — never `export default` |
+| **Barrels** | None. Import by direct path: `@/components/site/entity-card` |
+| **Props** | Typed inline in the signature; `export type` when shared |
 
 ```
-✅ components/user-card/index.tsx
-❌ components/UserCard.tsx
-❌ components/userCard/index.tsx
+✅ components/site/entity-card.tsx
+✅ components/anima/brands-directory.tsx
+❌ components/BrandsDirectory.tsx
+❌ components/brands-directory/index.tsx
 ```
+
+> These are the shared core's conventions (`sanruiz-mall-frontend-starter`).
+> Every ANIMA component complies: the 40 that predated the convention were
+> converted in one mechanical pass (`430083d`).
+>
+> ⚠️ The `component-architecture` and `domain-driven-design` skills (vendored
+> from `@silverassist/agents-toolkit`) still teach the old pattern. For this
+> repo's components, this table wins over those skills.
 
 📄 **Full details:** `.github/instructions/react-components.instructions.md`
 
@@ -90,7 +113,7 @@
 
 ```tsx
 // ✅ CORRECT: Hooks first, then early returns
-export default function Component({ data }: Props) {
+export function Component({ data }: Props) {
   const [state, setState] = useState(initial);
   const handleClick = useCallback(() => {}, []);
   
@@ -119,7 +142,7 @@ export default function Component({ data }: Props) {
 
 | Rule | Requirement |
 |------|-------------|
-| **Location** | `__tests__/` subfolder in each component/domain |
+| **Location** | Colocated: `<name>.test.ts(x)` next to the file it covers |
 | **Naming** | `[component-name].test.tsx` or `[feature].test.ts` |
 | **Coverage** | 100% for reducers, unit tests for actions & utils |
 | **Mocks** | Define mocks BEFORE imports |
@@ -221,3 +244,13 @@ Before ANY push to dev/staging/main:
 | Writing tests | `tests.instructions.md` |
 | TypeScript questions | `typescript.instructions.md` |
 | **Before pushing/PR** | `tests.instructions.md` + run quality checks |
+
+<!-- BEGIN:nextjs-agent-rules -->
+
+## This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->

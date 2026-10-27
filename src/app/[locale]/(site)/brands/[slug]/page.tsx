@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
-import BrandDetail from "@/components/BrandDetail";
-import JsonLd from "@/components/JsonLd";
+import { BrandDetail } from "@/components/anima/brand-detail";
+import { JsonLd } from "@/components/anima/json-ld";
 import { collectionTag, itemTag } from "@/lib/cache-tags";
 import { BRAND_BY_SLUG_QUERY } from "@/lib/queries";
 import { getLanguageAlternates, getLocalizedUrl } from "@/lib/seo";

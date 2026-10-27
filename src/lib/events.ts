@@ -1,7 +1,9 @@
 import type { EventNode } from "@/lib/types";
 import { parseEventDate } from "@/lib/event-date-formatter";
 
-export const PAST_EVENT_TAG_SLUG = "eventos-pasados";
+// Matches the term slug sanruiz-mall-core creates/uses in
+// ContentUpdaterService (get_or_create_past_events_term()).
+export const PAST_EVENT_TAG_SLUG = "past-events";
 
 function getTodayKey(today: Date): number {
   const year = today.getUTCFullYear();

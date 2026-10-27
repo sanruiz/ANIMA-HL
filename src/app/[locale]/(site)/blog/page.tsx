@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import BlogIntro from "@/components/BlogIntro";
-import BlogList from "@/components/BlogList";
-import JsonLd from "@/components/JsonLd";
+import { BlogIntro } from "@/components/anima/blog-intro";
+import { BlogList } from "@/components/anima/blog-list";
+import { JsonLd } from "@/components/anima/json-ld";
 import { collectionTag } from "@/lib/cache-tags";
 import { NEWS_QUERY } from "@/lib/queries";
 import { getLanguageAlternates, getLocalizedUrl } from "@/lib/seo";

@@ -13,7 +13,7 @@ Si en el futuro se agrega una sección de eventos al home, este documento debe a
 
 ## De dónde vienen los datos
 
-WordPress (headless, plugin `soma-malls-content-types` + ACF + WPGraphQL) vive en **otro repositorio**. Este repo solo consume la API GraphQL vía `fetchGraphQL()` (`src/lib/wp.ts`).
+WordPress (headless, plugin `sanruiz-mall-core` + ACF + WPGraphQL) vive en **otro repositorio**. Este repo solo consume la API GraphQL vía `fetchGraphQL()` (`src/lib/wp.ts`).
 
 `EVENTS_QUERY` (`src/lib/queries.ts`) pide **todos** los eventos en una sola llamada, ordenados por `DATE DESC` a nivel WordPress (ese orden es solo el de la respuesta cruda; el orden final que ve el usuario se recalcula en TypeScript, ver abajo):
 
@@ -39,7 +39,7 @@ events(first: $first, where: { orderby: { field: DATE, order: DESC } }) {
 Todo vive en `src/lib/events.ts` (96 líneas). No hay cron de WordPress ni `functions.php` en este repo — ese código, si existe, está en el repo de WordPress y **no puede documentarse ni verificarse desde aquí**.
 
 ```ts
-export const PAST_EVENT_TAG_SLUG = "eventos-pasados";
+export const PAST_EVENT_TAG_SLUG = "past-events";
 
 export function isPastEvent(event: EventNode, today = new Date()): boolean {
   return hasPastEventTag(event) || isPastByDate(event, todayKey);
@@ -48,17 +48,19 @@ export function isPastEvent(event: EventNode, today = new Date()): boolean {
 
 Un evento se considera **pasado** si se cumple cualquiera de estas dos condiciones (evaluadas en cada request):
 
-1. **Override manual por tag**: el evento tiene la etiqueta de taxonomía `eventos-pasados` en `eventTags` (viene de WordPress; este repo solo la lee, no la asigna).
+1. **Override manual por tag**: el evento tiene la etiqueta de taxonomía `past-events` en `eventTags` (viene de WordPress; este repo solo la lee, no la asigna).
 2. **Por fecha**: la fecha de referencia del evento (`endDate` si existe, si no `startDate`, si no el `date` del post de WP) es anterior a hoy — comparando enteros `YYYYMMDD` en UTC, mismo mecanismo que usa `parseEventDate()` (ver `docs/README-EVENT-DATE-FORMATTER.md`).
 
-**Diferencia clave con el diseño legado:** antes se documentaba un cron diario de WordPress que etiquetaba/desetiquetaba eventos. Eso ya no es necesario para que este front-end funcione: `isPastEvent()`/`getUpcomingEvents()`/`getPastEvents()` recalculan el estado "pasado" en cada request a partir de las fechas, sin depender de que ningún proceso batch haya corrido. El tag `eventos-pasados` solo se respeta como señal manual adicional, si WordPress lo sigue asignando.
+**El front-end no depende del cron.** `isPastEvent()`/`getUpcomingEvents()`/`getPastEvents()` recalculan el estado "pasado" en cada request a partir de las fechas, sin esperar a que ningún proceso batch haya corrido. El tag es un override adicional.
+
+> **Actualizado 2026-10-19.** El slug pasó de `eventos-pasados` a `past-events`, que es el que escribe `sanruiz-mall-core`; el término viejo se borró del backend el 2026-10-17. Y el cron **sí está etiquetando** otra vez: tenía un bug de comparación de fechas que lo hacía saltarse todo evento del año en curso, corregido upstream en la 0.6.1. Nada de esto cambia la lógica de arriba — precisamente porque la clasificación la manda la fecha, el frontend siguió correcto durante todo el periodo en que la etiqueta estuvo vacía.
 
 ## Filtrado y orden
 
 ```ts
 getUpcomingEvents(events, today)
 ```
-- Excluye eventos con el tag `eventos-pasados` **y** eventos cuya fecha de referencia ya pasó.
+- Excluye eventos con el tag `past-events` **y** eventos cuya fecha de referencia ya pasó.
 - Ordena ascendente por `startDate` (más cercano primero); si dos eventos empatan en fecha, ordena por título (`localeCompare`).
 
 ```ts
@@ -74,7 +76,7 @@ getPastEvents(events, today)
 `src/components/agenda-events-list/index.tsx` (client component):
 
 - Recibe `upcomingEvents` y `pastEvents` ya separados y ordenados — no vuelve a decidir qué es pasado.
-- Construye un filtro de categorías a partir de los `eventTags` de **ambos** arreglos combinados (excluyendo siempre `eventos-pasados`), como un set de tabs "Todos" + una por tag. El filtro es 100% client-side (`useState`), sin nueva consulta a WordPress.
+- Construye un filtro de categorías a partir de los `eventTags` de **ambos** arreglos combinados (excluyendo siempre `past-events`), como un set de tabs "Todos" + una por tag. El filtro es 100% client-side (`useState`), sin nueva consulta a WordPress.
 - Renderiza dos secciones dentro de la misma lista: próximos primero, luego "pasados" debajo (con su propio heading/empty-state), ambas afectadas por el filtro de categoría activo.
 - Cada fila (`EventRow`) usa `parseEventDate()` para el chip de día/mes-año, y `formatEventDateRange()` para la línea de fecha legible (ver el otro documento). Si `isPast`, se aplican estilos atenuados y un badge distinto en vez del tag de categoría.
 
@@ -84,17 +86,17 @@ getPastEvents(events, today)
 
 | Caso | ¿Se muestra en `/agenda`? | ¿Dónde? |
 |---|---|---|
-| Evento futuro, sin tag `eventos-pasados` | ✅ Sí | Sección "próximos", ordenado por fecha ascendente |
+| Evento futuro, sin tag `past-events` | ✅ Sí | Sección "próximos", ordenado por fecha ascendente |
 | Evento de hoy | ✅ Sí | Sección "próximos" (su fecha de referencia no es `< hoy`) |
 | Evento con `endDate` pasado pero `startDate` futuro | ❌ No (se usa `endDate` como referencia) | Sección "pasados" |
 | Evento sin tag pasado pero con fecha ya vencida | ❌ No | Sección "pasados", recalculado en cada request |
-| Evento con tag `eventos-pasados` pero fecha futura | ❌ No (el tag manda) | Sección "pasados" |
+| Evento con tag `past-events` pero fecha futura | ❌ No (el tag manda) | Sección "pasados" |
 | Visita directa a `/agenda/[slug]` de un evento pasado | ✅ Sí, se ve completo | Sin filtro en la página de detalle; solo se oculta "Agregar al calendario" |
 
 ## Preguntas frecuentes
 
 **¿Hay un cron o proceso batch en este repo que actualice el estado "pasado"?**
-No. Se recalcula en cada request desde las fechas. El tag `eventos-pasados` es solo un override manual opcional que, si WordPress lo asigna, este repo respeta.
+No. Se recalcula en cada request desde las fechas. El tag `past-events` es solo un override adicional que, si WordPress lo asigna, este repo respeta.
 
 **¿Puedo marcar un evento como "destacado" y que aparezca en otra sección?**
 No hoy — `eventFields.featured` se consulta pero no se usa en ningún componente de eventos. Si se necesita esa funcionalidad, hay que construirla (filtrar por `fields?.featured` y decidir dónde renderizarla; no hay sección de home para eventos todavía).

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import AnimaLogo from "@/components/AnimaLogo";
-import LocaleSwitcher from "@/components/LocaleSwitcher";
+import { AnimaLogo } from "@/components/anima/anima-logo";
+import { LocaleSwitcher } from "@/components/anima/locale-switcher";
 import { BRANDS } from "./brands";
 
 export const metadata: Metadata = {

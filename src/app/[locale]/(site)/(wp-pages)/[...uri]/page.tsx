@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
-import JsonLd from "@/components/JsonLd";
+import { JsonLd } from "@/components/anima/json-ld";
 import { collectionTag, itemTag } from "@/lib/cache-tags";
 import { PAGE_BY_URI_QUERY } from "@/lib/queries";
 import { getLanguageAlternates, getLocalizedUrl } from "@/lib/seo";

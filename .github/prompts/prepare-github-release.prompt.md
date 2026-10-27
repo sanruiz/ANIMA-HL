@@ -1,5 +1,5 @@
 ---
-description: Prepare a GitHub release (version bump, changelog, tag/Release) — auto-detects WordPress vs Node projects and the correct tag-vs-Release flow
+description: Prepare a GitHub release (version bump, changelog, tag/Release) for this Node/npm project
 agent: agent
 tools:
   - run_in_terminal
@@ -10,15 +10,13 @@ tools:
 
 # Prepare GitHub Release
 
-Prepare a new version release and drive it through the **correct GitHub flow** for the current
-project. This prompt is **project-agnostic**: it detects the ecosystem (WordPress plugin vs Node/npm
-package) and analyzes the repo's GitHub Actions workflows to decide whether a **bare tag** or a full
-**GitHub Release** is required.
+Prepare a new version release and drive it through the **correct GitHub flow**. This repo is a
+Node/npm project, so the release follows `release-node.md`; the prompt still analyzes the repo's
+GitHub Actions workflows to decide whether a **bare tag** or a full **GitHub Release** is required.
 
 ## Prerequisites
 - Reference: `.github/prompts/_partials/git-operations.md`
-- Reference: `.github/prompts/_partials/release-wordpress.md` (WordPress projects)
-- Reference: `.github/prompts/_partials/release-node.md` (Node/npm projects)
+- Reference: `.github/prompts/_partials/release-node.md`
 - `gh` CLI authenticated. Releases are a GitHub concept — if the `origin` remote is **not** GitHub
   (e.g. Bitbucket), stop and tell the user this flow does not apply.
 
@@ -40,11 +38,10 @@ git fetch --tags --quiet
 git tag --sort=-v:refname | head -1  # latest tag (current released version)
 ```
 
-Detect the **project type** and follow the matching partial:
+Follow the Node/npm partial:
 
 | Signal | Project type | Use partial |
 |--------|--------------|-------------|
-| `*.php` with a `* Version:` plugin header | WordPress plugin | `release-wordpress.md` |
 | `package.json` (no WP header) | Node / npm | `release-node.md` |
 | neither | Generic | inline fallback: bump a `VERSION` file / changelog only |
 
@@ -57,13 +54,13 @@ Detect the **project type** and follow the matching partial:
 
 ### 3. Run quality checks (per partial)
 
-Run the ecosystem's checks from the matching partial (WordPress: phpcs/phpstan; Node: `npm test` +
+Run the checks from `release-node.md` (`npm test` +
 lint/type-check/build). **Do not proceed if any check fails.**
 
 ### 4. Bump the version (per partial)
 
-Update every version file listed in the matching partial (WordPress: plugin header / `readme.txt` /
-`composer.json`; Node: `package.json` + `package-lock.json`).
+Update every version file listed in `release-node.md` — `package.json` and
+`package-lock.json`.
 
 ### 5. Update CHANGELOG.md
 
@@ -127,7 +124,6 @@ gh release create vX.Y.Z --generate-notes
 ## Important
 
 - **NEVER reuse an existing tag** — tags are immutable. If a tag exists, bump to the next version.
-- The `release-management` skill has full documentation for WordPress plugins — use it for troubleshooting.
 - Some projects use `master` instead of `main` — always verify the default branch with
   `gh repo view --json defaultBranchRef | cat`.
 - A bare tag and a GitHub Release are **not** interchangeable: many publish/build workflows only run

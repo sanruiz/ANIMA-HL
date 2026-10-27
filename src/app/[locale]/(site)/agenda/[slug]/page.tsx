@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
-import EventDetail from "@/components/event-detail";
-import JsonLd from "@/components/JsonLd";
+import { EventDetail } from "@/components/anima/event-detail";
+import { JsonLd } from "@/components/anima/json-ld";
 import { parseEventDate } from "@/lib/event-date-formatter";
 import { collectionTag, itemTag } from "@/lib/cache-tags";
 import { EVENT_BY_SLUG_QUERY } from "@/lib/queries";
