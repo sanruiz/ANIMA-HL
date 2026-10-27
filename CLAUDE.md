@@ -236,6 +236,20 @@ TYPE-XXX: Brief description
 - `test`: Adding or updating tests
 - `chore`: Maintenance tasks
 
+### Branch model
+
+`main` → `staging` → `dev`, since 2026-10-27 (`master` was renamed to `main`;
+GitHub redirects the old name, but update any local clone with
+`git branch -m master main && git fetch --prune && git branch -u origin/main`).
+
+| Rama | Para qué |
+|---|---|
+| `main` | producción — es lo que Vercel despliega al dominio |
+| `staging` | integración antes de producción |
+| `dev` | trabajo del día a día |
+
+CI corre en las tres, por push y por PR.
+
 ### Branch Naming
 
 - `feature/TYPE-XXX-brief-description`
@@ -256,8 +270,9 @@ markers to merge around local edits, and would revert them.
 
 The vendoring lock is gone and the skills are committed, so what you see here is
 what the agents get. `.agents-toolkit.json` stays — it is now plain repo config
-(base branch, tracker) that ten of the commands read to resolve `BASE_BRANCH`,
-and removing it would silently send PRs at `main` instead of `master`.
+(base branch, tracker) that ten of the commands read to resolve `BASE_BRANCH`.
+It now says `main`, matching the branch rename of 2026-10-27; keep the two in
+step, because the commands fall back to a guess rather than failing.
 
 This tooling is now independent of the shared core. Skills live in the core
 repo and serve whoever develops it — they are not distributed to the malls, so
@@ -323,8 +338,8 @@ Even within a Webflow-migrated section, split at the boundary of "canvas" vs
 `github-workflow` and `documentation-language` were seeded from a Silver Assist
 WordPress plugin template and are **deleted** — 1256 lines describing a stack
 this repo does not have. They were not inert: each carried `applyTo: "**"`, so
-`github-workflow` was asserting `main` as the base branch (this repo uses
-`master`) and `documentation-language` an English-only rule (`docs/` is in
+`github-workflow` was asserting a base branch that did not match this repo's
+at the time, and `documentation-language` an English-only rule (`docs/` is in
 Spanish).
 
 Deleted alongside them: the `create-component`, `plugin-creation`,
