@@ -2,7 +2,7 @@
   "stack": "all",
   "tracker": "github",
   "git": {
-    "defaultBranch": "master",
+    "defaultBranch": "main",
     "branchPrefix": {
       "feature": "feature/",
       "bugfix": "bugfix/",
@@ -10,7 +10,7 @@
     }
   },
   "pr": {
-    "targetBranch": "master",
+    "targetBranch": "main",
     "template": "default"
   }
 }
