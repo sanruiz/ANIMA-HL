@@ -12,11 +12,19 @@ import {
   isComingSoonPath,
   splitLocale,
 } from "@/lib/coming-soon";
+import { withNoIndexHeader } from "@/lib/indexing";
 
 // Detecta el idioma y redirige a /es o /en según corresponda.
 const intlMiddleware = createMiddleware(routing);
 
+// Todo lo que sale del proxy (i18n, el rewrite del coming soon y las
+// redirecciones de ?preview) pasa por withNoIndexHeader: es lo que mantiene
+// staging, dev y los alias *.vercel.app fuera de los buscadores.
 export default function proxy(request: NextRequest) {
+  return withNoIndexHeader(route(request), request.headers.get("host"));
+}
+
+function route(request: NextRequest) {
   // Sin modo coming soon: comportamiento normal (sólo i18n).
   if (!isComingSoonEnabled()) {
     return intlMiddleware(request);
