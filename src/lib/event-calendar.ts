@@ -111,8 +111,8 @@ export function createEventCalendar(
   const schedule = getCalendarSchedule(event.eventFields, mall.timeZone);
   if (!schedule) return null;
   const title = decodeHtmlEntities(event.title) || mall.name;
-  const description = decodeHtmlEntities(stripHtml(event.content || event.excerpt));
-  const place = decodeHtmlEntities(stripHtml(event.eventFields?.place ?? null));
+  const description = stripHtml(event.content || event.excerpt);
+  const place = stripHtml(event.eventFields?.place ?? null);
   const dateProperty = (name: string, date: Date) => schedule.allDay
     ? `${name};VALUE=DATE:${timestamp(date).slice(0, 8)}`
     : `${name}:${timestamp(date)}`;
