@@ -10,6 +10,20 @@ describe("resolveTags", () => {
     ]);
   });
 
+  it("resolves a deal change to its collection and item tags — deal is a valid type now", () => {
+    expect(resolveTags({ type: "deal", slug: "summer-sale" })).toEqual([
+      "wp:deals",
+      "wp:deal:summer-sale",
+    ]);
+  });
+
+  it("resolves a job_offer change the same way", () => {
+    expect(resolveTags({ type: "job_offer", slug: "sales-associate" })).toEqual([
+      "wp:job_offers",
+      "wp:job_offer:sales-associate",
+    ]);
+  });
+
   it("returns only the collection tag when no slug is sent", () => {
     expect(resolveTags({ type: "event" })).toEqual(["wp:events"]);
   });
@@ -66,7 +80,7 @@ describe("resolveTags", () => {
     ]);
   });
 
-  it.each([null, undefined, "brand", 42, [], { tags: "wp:posts" }])(
+  it.each([null, undefined, "brand", 42, [], [1, 2, 3], { tags: "wp:posts" }])(
     "returns no tags for the malformed payload %o",
     (payload) => {
       expect(resolveTags(payload)).toEqual([]);

@@ -19,7 +19,7 @@ export type TermNode = {
   name: string;
   slug: string;
   ancestors?: {
-    nodes: { slug: string | null }[];
+    nodes: { name: string; slug: string | null }[];
   } | null;
 };
 
@@ -91,6 +91,7 @@ export type BrandFields = {
   days: string | null;
   time: string | null;
   featured: boolean | null;
+  /** ACF checkbox: `["si"]` / `["no"]`. Read it through `isPetFriendly()`. */
   petfriendly: string[] | string | boolean | number | null;
   petfriendlyDescription: string | null;
   gallery: { nodes: MediaItem[] } | null;
@@ -134,14 +135,20 @@ export type DealNode = {
   id: string;
   title: string | null;
   slug: string | null;
+  excerpt: string | null;
+  content: string | null;
   featuredImage: FeaturedImage;
   dealTags: { nodes: TermNode[] } | null;
   dealFields: DealFields;
 };
 
-export type DealSingle = DealNode & {
-  content: string | null;
+export type DealSingle = Omit<DealNode, "dealFields"> & {
   modified: string | null;
+  dealFields: (Omit<NonNullable<DealFields>, "brand"> & {
+    brand: {
+      nodes: { id: string; title?: string | null; slug?: string | null }[];
+    } | null;
+  }) | null;
 };
 
 export type DealsResponse = { deals: { nodes: DealNode[] } };
