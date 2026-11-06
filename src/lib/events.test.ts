@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   PAST_EVENT_TAG_SLUG,
+  getEventStatus,
   getPastEvents,
   getUpcomingEvents,
   isPastEvent,
@@ -165,6 +166,25 @@ describe("isPastEvent()", () => {
 
     expect(isPastEvent(event, today)).toBe(false);
   });
+
+  it("uses the end date, so an event that started but has not ended is not past", () => {
+    const event = createEvent({
+      id: "running",
+      title: "Running",
+      startDate: "20250701",
+      endDate: "20250712",
+    });
+
+    expect(isPastEvent(event, today)).toBe(false);
+  });
+
+  it("reads ISO dates as well as ACF's Ymd", () => {
+    const ended = createEvent({ id: "iso-ended", title: "ISO", startDate: "2025-07-10" });
+    const upcoming = createEvent({ id: "iso-upcoming", title: "ISO", startDate: "2025-07-12" });
+
+    expect(isPastEvent(ended, today)).toBe(true);
+    expect(isPastEvent(upcoming, today)).toBe(false);
+  });
 });
 
 describe("getPastEvents()", () => {
@@ -241,5 +261,39 @@ describe("getPastEvents()", () => {
       "middle",
       "oldest",
     ]);
+  });
+});
+
+describe("getEventStatus()", () => {
+  const today = new Date(Date.UTC(2025, 6, 11));
+
+  it("is past when the event has already ended", () => {
+    const event = createEvent({ id: "ended", title: "Ended", startDate: "20250708", endDate: "20250710" });
+    expect(getEventStatus(event, today)).toBe("past");
+  });
+
+  it("is upcoming when the event starts later", () => {
+    const event = createEvent({ id: "later", title: "Later", startDate: "20250712" });
+    expect(getEventStatus(event, today)).toBe("upcoming");
+  });
+
+  it("is ongoing on the day of a single-day event", () => {
+    const event = createEvent({ id: "today", title: "Today", startDate: "20250711" });
+    expect(getEventStatus(event, today)).toBe("ongoing");
+  });
+
+  it("is ongoing while today falls within a multi-day event", () => {
+    const event = createEvent({ id: "range", title: "Range", startDate: "20250710", endDate: "20250712" });
+    expect(getEventStatus(event, today)).toBe("ongoing");
+  });
+
+  it("is past when tagged past, even on the day it runs", () => {
+    const event = createEvent({
+      id: "tagged",
+      title: "Tagged",
+      startDate: "20250711",
+      tagSlugs: [PAST_EVENT_TAG_SLUG],
+    });
+    expect(getEventStatus(event, today)).toBe("past");
   });
 });

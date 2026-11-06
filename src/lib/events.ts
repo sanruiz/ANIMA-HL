@@ -56,6 +56,30 @@ export function isPastEvent(
   return hasPastEventTag(event) || isPastByDate(event, todayKey);
 }
 
+export type EventStatus = "upcoming" | "ongoing" | "past";
+
+/**
+ * Classifies an event as "past" (ended, or manually tagged), "ongoing"
+ * (today falls within its start/end date), or "upcoming" (starts later).
+ */
+export function getEventStatus(
+  event: EventNode,
+  today: Date = new Date(),
+): EventStatus {
+  if (isPastEvent(event, today)) return "past";
+
+  const todayKey = getTodayKey(today);
+  const fields = event.eventFields;
+  const startKey = parseEventDate(fields?.startDate ?? event.date)?.key ?? null;
+  const endKey = parseEventDate(fields?.endDate)?.key ?? startKey;
+
+  if (startKey !== null && startKey <= todayKey && (endKey ?? startKey) >= todayKey) {
+    return "ongoing";
+  }
+
+  return "upcoming";
+}
+
 /**
  * Returns events that are active/upcoming and sorts them by closest start date first.
  */

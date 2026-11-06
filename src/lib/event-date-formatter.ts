@@ -19,7 +19,7 @@ type ParsedDate = {
 };
 
 function getIntlLocale(locale: EventDateLocale): string {
-  if (locale === "en") return "en-GB";
+  if (locale === "en") return "en-US";
   return "es";
 }
 
@@ -27,7 +27,31 @@ function normalizeLocale(locale: string | undefined): EventDateLocale {
   return locale === "en" ? "en" : "es";
 }
 
-function normalizeTime(value: string | null | undefined): string {
+const MONTH_YEAR_SHORT_FORMATTERS: Record<EventDateLocale, Intl.DateTimeFormat> = {
+  es: new Intl.DateTimeFormat(getIntlLocale("es"), {
+    month: "short",
+    year: "numeric",
+    timeZone: "UTC",
+  }),
+  en: new Intl.DateTimeFormat(getIntlLocale("en"), {
+    month: "short",
+    year: "numeric",
+    timeZone: "UTC",
+  }),
+};
+
+/**
+ * Formats a UTC date as a short month/year label (e.g. "mar 2026").
+ */
+export function formatMonthYearShort(date: Date, locale: string | undefined): string {
+  return MONTH_YEAR_SHORT_FORMATTERS[normalizeLocale(locale)].format(date);
+}
+
+/**
+ * Formats an ACF `H:i` time as a 12-hour label (e.g. "14:00" -> "2:00 PM").
+ * Falls back to the trimmed input when it doesn't match the expected shape.
+ */
+export function formatEventTime(value: string | null | undefined): string {
   if (!value) return "";
 
   const trimmedValue = value.trim();
@@ -95,8 +119,8 @@ export function formatEventDateRange({
 
   const startDateLabel = dateFormatter.format(start.date);
   const end = parseEventDate(endDate);
-  const normalizedStartTime = normalizeTime(startTime);
-  const normalizedEndTime = normalizeTime(endTime);
+  const normalizedStartTime = formatEventTime(startTime);
+  const normalizedEndTime = formatEventTime(endTime);
   const isRange = Boolean(end && end.key !== start.key);
 
   let output = startDateLabel;
