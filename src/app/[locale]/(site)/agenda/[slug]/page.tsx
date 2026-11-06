@@ -6,10 +6,11 @@ import { JsonLd } from "@/components/anima/json-ld";
 import { parseEventDate } from "@/lib/event-date-formatter";
 import { collectionTag, itemTag } from "@/lib/cache-tags";
 import { EVENT_BY_SLUG_QUERY } from "@/lib/queries";
-import { getLanguageAlternates, getLocalizedUrl } from "@/lib/seo";
+import { getLocalizedUrl } from "@/lib/seo";
 import type { EventBySlugResponse, EventSingle } from "@/lib/types";
 import { stripHtml } from "@/lib/utils";
 import { fetchGraphQL } from "@/lib/wp";
+import { mallPageMetadata } from "@/lib/mall";
 
 export const revalidate = 3600;
 
@@ -53,23 +54,11 @@ export async function generateMetadata({
 
     const title = `${event.title ?? t("title")} | Ánima Village`;
     const description = getEventDescription(event, t("metaDescription"));
-    const canonical = getLocalizedUrl(locale, `/agenda/${slug}`);
-    const image = event.featuredImage?.node?.sourceUrl;
 
     return {
       title,
       description,
-      alternates: {
-        canonical,
-        languages: getLanguageAlternates(`/agenda/${slug}`),
-      },
-      openGraph: {
-        title,
-        description,
-        type: "website",
-        url: canonical,
-        images: image ? [{ url: image }] : undefined,
-      },
+      ...mallPageMetadata(locale, `/agenda/${slug}`, event.featuredImage),
     };
   } catch {
     return {

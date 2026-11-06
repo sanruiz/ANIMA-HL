@@ -6,6 +6,7 @@ import { AboutVideo } from "@/components/anima/about-video";
 import { AboutEssence } from "@/components/anima/about-essence";
 import { AboutGallery } from "@/components/anima/about-gallery";
 import { AboutClosing } from "@/components/anima/about-closing";
+import { mallPageMetadata } from "@/lib/mall";
 
 export async function generateMetadata({
   params,
@@ -17,6 +18,7 @@ export async function generateMetadata({
   return {
     title: `${t("title")} | Ánima Village`,
     description: t("metaDescription"),
+    ...mallPageMetadata(locale, "/about"),
   };
 }
 

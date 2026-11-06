@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { createEventCalendar, getCalendarSchedule } from "@/lib/event-calendar";
-import { ANIMA } from "@/lib/mall";
+import { MALL } from "@/lib/mall";
 import type { EventFields, EventSingle } from "@/lib/types";
 
 const fields = (overrides: Partial<NonNullable<EventFields>> = {}): NonNullable<EventFields> => ({
@@ -21,7 +21,7 @@ function unfolded(value: string | null) {
 
 describe("event iCalendar export", () => {
   it("uses the venue's timezone and does not invent a missing end time", () => {
-    const calendar = unfolded(createEventCalendar(event(), url, ANIMA, now));
+    const calendar = unfolded(createEventCalendar(event(), url, MALL, now));
     expect(calendar).toContain("DTSTART:20261011T033000Z\r\n");
     expect(calendar).not.toContain("DTEND");
     expect(calendar).toContain("DTSTAMP:20260906T120000Z");
@@ -31,35 +31,35 @@ describe("event iCalendar export", () => {
   });
 
   it("keeps a stable event UID across downloads and locales", () => {
-    const first = unfolded(createEventCalendar(event(), url, ANIMA, now)).match(/^UID:.+$/m)?.[0];
-    const second = unfolded(createEventCalendar(event(), url.replace("/es/", "/en/"), ANIMA, new Date())).match(/^UID:.+$/m)?.[0];
+    const first = unfolded(createEventCalendar(event(), url, MALL, now)).match(/^UID:.+$/m)?.[0];
+    const second = unfolded(createEventCalendar(event(), url.replace("/es/", "/en/"), MALL, new Date())).match(/^UID:.+$/m)?.[0];
     expect(first).toBe(second);
   });
 
   it("exports all-day events with an exclusive end, including year boundaries", () => {
-    const calendar = createEventCalendar(event({ eventFields: fields({ startDate: "20261230", startTime: null, endDate: "2026-12-31" }) }), url, ANIMA, now);
+    const calendar = createEventCalendar(event({ eventFields: fields({ startDate: "20261230", startTime: null, endDate: "2026-12-31" }) }), url, MALL, now);
     expect(calendar).toContain("DTSTART;VALUE=DATE:20261230\r\nDTEND;VALUE=DATE:20270101");
   });
 
   it("exports a single day when no times or end date are provided", () => {
-    const calendar = createEventCalendar(event({ eventFields: fields({ startTime: null }) }), url, ANIMA, now);
+    const calendar = createEventCalendar(event({ eventFields: fields({ startTime: null }) }), url, MALL, now);
     expect(calendar).toContain("DTSTART;VALUE=DATE:20261010\r\nDTEND;VALUE=DATE:20261011");
   });
 
   it("exports explicit multi-day start/end times", () => {
-    const schedule = getCalendarSchedule(fields({ startDate: "2026-08-30", startTime: "08:00", endDate: "2026-09-03", endTime: "09:30" }), ANIMA.timeZone);
+    const schedule = getCalendarSchedule(fields({ startDate: "2026-08-30", startTime: "08:00", endDate: "2026-09-03", endTime: "09:30" }), MALL.timeZone);
     expect(schedule?.start.toISOString()).toBe("2026-08-30T15:00:00.000Z");
     expect(schedule?.end?.toISOString()).toBe("2026-09-03T16:30:00.000Z");
   });
 
   it("handles overnight events when only an end time is supplied", () => {
-    const schedule = getCalendarSchedule(fields({ startTime: "23:00", endTime: "01:00" }), ANIMA.timeZone);
+    const schedule = getCalendarSchedule(fields({ startTime: "23:00", endTime: "01:00" }), MALL.timeZone);
     expect(schedule?.start.toISOString()).toBe("2026-10-11T06:00:00.000Z");
     expect(schedule?.end?.toISOString()).toBe("2026-10-11T08:00:00.000Z");
   });
 
   it("uses historical timezone rules instead of hardcoding a UTC offset", () => {
-    const schedule = getCalendarSchedule(fields({ startDate: "2022-07-01", startTime: "12:00" }), ANIMA.timeZone);
+    const schedule = getCalendarSchedule(fields({ startDate: "2022-07-01", startTime: "12:00" }), MALL.timeZone);
     expect(schedule?.start.toISOString()).toBe("2022-07-01T18:00:00.000Z");
   });
 
@@ -68,16 +68,16 @@ describe("event iCalendar export", () => {
     { endTime: "12:80" }, { endDate: "invalid" }, { endDate: "2026-01-01" },
     { endDate: "2026-10-10", endTime: "10:00" },
   ])("does not export an invalid schedule: %j", (overrides) => {
-    expect(createEventCalendar(event({ eventFields: fields(overrides) }), url, ANIMA, now)).toBeNull();
+    expect(createEventCalendar(event({ eventFields: fields(overrides) }), url, MALL, now)).toBeNull();
   });
 
   it("does not use the publication date as an event date", () => {
-    expect(createEventCalendar(event({ date: "2026-09-01", eventFields: null }), url, ANIMA, now)).toBeNull();
+    expect(createEventCalendar(event({ date: "2026-09-01", eventFields: null }), url, MALL, now)).toBeNull();
   });
 
   it("escapes text and folds UTF-8 lines without corrupting accented characters", () => {
     const title = "Música, arte; jardín \\ Ánima\r\n" + "🎬á".repeat(60);
-    const calendar = createEventCalendar(event({ title }), url, ANIMA, now)!;
+    const calendar = createEventCalendar(event({ title }), url, MALL, now)!;
     expect(unfolded(calendar)).toContain("SUMMARY:Música\\, arte\\; jardín \\\\ Ánima\\n" + "🎬á".repeat(60));
     for (const line of calendar.split("\r\n")) expect(new TextEncoder().encode(line).length).toBeLessThanOrEqual(75);
     expect(calendar.replaceAll("\r\n", "")).not.toMatch(/[\r\n]/);

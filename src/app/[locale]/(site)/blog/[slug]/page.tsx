@@ -6,11 +6,12 @@ import { BlogPostHeader } from "@/components/anima/blog-post-header";
 import { JsonLd } from "@/components/anima/json-ld";
 import { collectionTag, itemTag } from "@/lib/cache-tags";
 import { NEWS_BY_SLUG_QUERY } from "@/lib/queries";
-import { getLanguageAlternates, getLocalizedUrl } from "@/lib/seo";
+import { getLocalizedUrl } from "@/lib/seo";
 import type { NewsBySlugResponse } from "@/lib/types";
 import { cn, stripHtml } from "@/lib/utils";
 import { fetchGraphQL } from "@/lib/wp";
 import { shouldBypassImageOptimizer } from "@/lib/wp-image";
+import { mallPageMetadata } from "@/lib/mall";
 
 export const revalidate = 3600;
 
@@ -42,24 +43,17 @@ export async function generateMetadata({
 
     const title = `${post.title ?? t("title")} | Ánima Village`;
     const description = stripHtml(post.excerpt) || t("metaDescription");
-    const canonical = getLocalizedUrl(locale, `/blog/${slug}`);
-    const image = post.featuredImage?.node?.sourceUrl;
+    const shared = mallPageMetadata(locale, `/blog/${slug}`, post.featuredImage);
 
     return {
       title,
       description,
-      alternates: {
-        canonical,
-        languages: getLanguageAlternates(`/blog/${slug}`),
-      },
+      ...shared,
       openGraph: {
-        title,
-        description,
+        ...shared.openGraph,
         type: "article",
-        url: canonical,
         publishedTime: post.date ?? undefined,
         modifiedTime: post.modified ?? undefined,
-        images: image ? [{ url: image }] : undefined,
       },
     };
   } catch {

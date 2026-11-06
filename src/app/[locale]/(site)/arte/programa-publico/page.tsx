@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { ArteDetail } from "@/components/anima/arte-detail";
 import { JsonLd } from "@/components/anima/json-ld";
-import { getLanguageAlternates, getLocalizedUrl } from "@/lib/seo";
+import { getLocalizedUrl } from "@/lib/seo";
+import { mallPageMetadata } from "@/lib/mall";
 
 const SLUG = "programa-publico";
 const IMAGES = ["/art/158.jpg", "/art/160.jpg", "/art/161.jpg", "/art/arte4.jpg"];
@@ -17,15 +18,11 @@ export async function generateMetadata({
     locale,
     namespace: "arte.detail.program",
   });
-  const canonical = getLocalizedUrl(locale, `/arte/${SLUG}`);
 
   return {
     title: `${t("title")} | Ánima Village`,
     description: t("metaDescription"),
-    alternates: {
-      canonical,
-      languages: getLanguageAlternates(`/arte/${SLUG}`),
-    },
+    ...mallPageMetadata(locale, `/arte/${SLUG}`),
   };
 }
 

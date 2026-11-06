@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { JsonLd } from "@/components/anima/json-ld";
 import { collectionTag, itemTag } from "@/lib/cache-tags";
 import { PAGE_BY_URI_QUERY } from "@/lib/queries";
-import { getLanguageAlternates, getLocalizedUrl } from "@/lib/seo";
+import { getLocalizedUrl } from "@/lib/seo";
 import type { PageByUriResponse } from "@/lib/types";
 import {
   buildWordPressUriPath,
@@ -13,6 +13,7 @@ import {
   transformContentToAssetProxy,
 } from "@/lib/utils";
 import { fetchGraphQL } from "@/lib/wp";
+import { mallPageMetadata } from "@/lib/mall";
 
 export const revalidate = 3600;
 
@@ -63,24 +64,12 @@ export async function generateMetadata({
 
     const title = `${decodeHtmlEntities(page.title) || t("defaultTitle")} | Ánima Village`;
     const description = getPageDescription(page.content, t("defaultDescription"));
-    const canonical = getLocalizedUrl(locale, uriPath);
-    const image = page.featuredImage?.node?.sourceUrl;
 
     return {
       title,
       description,
       robots: getRobotsMetadata(),
-      alternates: {
-        canonical,
-        languages: getLanguageAlternates(uriPath),
-      },
-      openGraph: {
-        title,
-        description,
-        type: "website",
-        url: canonical,
-        images: image ? [{ url: image }] : undefined,
-      },
+      ...mallPageMetadata(locale, uriPath, page.featuredImage),
     };
   } catch {
     return {

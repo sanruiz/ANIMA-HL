@@ -6,9 +6,10 @@ import { JsonLd } from "@/components/anima/json-ld";
 import { getPastEvents, getUpcomingEvents } from "@/lib/events";
 import { collectionTag } from "@/lib/cache-tags";
 import { EVENTS_QUERY } from "@/lib/queries";
-import { getLanguageAlternates, getLocalizedUrl } from "@/lib/seo";
+import { getLocalizedUrl } from "@/lib/seo";
 import type { EventsResponse, EventNode } from "@/lib/types";
 import { fetchGraphQL } from "@/lib/wp";
+import { mallPageMetadata } from "@/lib/mall";
 
 export const revalidate = 3600;
 
@@ -19,23 +20,13 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "agenda" });
-  const canonical = getLocalizedUrl(locale, "/agenda");
   const description = t("metaDescription");
   const title = `${t("title")} | Ánima Village`;
 
   return {
     title,
     description,
-    alternates: {
-      canonical,
-      languages: getLanguageAlternates("/agenda"),
-    },
-    openGraph: {
-      title,
-      description,
-      type: "website",
-      url: canonical,
-    },
+    ...mallPageMetadata(locale, "/agenda"),
   };
 }
 
