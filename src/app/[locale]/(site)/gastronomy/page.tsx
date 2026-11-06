@@ -7,6 +7,7 @@ import { collectionTag } from "@/lib/cache-tags";
 import { BRANDS_QUERY } from "@/lib/queries";
 import type { BrandNode, BrandsResponse } from "@/lib/types";
 import { fetchGraphQL } from "@/lib/wp";
+import { mallPageMetadata } from "@/lib/mall";
 
 const GASTRONOMY_TAG_SLUG = "gastronomy";
 
@@ -20,6 +21,7 @@ export async function generateMetadata({
   return {
     title: `${t("title")} | Ánima Village`,
     description: t("metaDescription"),
+    ...mallPageMetadata(locale, "/gastronomy"),
   };
 }
 

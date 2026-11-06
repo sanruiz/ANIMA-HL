@@ -5,9 +5,10 @@ import { BlogList } from "@/components/anima/blog-list";
 import { JsonLd } from "@/components/anima/json-ld";
 import { collectionTag } from "@/lib/cache-tags";
 import { NEWS_QUERY } from "@/lib/queries";
-import { getLanguageAlternates, getLocalizedUrl } from "@/lib/seo";
+import { getLocalizedUrl } from "@/lib/seo";
 import type { NewsResponse, PostNode } from "@/lib/types";
 import { fetchGraphQL } from "@/lib/wp";
+import { mallPageMetadata } from "@/lib/mall";
 
 // Segment ISR: WPGraphQL uses POST reads, so the route needs its own
 // revalidate export. The 1h tier is now only a fallback: WordPress invalidates
@@ -21,23 +22,13 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "blog" });
-  const canonical = getLocalizedUrl(locale, "/blog");
   const description = t("metaDescription");
   const title = `${t("title")} | Ánima Village`;
 
   return {
     title,
     description,
-    alternates: {
-      canonical,
-      languages: getLanguageAlternates("/blog"),
-    },
-    openGraph: {
-      title,
-      description,
-      type: "website",
-      url: canonical,
-    },
+    ...mallPageMetadata(locale, "/blog"),
   };
 }
 

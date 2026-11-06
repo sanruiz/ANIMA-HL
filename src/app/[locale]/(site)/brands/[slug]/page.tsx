@@ -5,10 +5,11 @@ import { BrandDetail } from "@/components/anima/brand-detail";
 import { JsonLd } from "@/components/anima/json-ld";
 import { collectionTag, itemTag } from "@/lib/cache-tags";
 import { BRAND_BY_SLUG_QUERY } from "@/lib/queries";
-import { getLanguageAlternates, getLocalizedUrl } from "@/lib/seo";
+import { getLocalizedUrl } from "@/lib/seo";
 import type { BrandBySlugResponse } from "@/lib/types";
 import { stripHtml } from "@/lib/utils";
 import { fetchGraphQL } from "@/lib/wp";
+import { mallPageMetadata } from "@/lib/mall";
 
 export const revalidate = 3600;
 
@@ -40,23 +41,11 @@ export async function generateMetadata({
 
     const title = `${brand.title ?? t("title")} | Ánima Village`;
     const description = stripHtml(brand.content) || t("metaDescription");
-    const canonical = getLocalizedUrl(locale, `/brands/${slug}`);
-    const image = brand.featuredImage?.node?.sourceUrl;
 
     return {
       title,
       description,
-      alternates: {
-        canonical,
-        languages: getLanguageAlternates(`/brands/${slug}`),
-      },
-      openGraph: {
-        title,
-        description,
-        type: "website",
-        url: canonical,
-        images: image ? [{ url: image }] : undefined,
-      },
+      ...mallPageMetadata(locale, `/brands/${slug}`, brand.featuredImage),
     };
   } catch {
     return {
