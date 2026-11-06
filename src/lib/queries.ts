@@ -130,6 +130,7 @@ export const BRANDS_QUERY = /* GraphQL */ `
             slug
             ancestors {
               nodes {
+                name
                 slug
               }
             }
@@ -225,6 +226,8 @@ export const DEALS_QUERY = /* GraphQL */ `
         id
         title
         slug
+        excerpt
+        content
         featuredImage {
           node {
             sourceUrl
@@ -258,12 +261,17 @@ export const DEAL_BY_SLUG_QUERY = /* GraphQL */ `
       id
       title
       slug
+      excerpt
       content
       modified
       featuredImage {
         node {
           sourceUrl
           altText
+          mediaDetails {
+            width
+            height
+          }
         }
       }
       dealTags {
@@ -279,6 +287,10 @@ export const DEAL_BY_SLUG_QUERY = /* GraphQL */ `
         brand {
           nodes {
             id
+            ... on Brand {
+              title
+              slug
+            }
           }
         }
       }

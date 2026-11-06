@@ -41,11 +41,41 @@ describe("POST /api/revalidate", () => {
     expect(revalidateTag).toHaveBeenCalledWith("wp:brands", { expire: 0 });
   });
 
+  it("revalidates the deal collection and item tags for a valid deal payload", async () => {
+    const response = await POST(request({ type: "deal", slug: "summer-sale" }, SECRET));
+    const json = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(json.revalidated).toBe(true);
+    expect(json.tags).toEqual(["wp:deals", "wp:deal:summer-sale"]);
+    expect(revalidateTag).toHaveBeenCalledWith("wp:deals", { expire: 0 });
+    expect(revalidateTag).toHaveBeenCalledWith("wp:deal:summer-sale", { expire: 0 });
+  });
+
   it("rejects a request with no secret", async () => {
     const response = await POST(request({ type: "brand" }));
 
     expect(response.status).toBe(401);
     expect(revalidateTag).not.toHaveBeenCalled();
+  });
+
+  // The secret travels only in the header: in a URL it would land in access
+  // logs and the Vercel dashboard. A mall once accepted `?secret=` too.
+  it("ignores a secret sent in the query string", async () => {
+    const response = await POST(
+      new Request(`https://example.com/api/revalidate?secret=${SECRET}`, {
+        method: "POST",
+        body: JSON.stringify({ type: "brand" }),
+      })
+    );
+
+    expect(response.status).toBe(401);
+    expect(revalidateTag).not.toHaveBeenCalled();
+  });
+
+  it("exposes no GET handler a browser could trigger", async () => {
+    const route: Record<string, unknown> = await import("@/app/api/revalidate/route");
+    expect(route.GET).toBeUndefined();
   });
 
   it("rejects a wrong secret", async () => {

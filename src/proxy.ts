@@ -1,5 +1,6 @@
 import createMiddleware from "next-intl/middleware";
 import { NextResponse, type NextRequest } from "next/server";
+import { getEnglishDisabledRedirect } from "@/i18n/english-redirect";
 import { routing } from "@/i18n/routing";
 import {
   COMING_SOON_PATH,
@@ -25,6 +26,17 @@ export default function proxy(request: NextRequest) {
 }
 
 function route(request: NextRequest) {
+  // Del core: con el inglés apagado, /en/... va a la página en español. ANIMA
+  // tiene los dos idiomas fijos en routing.ts, así que hoy nunca redirige.
+  const englishRedirect = getEnglishDisabledRedirect(
+    request.nextUrl.pathname,
+    request.nextUrl.search,
+    routing.locales.length > 1,
+  );
+  if (englishRedirect) {
+    return NextResponse.redirect(new URL(englishRedirect, request.url), 307);
+  }
+
   // Sin modo coming soon: comportamiento normal (sólo i18n).
   if (!isComingSoonEnabled()) {
     return intlMiddleware(request);

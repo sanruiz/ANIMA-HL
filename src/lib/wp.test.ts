@@ -1,8 +1,10 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { fetchGraphQL } from "./wp";
+import { fetchGraphQL } from "@/lib/wp";
 
-// ENDPOINT se evalúa al cargar el módulo, así que usamos el valor por defecto del código.
+// ENDPOINT is evaluated when the module loads, so the statically imported
+// module uses the code's default value.
 const DEFAULT_ENDPOINT = "https://mall-headless.local/graphql";
+const originalEnv = process.env.WORDPRESS_API_URL;
 const originalFetch = globalThis.fetch;
 const QUERY = "{ posts { nodes { id } } }";
 
@@ -23,7 +25,7 @@ function mockFetch(body: unknown, status = 200) {
 
 describe("fetchGraphQL()", () => {
   // === Request ===
-  it("hace POST al endpoint con Content-Type JSON", async () => {
+  it("POSTs to the endpoint with a JSON Content-Type", async () => {
     mockFetch({ data: {} });
 
     await fetchGraphQL({ query: QUERY });
@@ -34,7 +36,7 @@ describe("fetchGraphQL()", () => {
     expect(init.headers["Content-Type"]).toBe("application/json");
   });
 
-  it("añade ?lang= cuando se pasa locale", async () => {
+  it("appends ?lang= when a locale is given", async () => {
     mockFetch({ data: {} });
 
     await fetchGraphQL({ query: QUERY, locale: "es" });
@@ -43,7 +45,7 @@ describe("fetchGraphQL()", () => {
     expect(url).toBe(`${DEFAULT_ENDPOINT}?lang=es`);
   });
 
-  it("sin locale → URL sin parámetro lang", async () => {
+  it("no locale → URL without a lang parameter", async () => {
     mockFetch({ data: {} });
 
     await fetchGraphQL({ query: QUERY });
@@ -53,7 +55,7 @@ describe("fetchGraphQL()", () => {
     expect(url).toBe(DEFAULT_ENDPOINT);
   });
 
-  it("locale con caracteres especiales se codifica en la URL", async () => {
+  it("encodes a locale with special characters in the URL", async () => {
     mockFetch({ data: {} });
 
     await fetchGraphQL({ query: QUERY, locale: "zh-TW" });
@@ -62,7 +64,7 @@ describe("fetchGraphQL()", () => {
     expect(url).toContain("lang=zh-TW");
   });
 
-  it("incluye query y variables en el body del request", async () => {
+  it("sends query and variables in the request body", async () => {
     mockFetch({ data: {} });
 
     const variables = { slug: "mi-post" };
@@ -74,7 +76,7 @@ describe("fetchGraphQL()", () => {
     expect(body.variables).toEqual(variables);
   });
 
-  it("pasa revalidate como next.revalidate", async () => {
+  it("passes revalidate as next.revalidate", async () => {
     mockFetch({ data: {} });
 
     await fetchGraphQL({ query: QUERY, revalidate: 120 });
@@ -83,7 +85,7 @@ describe("fetchGraphQL()", () => {
     expect(init.next?.revalidate).toBe(120);
   });
 
-  it("revalidate default es 60", async () => {
+  it("defaults revalidate to 60", async () => {
     mockFetch({ data: {} });
 
     await fetchGraphQL({ query: QUERY });
@@ -120,34 +122,58 @@ describe("fetchGraphQL()", () => {
     expect(init.next).not.toHaveProperty("tags");
   });
 
-  // === Errores HTTP ===
-  it("respuesta HTTP no-ok lanza error con el status code", async () => {
+  it("uses WORDPRESS_API_URL when it is set", async () => {
+    process.env.WORDPRESS_API_URL = "https://example.test/graphql";
+    vi.resetModules();
+    try {
+      mockFetch({ data: { ok: true } });
+
+      const { fetchGraphQL: fetchWithEnv } = await import("@/lib/wp");
+      const result = await fetchWithEnv<{ ok: boolean }>({
+        query: "query { ok }",
+        locale: "es",
+      });
+
+      expect(result).toEqual({ ok: true });
+      expect(globalThis.fetch).toHaveBeenCalledWith(
+        "https://example.test/graphql?lang=es",
+        expect.objectContaining({ method: "POST" })
+      );
+    } finally {
+      if (originalEnv === undefined) delete process.env.WORDPRESS_API_URL;
+      else process.env.WORDPRESS_API_URL = originalEnv;
+      vi.resetModules();
+    }
+  });
+
+  // === HTTP errors ===
+  it("throws with the status code on a non-ok HTTP response", async () => {
     mockFetch("Not Found", 404);
 
     await expect(fetchGraphQL({ query: QUERY })).rejects.toThrow("404");
   });
 
-  it("respuesta 500 lanza error", async () => {
+  it("throws on a 500 response", async () => {
     mockFetch("Internal Server Error", 500);
 
     await expect(fetchGraphQL({ query: QUERY })).rejects.toThrow("500");
   });
 
-  // === Errores GraphQL ===
-  it("respuesta con array errors lanza error con todos los mensajes", async () => {
+  // === GraphQL errors ===
+  it("throws with every message when the response has an errors array", async () => {
     mockFetch({ errors: [{ message: "Error A" }, { message: "Error B" }] });
 
     await expect(fetchGraphQL({ query: QUERY })).rejects.toThrow("Error A | Error B");
   });
 
-  it("respuesta con un solo error lanza su mensaje", async () => {
+  it("throws the message of a single error", async () => {
     mockFetch({ errors: [{ message: "Campo inválido" }] });
 
     await expect(fetchGraphQL({ query: QUERY })).rejects.toThrow("Campo inválido");
   });
 
-  // === Respuesta sin data ===
-  it("respuesta JSON sin campo data lanza error descriptivo", async () => {
+  // === Response without data ===
+  it("throws a descriptive error when the JSON has no data field", async () => {
     mockFetch({});
 
     await expect(fetchGraphQL({ query: QUERY })).rejects.toThrow(
@@ -155,8 +181,8 @@ describe("fetchGraphQL()", () => {
     );
   });
 
-  // === Éxito ===
-  it("devuelve el campo data de la respuesta", async () => {
+  // === Success ===
+  it("returns the response's data field", async () => {
     type MyData = { posts: { id: number }[] };
     const mockData: MyData = { posts: [{ id: 1 }] };
     mockFetch({ data: mockData });
