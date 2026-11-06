@@ -20,6 +20,14 @@ export const MALL: CalendarMall = {
 };
 
 /**
+ * Where ANIMA publishes its event pages: `/agenda`, not the starter's
+ * `/events`. The .ics route links each calendar entry back to
+ * `<EVENTS_PATH>/<slug>`, so it must match the route folder under
+ * `app/[locale]/(site)/`.
+ */
+export const EVENTS_PATH = "/agenda";
+
+/**
  * What a shared link shows when its page has no image of its own: the home
  * video's poster frame (`public/videohome-poster.jpg`, the "ÁNIMA VILLAGE"
  * stone sign) cropped to 1200×630 from the centre. JPEG, because link

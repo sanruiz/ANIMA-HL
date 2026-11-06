@@ -1,7 +1,7 @@
 import { routing } from "@/i18n/routing";
 import { collectionTag, itemTag } from "@/lib/cache-tags";
 import { createEventCalendar } from "@/lib/event-calendar";
-import { MALL } from "@/lib/mall";
+import { EVENTS_PATH, MALL } from "@/lib/mall";
 import { EVENT_BY_SLUG_QUERY } from "@/lib/queries";
 import { getLocalizedUrl } from "@/lib/seo";
 import type { EventBySlugResponse } from "@/lib/types";
@@ -23,10 +23,9 @@ export async function GET(request: Request, { params }: { params: Promise<{ slug
       tags: [collectionTag("event"), itemTag("event", slug)],
     });
     if (!event) return new Response("Event not found", { status: 404 });
-    // ANIMA publishes events under /agenda, not the starter's /events.
     const calendar = createEventCalendar(
       event,
-      getLocalizedUrl(locale, `/agenda/${encodeURIComponent(slug)}`),
+      getLocalizedUrl(locale, `${EVENTS_PATH}/${encodeURIComponent(slug)}`),
       MALL
     );
     if (!calendar) return new Response("Event has no valid schedule", { status: 422 });
