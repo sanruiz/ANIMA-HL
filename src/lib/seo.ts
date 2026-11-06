@@ -100,6 +100,10 @@ export type ShareDefaults = {
    * Shared by every page without an image of its own: 1200×630, JPEG or PNG.
    * A relative URL resolves against `metadataBase` — `NEXT_PUBLIC_SITE_URL` —
    * so scrapers get a 404 if that variable names anything but this site.
+   *
+   * When the picture changes, change the filename too. Facebook and WhatsApp
+   * cache a share image by its URL, so new bytes behind an old URL can keep
+   * showing the old picture, and a re-scrape does not reliably refresh it.
    */
   image: ShareImage;
   /**

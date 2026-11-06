@@ -1,12 +1,10 @@
 import { Link } from "@/i18n/navigation";
 
 /**
- * Colors come from the semantic tokens every mall defines, not from a
- * palette: the antara branch styled this with `text-refugio` / `text-origen`,
- * which exist in no other mall and fail silently — Tailwind drops the unknown
- * class and the text simply inherits. Antara itself defines
- * `--foreground: var(--origen)` and `--background: var(--refugio)`, so the
- * mapping is one to one.
+ * Home / section trail for a detail page. Colors come from the semantic
+ * tokens every mall defines (`foreground`, `background`), never from one
+ * mall's palette: Tailwind drops a class whose token does not exist, so the
+ * text would silently inherit instead.
  */
 
 type BreadcrumbsProps = {
