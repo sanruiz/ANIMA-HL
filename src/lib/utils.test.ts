@@ -5,120 +5,155 @@ import {
   decodeHtmlEntities,
   formatBrandHours,
   formatMonthYear,
+  isPetFriendly,
   stripHtml,
   transformContentToAssetProxy,
-} from "./utils";
+} from "@/lib/utils";
 
 describe("cn()", () => {
-  it("combina clases simples", () => {
+  it("joins plain classes", () => {
     expect(cn("foo", "bar")).toBe("foo bar");
   });
 
-  it("descarta valores falsy", () => {
+  it("drops falsy values", () => {
     expect(cn("foo", undefined, null, false, "bar")).toBe("foo bar");
   });
 
-  it("resuelve conflictos de Tailwind — último gana", () => {
+  it("resolves Tailwind conflicts — the last one wins", () => {
     expect(cn("bg-red-500", "bg-blue-500")).toBe("bg-blue-500");
     expect(cn("p-4", "p-8")).toBe("p-8");
   });
 
-  it("acepta objetos condicionales de clsx", () => {
+  it("accepts clsx conditional objects", () => {
     expect(cn({ "font-bold": true, italic: false })).toBe("font-bold");
   });
 
-  it("devuelve string vacío sin argumentos", () => {
+  it("returns an empty string with no arguments", () => {
     expect(cn()).toBe("");
   });
 
-  it("fusiona variantes de tamaño correctamente", () => {
+  it("merges size variants correctly", () => {
     expect(cn("text-sm", "text-lg")).toBe("text-lg");
     expect(cn("w-4 h-4", "w-6")).toBe("h-4 w-6");
   });
 });
 
 describe("stripHtml()", () => {
-  it("null → string vacío", () => {
+  it("null → empty string", () => {
     expect(stripHtml(null)).toBe("");
   });
 
-  it("string vacío → string vacío", () => {
+  it("empty string → empty string", () => {
     expect(stripHtml("")).toBe("");
   });
 
-  it("texto sin HTML → lo devuelve sin cambios", () => {
+  it("returns text without HTML unchanged", () => {
     expect(stripHtml("Hola mundo")).toBe("Hola mundo");
   });
 
-  it("elimina etiquetas HTML simples", () => {
+  it("removes simple HTML tags", () => {
     expect(stripHtml("<p>Hola</p>")).toBe("Hola");
   });
 
-  it("elimina etiquetas anidadas", () => {
+  it("removes nested tags", () => {
     expect(stripHtml("<div><p><strong>Texto</strong></p></div>")).toBe("Texto");
   });
 
-  it("elimina atributos dentro de etiquetas", () => {
+  it("removes attributes inside tags", () => {
     expect(stripHtml('<a href="/ruta" class="link">Ver más</a>')).toBe("Ver más");
   });
 
-  it("normaliza espacios múltiples a uno solo", () => {
+  it("collapses multiple spaces into one", () => {
     expect(stripHtml("<p>  Hola   mundo  </p>")).toBe("Hola mundo");
   });
 
-  it("normaliza saltos de línea a espacios", () => {
+  it("turns line breaks into spaces", () => {
     expect(stripHtml("Texto\n\ncon\n   espacios")).toBe("Texto con espacios");
   });
 
-  it("elimina etiquetas self-closing", () => {
+  it("removes self-closing tags", () => {
     expect(stripHtml("Antes<br />Después")).toBe("AntesDespués");
+  });
+
+  // Real WordPress output that reached meta descriptions encoded.
+  it("decodes entities, so a meta description reads as text", () => {
+    expect(stripHtml("<p>AT&amp;T tiene los planes</p>")).toBe("AT&T tiene los planes");
+    expect(stripHtml("<p>y así arrancó, [&hellip;]</p>\n")).toBe("y así arrancó, […]");
+    expect(stripHtml("su colección &#8220;Real Women&#8221;")).toBe(
+      "su colección “Real Women”"
+    );
+  });
+
+  it("keeps markup written as text instead of stripping it", () => {
+    expect(stripHtml("<p>Usa &lt;b&gt;negritas&lt;/b&gt;</p>")).toBe(
+      "Usa <b>negritas</b>"
+    );
+  });
+
+  it("collapses non-breaking spaces with the rest", () => {
+    expect(stripHtml("Hola&nbsp;&nbsp; mundo&#160;")).toBe("Hola mundo");
   });
 });
 
 describe("decodeHtmlEntities()", () => {
-  it("decodifica entidades HTML nombradas comunes", () => {
+  it("decodes common named HTML entities", () => {
     expect(decodeHtmlEntities("Tom &amp; Jerry &quot;Club&quot;")).toBe(
       'Tom & Jerry "Club"'
     );
   });
 
-  it("decodifica entidades numéricas decimales y hexadecimales", () => {
+  it("decodes decimal and hexadecimal numeric entities", () => {
     expect(decodeHtmlEntities("Caf&#233; &#x26; té")).toBe("Café & té");
   });
 
-  it("preserva entidades desconocidas", () => {
+  it("decodes the typographic entities WordPress excerpts carry", () => {
+    expect(decodeHtmlEntities("Leer más [&hellip;]")).toBe("Leer más […]");
+    expect(decodeHtmlEntities("10&ndash;12 &mdash; &laquo;hoy&raquo; it&rsquo;s")).toBe(
+      "10–12 — «hoy» it’s"
+    );
+  });
+
+  it("decodes named accents case-sensitively", () => {
+    expect(decodeHtmlEntities("&Aacute;nima &aacute;rbol &Ntilde;u")).toBe("Ánima árbol Ñu");
+  });
+
+  it("still decodes an uppercase spelling of a basic entity", () => {
+    expect(decodeHtmlEntities("A &AMP; B")).toBe("A & B");
+  });
+
+  it("keeps unknown entities", () => {
     expect(decodeHtmlEntities("Texto &unknown;")).toBe("Texto &unknown;");
   });
 
-  it("null o undefined → string vacío", () => {
+  it("null or undefined → empty string", () => {
     expect(decodeHtmlEntities(null)).toBe("");
     expect(decodeHtmlEntities(undefined)).toBe("");
   });
 });
 
 describe("buildWordPressUriPath()", () => {
-  it("convierte segmentos catch-all en URI de WordPress", () => {
+  it("turns catch-all segments into a WordPress URI", () => {
     expect(buildWordPressUriPath(["legal", "privacy"])).toBe("/legal/privacy");
   });
 
-  it("decodifica segmentos URL-encoded", () => {
+  it("decodes URL-encoded segments", () => {
     expect(buildWordPressUriPath(["privacy%20notice"])).toBe("/privacy notice");
   });
 
-  it("sin segmentos → null", () => {
+  it("no segments → null", () => {
     expect(buildWordPressUriPath(undefined)).toBeNull();
     expect(buildWordPressUriPath([])).toBeNull();
   });
 });
 
 describe("transformContentToAssetProxy()", () => {
-  it("reescribe rutas relativas de /wp-content/uploads", () => {
+  it("rewrites relative /wp-content/uploads paths", () => {
     expect(
       transformContentToAssetProxy('<img src="/wp-content/uploads/foo.png" />')
     ).toBe('<img src="/assets/uploads/foo.png" />');
   });
 
-  it("reescribe URLs absolutas conservando query string", () => {
+  it("rewrites absolute URLs keeping the query string", () => {
     expect(
       transformContentToAssetProxy(
         '<link href="https://cms.example.com/wp-content/themes/main.css?ver=1" />'
@@ -126,7 +161,7 @@ describe("transformContentToAssetProxy()", () => {
     ).toBe('<link href="/assets/themes/main.css?ver=1" />');
   });
 
-  it("reescribe URLs protocol-relative de plugins", () => {
+  it("rewrites protocol-relative plugin URLs", () => {
     expect(
       transformContentToAssetProxy(
         "url(//cms.example.com/wp-content/plugins/form/style.css)"
@@ -134,7 +169,7 @@ describe("transformContentToAssetProxy()", () => {
     ).toBe("url(/assets/plugins/form/style.css)");
   });
 
-  it("no cambia contenido sin assets de WordPress", () => {
+  it("leaves content without WordPress assets unchanged", () => {
     expect(transformContentToAssetProxy("<p>Hola</p>")).toBe("<p>Hola</p>");
   });
 });
@@ -182,4 +217,36 @@ describe("formatBrandHours()", () => {
   it("returns an empty string when both are missing", () => {
     expect(formatBrandHours(null, null)).toBe("");
   });
+});
+
+describe("isPetFriendly()", () => {
+  // The shape WPGraphQL actually returns for the ACF select field. The array
+  // is why the raw value cannot be tested directly: ["no"] is truthy.
+  it.each([[["si"]], [["sí"]], [["yes"]]])("accepts %j", (value) => {
+    expect(isPetFriendly(value)).toBe(true);
+  });
+
+  it.each([[["no"]], [[]], [["No"]]])("rejects %j", (value) => {
+    expect(isPetFriendly(value)).toBe(false);
+  });
+
+  it("does not mark a brand that answered no as pet friendly", () => {
+    expect(isPetFriendly(["no"])).toBe(false);
+    expect(Boolean(["no"])).toBe(true); // the bug this guards against
+  });
+
+  // Shapes older installs expose.
+  it.each([["si"], ["SÍ"], [" yes "], ["1"], [true], [1]])(
+    "accepts the legacy shape %j",
+    (value) => {
+      expect(isPetFriendly(value)).toBe(true);
+    }
+  );
+
+  it.each([["no"], [""], [false], [0], [null], [undefined], [{}]])(
+    "rejects the legacy shape %j",
+    (value) => {
+      expect(isPetFriendly(value)).toBe(false);
+    }
+  );
 });

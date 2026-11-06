@@ -5,11 +5,33 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+/**
+ * WordPress HTML as plain text: tags removed, entities decoded, whitespace
+ * collapsed. Meant for text React renders or a meta tag carries — React
+ * escapes it again, so an entity left encoded reaches the reader literally
+ * (`AT&amp;T`, `[&hellip;]`).
+ *
+ * Tags go before entities are decoded, so `&lt;b&gt;` written as text stays
+ * `<b>` instead of being taken for a tag. Never feed the result to
+ * `dangerouslySetInnerHTML`: it is text, and may now contain `<`.
+ */
 export function stripHtml(html: string | null): string {
   if (!html) return "";
-  return html.replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
+  return decodeHtmlEntities(html.replace(/<[^>]*>/g, ""))
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
+/**
+ * The named entities WordPress and its editors produce. `wptexturize` writes
+ * curly quotes and dashes as numeric entities, which need no entry here, but
+ * the excerpt's `[&hellip;]` is named, and pasted text brings the rest.
+ *
+ * A hand list rather than a library: a dependency would have to be added to
+ * every mall's package.json, and the core travels as copied files. Lookup is
+ * case-sensitive (`&Aacute;` is not `&aacute;`); an unlisted code falls back
+ * to its lowercase form, so `&AMP;` still decodes.
+ */
 const HTML_ENTITY_MAP: Record<string, string> = {
   amp: "&",
   apos: "'",
@@ -17,6 +39,40 @@ const HTML_ENTITY_MAP: Record<string, string> = {
   lt: "<",
   nbsp: " ",
   quot: '"',
+  hellip: "…",
+  ndash: "–",
+  mdash: "—",
+  lsquo: "‘",
+  rsquo: "’",
+  sbquo: "‚",
+  ldquo: "“",
+  rdquo: "”",
+  bdquo: "„",
+  laquo: "«",
+  raquo: "»",
+  bull: "•",
+  middot: "·",
+  copy: "©",
+  reg: "®",
+  trade: "™",
+  euro: "€",
+  deg: "°",
+  iexcl: "¡",
+  iquest: "¿",
+  aacute: "á",
+  eacute: "é",
+  iacute: "í",
+  oacute: "ó",
+  uacute: "ú",
+  ntilde: "ñ",
+  uuml: "ü",
+  Aacute: "Á",
+  Eacute: "É",
+  Iacute: "Í",
+  Oacute: "Ó",
+  Uacute: "Ú",
+  Ntilde: "Ñ",
+  Uuml: "Ü",
 };
 
 const WORDPRESS_ASSET_PATTERN =
@@ -39,7 +95,7 @@ export function decodeHtmlEntities(value: string | null | undefined): string {
       return Number.isNaN(charCode) ? entity : String.fromCodePoint(charCode);
     }
 
-    return HTML_ENTITY_MAP[code.toLowerCase()] ?? entity;
+    return HTML_ENTITY_MAP[code] ?? HTML_ENTITY_MAP[code.toLowerCase()] ?? entity;
   });
 }
 
