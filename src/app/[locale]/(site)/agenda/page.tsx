@@ -110,6 +110,7 @@ export default async function AgendaPage({
           pastHeading={t("pastHeading")}
           emptyMessage={t("empty")}
           pastEmptyMessage={t("pastEmpty")}
+          pastShowMoreLabel={t("pastShowMore")}
           filterAllLabel={t("filterAll")}
           pastBadgeLabel={t("pastBadge")}
         />

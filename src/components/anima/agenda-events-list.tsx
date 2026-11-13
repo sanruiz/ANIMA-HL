@@ -16,6 +16,9 @@ import { shouldBypassImageOptimizer } from "@/lib/wp-image";
 
 const ALL_FILTER = "__all__";
 
+/** How many past events are shown at first, and how many each "show more" adds. */
+export const PAST_EVENTS_PAGE_SIZE = 10;
+
 interface AgendaEventsListProps {
   upcomingEvents: EventNode[];
   pastEvents: EventNode[];
@@ -24,6 +27,7 @@ interface AgendaEventsListProps {
   pastHeading: string;
   emptyMessage: string;
   pastEmptyMessage: string;
+  pastShowMoreLabel: string;
   filterAllLabel: string;
   pastBadgeLabel: string;
 }
@@ -178,10 +182,19 @@ export function AgendaEventsList({
   pastHeading,
   emptyMessage,
   pastEmptyMessage,
+  pastShowMoreLabel,
   filterAllLabel,
   pastBadgeLabel,
 }: AgendaEventsListProps) {
   const [activeCategory, setActiveCategory] = useState<string>(ALL_FILTER);
+  const [visiblePastCount, setVisiblePastCount] = useState(
+    PAST_EVENTS_PAGE_SIZE,
+  );
+
+  const selectCategory = (category: string) => {
+    setActiveCategory(category);
+    setVisiblePastCount(PAST_EVENTS_PAGE_SIZE);
+  };
 
   const categories = useMemo(() => {
     const map = new Map<string, string>();
@@ -210,6 +223,9 @@ export function AgendaEventsList({
 
   const filteredUpcoming = filterByCategory(upcomingEvents);
   const filteredPast = filterByCategory(pastEvents);
+  // pastEvents arrives most-recent first, so the head of the list is the latest.
+  const visiblePast = filteredPast.slice(0, visiblePastCount);
+  const hasMorePast = filteredPast.length > visiblePastCount;
 
   const filterClass = (isActive: boolean) =>
     cn(
@@ -239,7 +255,7 @@ export function AgendaEventsList({
           type="button"
           role="tab"
           aria-selected={activeCategory === ALL_FILTER}
-          onClick={() => setActiveCategory(ALL_FILTER)}
+          onClick={() => selectCategory(ALL_FILTER)}
           className={filterClass(activeCategory === ALL_FILTER)}
         >
           {filterAllLabel}
@@ -250,7 +266,7 @@ export function AgendaEventsList({
             type="button"
             role="tab"
             aria-selected={activeCategory === slug}
-            onClick={() => setActiveCategory(slug)}
+            onClick={() => selectCategory(slug)}
             className={filterClass(activeCategory === slug)}
           >
             {name}
@@ -282,17 +298,34 @@ export function AgendaEventsList({
           {filteredPast.length === 0 ? (
             <p className="agenda-events__empty">{pastEmptyMessage}</p>
           ) : (
-            <ul className="m-0 list-none p-0">
-              {filteredPast.map((event) => (
-                <EventRow
-                  key={`past:${event.id}`}
-                  event={event}
-                  locale={locale}
-                  isPast
-                  pastBadgeLabel={pastBadgeLabel}
-                />
-              ))}
-            </ul>
+            <>
+              <ul className="m-0 list-none p-0">
+                {visiblePast.map((event) => (
+                  <EventRow
+                    key={`past:${event.id}`}
+                    event={event}
+                    locale={locale}
+                    isPast
+                    pastBadgeLabel={pastBadgeLabel}
+                  />
+                ))}
+              </ul>
+              {hasMorePast ? (
+                <div className="mt-8 flex justify-center">
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setVisiblePastCount(
+                        (count) => count + PAST_EVENTS_PAGE_SIZE,
+                      )
+                    }
+                    className={filterClass(false)}
+                  >
+                    {pastShowMoreLabel}
+                  </button>
+                </div>
+              ) : null}
+            </>
           )}
         </div>
       </div>
