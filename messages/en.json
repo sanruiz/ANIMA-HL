@@ -43,6 +43,7 @@
     "filterAll": "All",
     "empty": "No events yet.",
     "pastEmpty": "No past events yet.",
+    "pastShowMore": "Show more past events",
     "pastBadge": "Ended",
     "error": "Could not load events. Check the WordPress connection.",
     "featured": "Featured",

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { EventDetail } from "@/components/anima/event-detail";
 import { JsonLd } from "@/components/anima/json-ld";
@@ -46,7 +46,7 @@ export async function generateMetadata({
   params,
 }: EventDetailParams): Promise<Metadata> {
   const { locale, slug } = await params;
-  const t = await getTranslations({ locale, namespace: "agenda" });
+  const t = await getTranslations("agenda");
 
   try {
     const event = await getEvent(locale, slug);
@@ -70,8 +70,6 @@ export async function generateMetadata({
 
 export default async function EventDetailPage({ params }: EventDetailParams) {
   const { locale, slug } = await params;
-  setRequestLocale(locale);
-
   let event: EventBySlugResponse["event"] = null;
   try {
     event = await getEvent(locale, slug);

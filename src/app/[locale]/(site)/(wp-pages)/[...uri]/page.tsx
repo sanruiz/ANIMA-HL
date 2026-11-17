@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { JsonLd } from "@/components/anima/json-ld";
 import { collectionTag, itemTag } from "@/lib/cache-tags";
@@ -54,7 +54,7 @@ export async function generateMetadata({
 }: WordPressPageParams): Promise<Metadata> {
   const { locale, uri } = await params;
   const uriPath = buildWordPressUriPath(uri);
-  const t = await getTranslations({ locale, namespace: "metadata" });
+  const t = await getTranslations("metadata");
 
   if (!uriPath) return {};
 
@@ -82,8 +82,6 @@ export async function generateMetadata({
 
 export default async function WordPressPage({ params }: WordPressPageParams) {
   const { locale, uri } = await params;
-  setRequestLocale(locale);
-
   const uriPath = buildWordPressUriPath(uri);
 
   if (!uriPath) notFound();
