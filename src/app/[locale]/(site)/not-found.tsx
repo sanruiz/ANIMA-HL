@@ -1,11 +1,10 @@
 import { Compass, Home, MapPin } from "lucide-react";
-import { getLocale, getTranslations } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
 
 export default async function NotFoundPage() {
-  const locale = await getLocale();
-  const t = await getTranslations({ locale, namespace: "notFound" });
+  const t = await getTranslations("notFound");
 
   return (
     <section className="flex min-h-[calc(100svh-100px)] w-full items-center justify-center overflow-hidden bg-brand-claro px-5 pb-18 pt-36 text-brand-oscuro md:px-8 md:pb-24 md:pt-44">

@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { setRequestLocale } from "next-intl/server";
 import { VideoHero } from "@/components/anima/video-hero";
 import { OurSoul } from "@/components/anima/our-soul";
 import { OfferBanner } from "@/components/anima/offer-banner";
@@ -16,14 +15,7 @@ export async function generateMetadata({
   return mallPageMetadata(locale, "/");
 }
 
-export default async function HomePage({
-  params,
-}: {
-  params: Promise<{ locale: string }>;
-}) {
-  const { locale } = await params;
-  setRequestLocale(locale);
-
+export default function HomePage() {
   return (
     <>
       <VideoHero />

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import { AnimaLogo } from "@/components/anima/anima-logo";
 import { LocaleSwitcher } from "@/components/anima/locale-switcher";
 import { BRANDS } from "./brands";
@@ -16,7 +16,6 @@ export default async function ComingSoonPage({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  setRequestLocale(locale);
   const t = await getTranslations("comingSoon");
 
   // Lista duplicada para que el loop del marquee sea continuo.

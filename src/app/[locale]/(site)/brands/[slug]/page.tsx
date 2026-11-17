@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { BrandDetail } from "@/components/anima/brand-detail";
 import { JsonLd } from "@/components/anima/json-ld";
@@ -33,7 +33,7 @@ export async function generateMetadata({
   params,
 }: BrandDetailParams): Promise<Metadata> {
   const { locale, slug } = await params;
-  const t = await getTranslations({ locale, namespace: "brands" });
+  const t = await getTranslations("brands");
 
   try {
     const brand = await getBrand(locale, slug);
@@ -57,8 +57,6 @@ export async function generateMetadata({
 
 export default async function BrandDetailPage({ params }: BrandDetailParams) {
   const { locale, slug } = await params;
-  setRequestLocale(locale);
-
   let brand: BrandBySlugResponse["brand"] = null;
   try {
     brand = await getBrand(locale, slug);

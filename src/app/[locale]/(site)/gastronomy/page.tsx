@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import { BrandsDirectory } from "@/components/anima/brands-directory";
 import { GastronomyHero } from "@/components/anima/gastronomy-hero";
 import { FeaturedBrandsCarousel } from "@/components/anima/featured-brands-carousel";
@@ -17,7 +17,7 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const t = await getTranslations({ locale, namespace: "gastronomy" });
+  const t = await getTranslations("gastronomy");
   return {
     title: `${t("title")} | Ánima Village`,
     description: t("metaDescription"),
@@ -31,7 +31,6 @@ export default async function GastronomyPage({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  setRequestLocale(locale);
   const t = await getTranslations("gastronomy");
 
   let brands: BrandNode[] = [];
