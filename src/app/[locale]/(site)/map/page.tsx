@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import { MapFindUs } from "@/components/anima/map-find-us";
 import { MapIntro } from "@/components/anima/map-intro";
 import { mallPageMetadata } from "@/lib/mall";
@@ -10,7 +10,7 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const t = await getTranslations({ locale, namespace: "map" });
+  const t = await getTranslations("map");
   return {
     title: `${t("title")} | Ánima Village`,
     description: t("metaDescription"),
@@ -18,14 +18,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function MapPage({
-  params,
-}: {
-  params: Promise<{ locale: string }>;
-}) {
-  const { locale } = await params;
-  setRequestLocale(locale);
-
+export default function MapPage() {
   return (
     <>
       <MapIntro />

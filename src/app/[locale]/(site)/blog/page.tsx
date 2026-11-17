@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import { BlogIntro } from "@/components/anima/blog-intro";
 import { BlogList } from "@/components/anima/blog-list";
 import { JsonLd } from "@/components/anima/json-ld";
@@ -21,7 +21,7 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const t = await getTranslations({ locale, namespace: "blog" });
+  const t = await getTranslations("blog");
   const description = t("metaDescription");
   const title = `${t("title")} | Ánima Village`;
 
@@ -38,7 +38,6 @@ export default async function BlogPage({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  setRequestLocale(locale);
   const t = await getTranslations("blog");
 
   let posts: PostNode[] = [];

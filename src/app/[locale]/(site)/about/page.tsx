@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import { AboutHero } from "@/components/anima/about-hero";
 import { AboutIntro } from "@/components/anima/about-intro";
 import { AboutVideo } from "@/components/anima/about-video";
@@ -14,7 +14,7 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const t = await getTranslations({ locale, namespace: "about" });
+  const t = await getTranslations("about");
   return {
     title: `${t("title")} | Ánima Village`,
     description: t("metaDescription"),
@@ -22,14 +22,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function AboutPage({
-  params,
-}: {
-  params: Promise<{ locale: string }>;
-}) {
-  const { locale } = await params;
-  setRequestLocale(locale);
-
+export default function AboutPage() {
   return (
     <>
       <AboutHero />
