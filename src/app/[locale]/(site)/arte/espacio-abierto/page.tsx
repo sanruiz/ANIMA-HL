@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import { ArteDetail } from "@/components/anima/arte-detail";
 import { JsonLd } from "@/components/anima/json-ld";
 import { getLocalizedUrl } from "@/lib/seo";
@@ -14,10 +14,7 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const t = await getTranslations({
-    locale,
-    namespace: "arte.detail.openSpace",
-  });
+  const t = await getTranslations("arte.detail.openSpace");
 
   return {
     title: `${t("title")} | Ánima Village`,
@@ -32,8 +29,6 @@ export default async function ArteEspacioAbiertoPage({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  setRequestLocale(locale);
-
   const t = await getTranslations("arte.detail.openSpace");
   const tArte = await getTranslations("arte");
   const url = getLocalizedUrl(locale, `/arte/${SLUG}`);

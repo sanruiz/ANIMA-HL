@@ -43,6 +43,7 @@
     "filterAll": "Todo",
     "empty": "No hay eventos por ahora.",
     "pastEmpty": "No hay eventos pasados por ahora.",
+    "pastShowMore": "Ver más eventos pasados",
     "pastBadge": "Finalizado",
     "error": "No se pudo cargar la agenda. Revisa la conexión con WordPress.",
     "featured": "Destacado",

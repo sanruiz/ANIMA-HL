@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import { AgendaEventsList } from "@/components/anima/agenda-events-list";
 import { AgendaHero } from "@/components/anima/agenda-hero";
 import { JsonLd } from "@/components/anima/json-ld";
@@ -19,7 +19,7 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const t = await getTranslations({ locale, namespace: "agenda" });
+  const t = await getTranslations("agenda");
   const description = t("metaDescription");
   const title = `${t("title")} | Ánima Village`;
 
@@ -36,7 +36,6 @@ export default async function AgendaPage({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  setRequestLocale(locale);
   const t = await getTranslations("agenda");
 
   let upcomingEvents: EventNode[] = [];
@@ -110,6 +109,7 @@ export default async function AgendaPage({
           pastHeading={t("pastHeading")}
           emptyMessage={t("empty")}
           pastEmptyMessage={t("pastEmpty")}
+          pastShowMoreLabel={t("pastShowMore")}
           filterAllLabel={t("filterAll")}
           pastBadgeLabel={t("pastBadge")}
         />

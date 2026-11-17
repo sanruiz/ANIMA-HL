@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { BlogPostHeader } from "@/components/anima/blog-post-header";
 import { JsonLd } from "@/components/anima/json-ld";
@@ -35,7 +35,7 @@ export async function generateMetadata({
   params,
 }: BlogPostParams): Promise<Metadata> {
   const { locale, slug } = await params;
-  const t = await getTranslations({ locale, namespace: "blog" });
+  const t = await getTranslations("blog");
 
   try {
     const post = await getPost(locale, slug);
@@ -66,8 +66,6 @@ export async function generateMetadata({
 
 export default async function BlogPostPage({ params }: BlogPostParams) {
   const { locale, slug } = await params;
-  setRequestLocale(locale);
-
   let post: NewsBySlugResponse["post"] = null;
   try {
     post = await getPost(locale, slug);

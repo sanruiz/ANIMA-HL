@@ -71,6 +71,7 @@ const defaultProps = {
   pastHeading: "Eventos pasados",
   emptyMessage: "No hay eventos por ahora.",
   pastEmptyMessage: "No hay eventos pasados por ahora.",
+  pastShowMoreLabel: "Ver más eventos pasados",
   filterAllLabel: "Todo",
   pastBadgeLabel: "Finalizado",
 };
@@ -141,6 +142,85 @@ describe("AgendaEventsList", () => {
 
     expect(screen.getByText("Sunset Yoga")).toBeInTheDocument();
     expect(screen.queryByText("Mercado de productores")).not.toBeInTheDocument();
+  });
+
+  describe("past events limit", () => {
+    // Most-recent first, the order getPastEvents hands the component.
+    const makePast = (count: number, tagSlug?: string) =>
+      Array.from({ length: count }, (_, index) =>
+        createEvent({
+          id: `${tagSlug ?? "past"}-${index + 1}`,
+          title: `${tagSlug ?? "Pasado"} ${index + 1}`,
+          startDate: "2026-01-10",
+          tagSlug,
+          tagName: tagSlug,
+        }),
+      );
+
+    const showMore = () =>
+      screen.queryByRole("button", { name: defaultProps.pastShowMoreLabel });
+
+    it("shows only the latest 10 past events at first", () => {
+      render(
+        <AgendaEventsList
+          {...defaultProps}
+          upcomingEvents={[]}
+          pastEvents={makePast(25)}
+        />,
+      );
+
+      expect(screen.getAllByText("Finalizado")).toHaveLength(10);
+      expect(screen.getByText("Pasado 10")).toBeInTheDocument();
+      expect(screen.queryByText("Pasado 11")).not.toBeInTheDocument();
+      expect(showMore()).toBeInTheDocument();
+    });
+
+    it("reveals 10 more per click and hides the button at the end", () => {
+      render(
+        <AgendaEventsList
+          {...defaultProps}
+          upcomingEvents={[]}
+          pastEvents={makePast(25)}
+        />,
+      );
+
+      fireEvent.click(showMore()!);
+      expect(screen.getAllByText("Finalizado")).toHaveLength(20);
+
+      fireEvent.click(showMore()!);
+      expect(screen.getAllByText("Finalizado")).toHaveLength(25);
+      expect(showMore()).not.toBeInTheDocument();
+    });
+
+    it("has no button when there are 10 or fewer past events", () => {
+      render(
+        <AgendaEventsList
+          {...defaultProps}
+          upcomingEvents={[]}
+          pastEvents={makePast(10)}
+        />,
+      );
+
+      expect(screen.getAllByText("Finalizado")).toHaveLength(10);
+      expect(showMore()).not.toBeInTheDocument();
+    });
+
+    it("starts again at 10 when the category changes", () => {
+      render(
+        <AgendaEventsList
+          {...defaultProps}
+          upcomingEvents={[]}
+          pastEvents={[...makePast(15, "wellness"), ...makePast(15, "community")]}
+        />,
+      );
+
+      fireEvent.click(showMore()!);
+      expect(screen.getAllByText("Finalizado")).toHaveLength(20);
+
+      fireEvent.click(screen.getByRole("tab", { name: "wellness" }));
+      expect(screen.getAllByText("Finalizado")).toHaveLength(10);
+      expect(showMore()).toBeInTheDocument();
+    });
   });
 
   it("links each row to its event detail page", () => {
