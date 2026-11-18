@@ -14,6 +14,12 @@ jobs:
   quality:
     name: Lint, typecheck, test, build
     runs-on: ubuntu-latest
+    # packages: read lets GITHUB_TOKEN install @sanruiz/mall-frontend-core from
+    # GitHub Packages. The package must grant this repo access under
+    # Package settings → Manage Actions access.
+    permissions:
+      contents: read
+      packages: read
     steps:
       - uses: actions/checkout@v4
 
@@ -24,6 +30,8 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Lint
         run: npm run lint
