@@ -9,6 +9,7 @@ const wordpressUrl = new URL(
 );
 
 const nextConfig: NextConfig = {
+  transpilePackages: ["@sanruiz/mall-frontend-core"],
   allowedDevOrigins: ["192.168.1.27"],
   turbopack: {
     root: process.cwd(),
