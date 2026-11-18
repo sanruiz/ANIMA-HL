@@ -20,28 +20,45 @@ export const dynamic = "force-dynamic";
 
 const SECRET_HEADER = "x-revalidate-secret";
 
+type AuthResult = "ok" | "unconfigured" | "missing" | "mismatch";
+
+/**
+ * Why each rejection is logged. The plugin sends without waiting for the
+ * answer, so a 401 here is invisible on the WordPress side: this log is the
+ * only place a wrong secret, or a request reaching a deployment that has no
+ * secret (a preview, an old domain), ever shows up.
+ */
+const REJECTION_REASONS: Record<Exclude<AuthResult, "ok">, string> = {
+  unconfigured: "REVALIDATE_SECRET is not set in this environment",
+  missing: `no ${SECRET_HEADER} header`,
+  mismatch: `${SECRET_HEADER} does not match REVALIDATE_SECRET`,
+};
+
 /**
  * Compare the request secret against the configured one in constant time.
  *
- * Returns false when `REVALIDATE_SECRET` is unset so a misconfigured
+ * Reports "unconfigured" when `REVALIDATE_SECRET` is unset so a misconfigured
  * deployment fails closed instead of exposing an open invalidation endpoint.
  *
  * @param request Incoming request.
- * @returns Whether the caller presented the correct secret.
+ * @returns "ok", or why the request is not authorized.
  */
-function isAuthorized(request: Request): boolean {
+function authorize(request: Request): AuthResult {
   const expected = process.env.REVALIDATE_SECRET;
 
-  if (!expected) return false;
+  if (!expected) return "unconfigured";
 
-  const provided = request.headers.get(SECRET_HEADER) ?? "";
+  const provided = request.headers.get(SECRET_HEADER);
+
+  if (!provided) return "missing";
+
   const providedBuffer = Buffer.from(provided, "utf8");
   const expectedBuffer = Buffer.from(expected, "utf8");
 
   // timingSafeEqual throws on length mismatch, so compare lengths first.
-  if (providedBuffer.length !== expectedBuffer.length) return false;
+  if (providedBuffer.length !== expectedBuffer.length) return "mismatch";
 
-  return timingSafeEqual(providedBuffer, expectedBuffer);
+  return timingSafeEqual(providedBuffer, expectedBuffer) ? "ok" : "mismatch";
 }
 
 /**
@@ -51,7 +68,13 @@ function isAuthorized(request: Request): boolean {
  * @returns JSON describing which tags were invalidated.
  */
 export async function POST(request: Request): Promise<Response> {
-  if (!isAuthorized(request)) {
+  const auth = authorize(request);
+
+  if (auth !== "ok") {
+    // Never log the presented value: a near-miss secret is still a secret.
+    console.warn(
+      `[revalidate] rejected: ${REJECTION_REASONS[auth]} (VERCEL_ENV=${process.env.VERCEL_ENV ?? "unset"})`
+    );
     return Response.json(
       { revalidated: false, message: "Unauthorized" },
       { status: 401 }
@@ -69,6 +92,7 @@ export async function POST(request: Request): Promise<Response> {
   const tags = resolveTags(body);
 
   if (tags.length === 0) {
+    console.warn("[revalidate] rejected: no valid tags in payload");
     return Response.json(
       { revalidated: false, message: "No valid tags in payload" },
       { status: 400 }
@@ -80,6 +104,10 @@ export async function POST(request: Request): Promise<Response> {
   for (const tag of tags) {
     revalidateTag(tag, { expire: 0 });
   }
+
+  // One line per accepted request: evidence that WordPress reaches this
+  // deployment, which an absence of errors cannot give.
+  console.info(`[revalidate] ${tags.join(" ")}`);
 
   return Response.json({ revalidated: true, tags, now: Date.now() });
 }

@@ -20,14 +20,25 @@ function request(body: unknown, secret?: string): Request {
 }
 
 describe("POST /api/revalidate", () => {
+  let warn: ReturnType<typeof vi.spyOn>;
+  let info: ReturnType<typeof vi.spyOn>;
+
   beforeEach(() => {
     revalidateTag.mockClear();
     process.env.REVALIDATE_SECRET = SECRET;
+    warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+    info = vi.spyOn(console, "info").mockImplementation(() => {});
   });
 
   afterEach(() => {
     delete process.env.REVALIDATE_SECRET;
+    vi.restoreAllMocks();
   });
+
+  /** Everything the route wrote through console.warn, as one string. */
+  function warnings(): string {
+    return warn.mock.calls.map((call: unknown[]) => call.join(" ")).join("\n");
+  }
 
   it("invalidates the tags for a content change", async () => {
     const response = await POST(request({ type: "brand", slug: "nike" }, SECRET));
@@ -120,5 +131,50 @@ describe("POST /api/revalidate", () => {
 
     expect(response.status).toBe(200);
     expect(revalidateTag).toHaveBeenCalledTimes(ALL_TAGS.length);
+  });
+
+  // The plugin sends without waiting for the answer, so these logs are the
+  // only trace of a misconfigured endpoint. Antara ran a month with every
+  // revalidation landing on a deployment that had no secret.
+  describe("logging", () => {
+    it("logs each accepted request with its tags", async () => {
+      await POST(request({ type: "brand", slug: "nike" }, SECRET));
+
+      expect(info).toHaveBeenCalledWith("[revalidate] wp:brands wp:brand:nike");
+      expect(warn).not.toHaveBeenCalled();
+    });
+
+    it("names a deployment with no secret configured", async () => {
+      delete process.env.REVALIDATE_SECRET;
+
+      await POST(request({ type: "brand" }, SECRET));
+
+      expect(warnings()).toContain("REVALIDATE_SECRET is not set in this environment");
+    });
+
+    it("tells a missing header apart from a wrong secret", async () => {
+      await POST(request({ type: "brand" }));
+      expect(warnings()).toContain("no x-revalidate-secret header");
+
+      warn.mockClear();
+      await POST(request({ type: "brand" }, "nope"));
+      expect(warnings()).toContain("does not match REVALIDATE_SECRET");
+    });
+
+    it("never logs the secret that was presented", async () => {
+      const nearMiss = `${SECRET.slice(0, -1)}X`;
+
+      await POST(request({ type: "brand" }, nearMiss));
+
+      expect(warnings()).not.toContain(nearMiss);
+      expect(warnings()).not.toContain(SECRET);
+      expect(info).not.toHaveBeenCalled();
+    });
+
+    it("logs a payload with nothing to revalidate", async () => {
+      await POST(request({ type: "widget" }, SECRET));
+
+      expect(warnings()).toContain("no valid tags in payload");
+    });
   });
 });
